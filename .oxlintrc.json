@@ -1,0 +1,40 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["eslint", "typescript", "unicorn", "oxc", "vue"],
+  "env": {
+    "browser": true
+  },
+  "categories": {
+    "correctness": "error"
+  },
+  "rules": {
+    // No semicolons
+    "semi": ["error", "never"],
+
+    // Always use single quotes
+    "quotes": ["error", "single"],
+
+    // No unused variables
+    "no-unused-vars": ["error"],
+
+    // Require ===
+    "eqeqeq": ["error", "always"],
+
+    // Disallow var
+    "no-var": ["error"],
+
+    // Prefer const
+    "prefer-const": ["error"],
+
+    // No trailing spaces
+    "no-trailing-spaces": ["error"],
+
+    // Spacing rules
+    "space-before-function-paren": ["error", "never"],
+    "keyword-spacing": ["error", { "before": true, "after": true }],
+    "comma-spacing": ["error", { "before": false, "after": true }],
+
+    // Curly braces required
+    "curly": ["error", "all"]
+  }
+}
