@@ -1,5 +1,8 @@
 import chroma from 'chroma-js'
 import { calculateVariances } from '@/variances.js'
+import { GeneticAlgorithm } from '@/genetic.js'
+import { distance } from '@/vector.ts'
+import { oklab } from '@/oklab.js'
 
 function colorGraphSort(colors) {
   const graph = new Map()
@@ -238,7 +241,7 @@ function pcaSort(colors) {
 }
 
 function computeOKLabStats(colors) {
-  const labs = colors.map((c) => chroma(c).oklab())
+  const labs = colors.map((c) => oklab(c))
   const n = labs.length
 
   const mean = labs.reduce((acc, l) => [acc[0] + l[0], acc[1] + l[1], acc[2] + l[2]], [0, 0, 0]).map((v) => v / n)
@@ -251,8 +254,8 @@ function computeOKLabStats(colors) {
 function adaptiveOKLabDistanceFactory(colors) {
   const σ = computeOKLabStats(colors)
   return (a, b) => {
-    const A = chroma(a).oklab()
-    const B = chroma(b).oklab()
+    const A = oklab(a)
+    const B = oklab(b)
     return Math.hypot((A[0] - B[0]) / σ[0], (A[1] - B[1]) / σ[1], (A[2] - B[2]) / σ[2])
   }
 }
@@ -419,7 +422,7 @@ function closestbidimomentumSort(colors) {
     return { first, last }
   }
 
-  const data = colors.map((c) => chroma(c).oklab())
+  const data = colors.map((c) => oklab(c))
   const remaining = new Set(data)
   const sorted = []
 
@@ -545,7 +548,7 @@ function inlinestbidimomentumSort(colors) {
     return { first, mid, last }
   }
 
-  const data = colors.map((c) => chroma(c).oklab())
+  const data = colors.map((c) => oklab(c))
   const remaining = new Set(data)
   const sorted = []
 
@@ -716,7 +719,7 @@ function inlinestbidideltamomentumSort(colors) {
     return { first, mid, last }
   }
 
-  const data = colors.map((c) => chroma(c).oklab())
+  const data = colors.map((c) => oklab(c))
   const remaining = new Set(data)
   const sorted = []
 
@@ -777,6 +780,52 @@ function inlinestbidideltamomentumSort(colors) {
   return sorted.map((c) => chroma.oklab(...c).hex())
 }
 
+function evolve(colors) {
+  function fitness(palette) {
+    let totalDistance = 0
+
+    for (let i = 0; i < palette.length - 1; i++) {
+      // const a = chroma(palette[i]).oklab()
+      // const b = chroma(palette[i + 1]).oklab()
+      const a = oklab(palette[i])
+      const b = oklab(palette[i + 1])
+
+      totalDistance += distance(a, b)
+    }
+
+    return -totalDistance // Minimize distance
+  }
+
+  let previous = 1
+
+  const random = () => {
+    previous = (previous * 16807) % 2147483647
+    return previous / 2147483647
+  }
+
+  const populationSize = Math.min(40, Math.max(10, colors.length)) * 5
+  const generations = colors.length < 50 ? 250 : Math.floor((125 * 250 * 64) / (populationSize * colors.length))
+
+  // console.log(colors.length, generations)
+
+  const ga = new GeneticAlgorithm({
+    populationSize,
+    generations,
+    maxStagnation: colors.length < 50 ? 20 : 10,
+    mutationRate: 0.5,
+    crossoverRate: 0.9,
+    eliteSize: 5,
+    random,
+    fitness: fitness,
+    seed: () => [...colors].sort(() => random() - 0.5)
+    // onGeneration: (stats) => {
+    //   console.log(`Gen ${stats.generation}: Fitness = ${stats.bestFitness.toFixed(2)}`)
+    // }
+  })
+
+  return ga.run().bestGenome
+}
+
 export const sortingMethods = [
   {
     name: 'DeltaE',
@@ -817,6 +866,10 @@ export const sortingMethods = [
   {
     name: 'Inlinest Bidi DeltaE Momentum',
     fn: inlinestbidideltamomentumSort
+  },
+  {
+    name: 'Genetic',
+    fn: evolve
   }
 ]
 

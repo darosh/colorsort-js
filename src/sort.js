@@ -1,30 +1,41 @@
 import chroma from 'chroma-js'
+import { oklab } from './oklab.js'
 
 export class Color {
   constructor(value) {
+    this.value = value
     this.color = chroma(value)
   }
+
   hex() {
     return this.color.hex()
   }
+
   rgb() {
     return this.color.rgb()
   }
+
   hsl() {
     return this.color.hsl()
   }
+
   hcl() {
     return this.color.hcl()
   }
+
   oklch() {
     return this.color.oklch()
   }
+
   oklab() {
-    return this.color.oklab()
+    // return this.color.oklab()
+    return oklab(this.value)
   }
+
   lab() {
     return this.color.lab()
   }
+
   toString() {
     return this.hex()
   }
@@ -74,9 +85,9 @@ export class Palette {
   }
 }
 
-export function timed(fn) {
+export async function timed(fn) {
   const start = performance.now()
-  const result = fn()
+  const result = await fn()
   const elapsed = performance.now() - start
   return { result, elapsed }
 }
