@@ -17,3 +17,4 @@
 - [ ] auto reverse sorted
 - [ ] best diff
 - [ ] auto best
+- [ ] highlight best metrics
