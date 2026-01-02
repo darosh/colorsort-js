@@ -17,6 +17,7 @@ export class GeneticAlgorithm {
     // User-provided functions
     this.fitnessFunc = config.fitness || (() => 0)
     this.seedFunc = config.seed || (() => [])
+    this.fitnessCompare = config.compare || ((a, b) => b - a)
     this.onGeneration = config.onGeneration
 
     // State
@@ -41,12 +42,12 @@ export class GeneticAlgorithm {
 
   // Sort population by fitness (descending)
   sortPopulation() {
-    this.population.sort((a, b) => b.fitness - a.fitness)
+    this.population.sort((a, b) => this.fitnessCompare(a.fitness, b.fitness))
   }
 
   // Update the best individual tracker
   updateBest() {
-    if (this.population[0].fitness > this.bestFitness) {
+    if (this.bestFitness === -Infinity || this.fitnessCompare(this.population[0].fitness, this.bestFitness) < 0) {
       this.peakGeneration = this.currentGeneration
       this.bestFitness = this.population[0].fitness
       this.bestIndividual = [...this.population[0].genome]
@@ -60,7 +61,8 @@ export class GeneticAlgorithm {
       const idx = Math.floor(this.random() * this.population.length)
       tournament.push(this.population[idx])
     }
-    tournament.sort((a, b) => b.fitness - a.fitness)
+
+    tournament.sort((a, b) => this.fitnessCompare(a.fitness, b.fitness))
     return tournament[0]
   }
 
@@ -118,7 +120,7 @@ export class GeneticAlgorithm {
       mutated = this.shiftMutate(mutated)
       const score = this.fitnessFunc(mutated)
 
-      if (score > bestScore) {
+      if (this.fitnessCompare(score, bestScore) < 0) {
         bestScore = score
         best = mutated
       }
@@ -126,7 +128,7 @@ export class GeneticAlgorithm {
 
     const reversed = [...best].reverse()
 
-    if (bestScore < this.fitnessFunc(reversed)) {
+    if (this.fitnessCompare(bestScore, this.fitnessFunc(reversed)) < 0) {
       return reversed
     }
 
