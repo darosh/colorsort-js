@@ -1,6 +1,6 @@
 <template>
   <v-app theme="dark">
-    <v-navigation-drawer v-model="showNav" width="423"> </v-navigation-drawer>
+    <v-navigation-drawer v-model="showNav" width="423"></v-navigation-drawer>
 
     <v-app-bar scroll-behavior="hide" :scroll-threshold="64">
       <v-app-bar-nav-icon @click="showNav = !showNav" />
@@ -65,7 +65,7 @@
       <x-preview :points="selectedColors" />
     </div>
   </v-app>
-  <!--  <v-progress-linear style="z-index: 10000; position: fixed; top: 0;" height="4" color="red" active :model-value="50" />-->
+  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
 </template>
 
 <script>
@@ -82,7 +82,11 @@ export default {
     sorted: [],
     types: [],
     selectedColors: [],
-    showNav: false
+    showNav: false,
+    rendered: 0,
+    renderingTotal: 1,
+    flushRenders: [],
+    flushTimeout: null
   }),
   methods: {
     async sort () {
@@ -95,11 +99,31 @@ export default {
 
       this.types = types
       this.sorted = sorted
+
+      this.renderingTotal = 0
+      this.rendered = 0
+
+      ;[...sorted].sort((a, b) => a.id - b.id).forEach(x => {
+        if(x.render) {
+          this.renderingTotal++
+          x.render()
+        }
+      })
     },
     onrender ({ result, elapsed, row }) {
       const r = this.sorted.find((x) => x.id === row.id)
-      r.colors = result
-      r.time = elapsed
+      this.rendered++
+      this.flushRenders.push({r, result, elapsed})
+
+      clearTimeout(this.flushTimeout)
+
+      this.flushTimeout = setTimeout(() => {
+        while (this.flushRenders.length) {
+          const {r, result, elapsed} = this.flushRenders.shift()
+          r.colors = result
+          r.time = elapsed
+        }
+      }, 1)
     },
     formatTypes (obj) {
       return Object.fromEntries(

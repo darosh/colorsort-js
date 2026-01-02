@@ -1,6 +1,6 @@
 import RenderWorker from './render.worker.js?worker'
 
-const concurrency = Math.max(window.navigator.hardwareConcurrency, 2)
+const concurrency = Math.max(window.navigator.hardwareConcurrency, 4)
 const workers = []
 const pending = []
 
