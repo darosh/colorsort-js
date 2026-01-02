@@ -14,3 +14,6 @@
 - [ ] compute filtered only
 - [ ] app layout: side panel? toolbar?
 - [ ] clarify license of https://bsky.app/profile/meodai.bsky.social/post/3mb7kea5ubk2v
+- [ ] auto reverse sorted
+- [ ] best diff
+- [ ] auto best

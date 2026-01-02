@@ -8,7 +8,8 @@ function renderRow(colors, palette, label, id, key, time = null) {
     colors,
     palette,
     label,
-    time
+    time,
+    best: false
   }
 }
 

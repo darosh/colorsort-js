@@ -39,7 +39,7 @@ export const palettes = {
   'helix-4': chroma.cubehelix().rotations(3).scale().correctLightness().colors(64),
   'yellow-grey': chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6),
   'blue-pink': chroma.scale(['blue', 'pink']).mode('oklch').colors(8),
-  'primary': ['#00f', '#0ff', '#000', '#fff', '#f00', '#0f0', '#ff0', '#f0f'],
+  primary: ['#00f', '#0ff', '#000', '#fff', '#f00', '#0f0', '#ff0', '#f0f'],
   'palette-a': ['#834200', '#323213', '#2b6c21', '#888d0d', '#ffc249', '#da6d00', '#a22800', '#640000', '#000000', '#1d1d67', '#264bab', '#409e9e', '#a6da97', '#ffffff', '#9191aa', '#555555'],
   'palette-b': ['#1c1718', '#45221b', '#891420', '#4e4e52', '#865f51', '#e43040', '#87878c', '#c78a55', '#ee7976', '#e4c4ad'],
   'palette-c': ['#000000', '#1D2B53', '#7E2553', '#008751', '#AB5236', '#5F574F', '#C2C3C7', '#FFF1E8', '#FF004D', '#FFA300', '#FFEC27', '#00E436', '#29ADFF', '#83769C', '#FF77A8', '#FFCCAA'],
