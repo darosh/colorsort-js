@@ -25,7 +25,7 @@
             <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, label, palette, time, key, best, id, dist, metrics },
+            data: { colors, label, palette, time, key, best, id, dist, metrics, bestMetrics },
             skip,
             odd,
           } in filtered"
@@ -50,19 +50,22 @@
               <td style="width: 72px" class="text-right">
                 {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
               </td>
-              <td style="width: 60px" class="text-right px-1">
-                <template v-if="metrics">{{metrics.totalDistance.toFixed(2)}}</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.totalDistance}">
+                <template v-if="bestMetrics.totalDistance">*</template>
+                <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 60px" class="text-right px-1">
-                <template v-if="metrics">{{metrics.avgAngleChange.toFixed()}}&deg;</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.avgAngleChange}">
+                <template v-if="bestMetrics.avgAngleChange">*</template>
+                <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 60px" class="text-right px-1">
-                <template v-if="metrics">{{metrics.maxAngleChange.toFixed()}}&deg;</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.maxAngleChange}">
+                <template v-if="bestMetrics.maxAngleChange">*</template>
+                <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 60px" class="text-right px-1">
+              <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !dist}">
                 {{ dist !== null ? (!dist ? 0 : dist.toFixed(2)) : '...' }}
               </td>
               <td style="width: 64px" class="pr-0">
@@ -87,7 +90,7 @@
 
 <script>
 import { reactive } from 'vue'
-import { sortAll, updateDistances } from '@/sort-all.js'
+import { bestMetrics, sortAll, updateDistances } from '@/sort-all.js'
 import { palettes } from '@/palettes.js'
 import { representations, sortingMethods } from '@/sortings.js'
 import XPreview from '@/XPreview.vue'
@@ -164,6 +167,15 @@ export default {
     },
     sortingDone () {
       updateDistances(this.sorted)
+      const bests = bestMetrics(this.sorted)
+
+      this.sorted.forEach(r => {
+        r.bestMetrics = {
+          totalDistance: bests[r.palette].totalDistance === r.metrics.totalDistance,
+          avgAngleChange: bests[r.palette].avgAngleChange === r.metrics.avgAngleChange,
+          maxAngleChange: bests[r.palette].maxAngleChange === r.metrics.maxAngleChange
+        }
+      })
     }
   },
   mounted () {

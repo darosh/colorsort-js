@@ -14,7 +14,8 @@ function renderRow(colors, palette, label, id, key, time = null) {
     time,
     best: BESTIES.some((d) => d.key === key && d.label === label),
     dist: null,
-    metrics: colors.length ? metrics(colors) : null
+    metrics: colors.length ? metrics(colors) : null,
+    bestMetrics: null
   }
 }
 
@@ -41,6 +42,26 @@ function updateDistance(row, sorted) {
 
 export function updateDistances(sorted) {
   sorted.forEach((r) => updateDistance(r, sorted))
+}
+
+export function bestMetrics(sorted) {
+  const bests = {}
+
+  sorted.forEach((r) => {
+    bests[r.palette] = bests[r.palette] || {
+      totalDistance: Number.POSITIVE_INFINITY,
+      avgAngleChange: Number.POSITIVE_INFINITY,
+      maxAngleChange: Number.POSITIVE_INFINITY
+    }
+
+    const b = bests[r.palette]
+
+    b.totalDistance = Math.min(b.totalDistance, r.metrics.totalDistance)
+    b.avgAngleChange = Math.min(b.avgAngleChange, r.metrics.avgAngleChange)
+    b.maxAngleChange = Math.min(b.maxAngleChange, r.metrics.maxAngleChange)
+  })
+
+  return bests
 }
 
 export async function sortAll(palettes, representations = [], sortingMethods = [], onrender) {
