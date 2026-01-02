@@ -9,8 +9,8 @@ import chroma from 'chroma-js'
 let line, renderer, scene, camera, controls
 let geometry
 let matLine
-let innerWidth = 512
-let innerHeight = 512
+let innerWidth = 424 - 12 * 2
+let innerHeight = 424 - 12 * 2
 
 const S = 40
 

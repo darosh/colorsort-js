@@ -1,66 +1,71 @@
 <template>
-  <v-responsive>
-    <v-app theme="dark">
-      <v-main>
-        <v-container max-width="1400">
-          <v-table hover>
-            <thead>
-              <tr>
-                <th>Palette</th>
-                <th>Algorithm</th>
-                <th class="text-right">Colors</th>
-                <th class="text-right">Time</th>
-                <th class="text-center">Best</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr
-                :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
-                v-for="{
+  <v-app theme="dark">
+    <v-navigation-drawer v-model="showNav" width="423"> </v-navigation-drawer>
+
+    <v-app-bar scroll-behavior="hide" :scroll-threshold="64">
+      <v-app-bar-nav-icon @click="showNav = !showNav" />
+    </v-app-bar>
+
+    <v-main style="--v-layout-top: 64px;">
+      <v-container max-width="1400">
+        <v-table hover>
+          <thead>
+            <tr>
+              <th>Palette</th>
+              <th>Algorithm</th>
+              <th class="text-right">Colors</th>
+              <th class="text-right">Time</th>
+              <th class="text-center">Best</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
+              v-for="{
             data: { colors, label, palette, time, key, best, id },
             skip,
             odd,
           } in filtered"
-                @click="showPreview = !showPreview"
-                @mouseenter="onmouseenter(colors)"
-              >
-                <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
-                  {{ palette }}: {{ key }}<br /><br /><i>{{ types[palette - 1].type }}</i>
-                  <v-table density="compact" class="mt-6 bg-transparent">
-                    <tbody>
-                      <tr v-for="(value, key) in formatTypes(types[palette - 1].data)">
-                        <td class="pl-0">{{ key }}</td>
-                        <td class="text-right">{{ value }}</td>
-                      </tr>
-                    </tbody>
-                  </v-table>
-                </td>
-                <td style="width: 230px">{{ label }}</td>
-                <td style="width: 72px" class="text-right">
-                  {{ colors.length || '...' }}
-                </td>
-                <td style="width: 72px" class="text-right">
-                  {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
-                </td>
-                <td style="width: 72px">
-                  <v-checkbox-btn :model-value="best" @click="e => bestChange(e, id)" />
-                </td>
-                <td>
-                  <div style="display: flex">
-                    <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-        </v-container>
-      </v-main>
-      <div v-if="showPreview" style="position: fixed; bottom:0; background: rgba(0,0,0,.5);">
-        <x-preview :points="selectedColors" />
-      </div>
-    </v-app>
-  </v-responsive>
+              @click="showPreview = !showPreview"
+              @mouseenter="onmouseenter(colors)"
+            >
+              <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
+                {{ palette }}: {{ key }}<br /><br /><i>{{ types[palette - 1].type }}</i>
+                <v-table density="compact" class="mt-6 bg-transparent">
+                  <tbody>
+                    <tr v-for="(value, key) in formatTypes(types[palette - 1].data)">
+                      <td class="pl-0">{{ key }}</td>
+                      <td class="text-right">{{ value }}</td>
+                    </tr>
+                  </tbody>
+                </v-table>
+              </td>
+              <td style="width: 230px">{{ label }}</td>
+              <td style="width: 72px" class="text-right">
+                {{ colors.length || '...' }}
+              </td>
+              <td style="width: 72px" class="text-right">
+                {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
+              </td>
+              <td style="width: 72px">
+                <v-checkbox-btn :model-value="best" @click="e => bestChange(e, id)" />
+              </td>
+              <td>
+                <div style="display: flex">
+                  <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-container>
+    </v-main>
+    <div v-if="showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
+      <x-preview :points="selectedColors" />
+    </div>
+  </v-app>
+  <!--  <v-progress-linear style="z-index: 10000; position: fixed; top: 0;" height="4" color="red" active :model-value="50" />-->
 </template>
 
 <script>
@@ -77,6 +82,7 @@ export default {
     sorted: [],
     types: [],
     selectedColors: [],
+    showNav: false
   }),
   methods: {
     async sort () {
@@ -106,7 +112,7 @@ export default {
     bestChange (e, id) {
       const item = this.sorted.find(s => s.id === id)
       item.best = !item.best
-      const besties = this.sorted.filter(d => d.best).map(({key, label}) => ({key, label}))
+      const besties = this.sorted.filter(d => d.best).map(({ key, label }) => ({ key, label }))
       console.log(JSON.stringify(besties))
     }
   },
