@@ -15,6 +15,8 @@
               <th>Algorithm</th>
               <th class="text-right">Colors</th>
               <th class="text-right">Time</th>
+              <th class="text-center pr-0 pl-6" colspan="3">Length / Avg&deg; / Max&deg;</th>
+              <th class="text-right pr-0">Diff</th>
               <th class="text-center">Best</th>
               <th></th>
             </tr>
@@ -23,7 +25,7 @@
             <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, label, palette, time, key, best, id },
+            data: { colors, label, palette, time, key, best, id, dist, metrics },
             skip,
             odd,
           } in filtered"
@@ -48,10 +50,25 @@
               <td style="width: 72px" class="text-right">
                 {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
               </td>
-              <td style="width: 72px">
-                <v-checkbox-btn :model-value="best" @click="e => bestChange(e, id)" />
+              <td style="width: 60px" class="text-right px-1">
+                <template v-if="metrics">{{metrics.totalDistance.toFixed(2)}}</template>
+                <template v-else>...</template>
               </td>
-              <td>
+              <td style="width: 60px" class="text-right px-1">
+                <template v-if="metrics">{{metrics.avgAngleChange.toFixed()}}&deg;</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 60px" class="text-right px-1">
+                <template v-if="metrics">{{metrics.maxAngleChange.toFixed()}}&deg;</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 60px" class="text-right px-1">
+                {{ dist !== null ? (!dist ? 0 : dist.toFixed(2)) : '...' }}
+              </td>
+              <td style="width: 64px" class="pr-0">
+                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best" @click.stop="e => bestChange(e, id)" />
+              </td>
+              <td class="pl-0">
                 <div style="display: flex">
                   <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                 </div>
@@ -70,10 +87,11 @@
 
 <script>
 import { reactive } from 'vue'
-import { sortAll } from '@/sort-all.js'
+import { sortAll, updateDistances } from '@/sort-all.js'
 import { palettes } from '@/palettes.js'
 import { representations, sortingMethods } from '@/sortings.js'
 import XPreview from '@/XPreview.vue'
+import { metrics } from '@/metrics.js'
 
 export default {
   components: { XPreview },
@@ -104,7 +122,7 @@ export default {
       this.rendered = 0
 
       ;[...sorted].sort((a, b) => a.id - b.id).forEach(x => {
-        if(x.render) {
+        if (x.render) {
           this.renderingTotal++
           x.render()
         }
@@ -113,15 +131,20 @@ export default {
     onrender ({ result, elapsed, row }) {
       const r = this.sorted.find((x) => x.id === row.id)
       this.rendered++
-      this.flushRenders.push({r, result, elapsed})
+      this.flushRenders.push({ r, result, elapsed })
 
       clearTimeout(this.flushTimeout)
 
       this.flushTimeout = setTimeout(() => {
         while (this.flushRenders.length) {
-          const {r, result, elapsed} = this.flushRenders.shift()
+          const { r, result, elapsed } = this.flushRenders.shift()
           r.colors = result
           r.time = elapsed
+          r.metrics = metrics(result)
+        }
+
+        if (this.rendered === this.renderingTotal) {
+          this.sortingDone()
         }
       }, 1)
     },
@@ -138,6 +161,9 @@ export default {
       item.best = !item.best
       const besties = this.sorted.filter(d => d.best).map(({ key, label }) => ({ key, label }))
       console.log(JSON.stringify(besties))
+    },
+    sortingDone () {
+      updateDistances(this.sorted)
     }
   },
   mounted () {

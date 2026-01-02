@@ -1,0 +1,82 @@
+[
+  {
+    "key": "grayscale",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "grayscale-red",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "random-16",
+    "label": "Oklab"
+  },
+  {
+    "key": "random-32",
+    "label": "TSP"
+  },
+  {
+    "key": "random-48",
+    "label": "Oklab"
+  },
+  {
+    "key": "random-128",
+    "label": "Adaptive OKLab"
+  },
+  {
+    "key": "yellow-green-1",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "yellow-green-2",
+    "label": "Adaptive OKLab"
+  },
+  {
+    "key": "spectral",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "chroma-1",
+    "label": "Adaptive OKLab"
+  },
+  {
+    "key": "chroma-2",
+    "label": "Adaptive OKLab"
+  },
+  {
+    "key": "helix-1",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "helix-2",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "helix-3",
+    "label": "Inlinest Bidi Momentum"
+  },
+  {
+    "key": "helix-4",
+    "label": "Closest Bidi Momentum"
+  },
+  {
+    "key": "yellow-grey",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "blue-pink",
+    "label": "Inlinest Bidi DeltaE Momentum"
+  },
+  {
+    "key": "primary",
+    "label": "Inlinest Bidi Momentum"
+  },
+  {
+    "key": "palette-a",
+    "label": "HSL"
+  },
+  {
+    "key": "palette-b",
+    "label": "Closest Bidi Momentum"
+  }
+]

@@ -32,7 +32,13 @@ export const palettes = {
   'yellow-green-2': chroma.scale('YlGn').gamma(0.25).colors(13).slice(1),
   spectral: chroma.scale('Spectral').colors(12),
   'chroma-1': chroma.scale([chroma.lch(50, 0, 1), chroma.lch(50, 100, 1)]).colors(24),
-  'chroma-2': [...chroma.scale([chroma.lch(50, 0, 1), chroma.lch(50, 100, 1)]).colors(8), ...chroma.scale([chroma.lch(50, 0, 181), chroma.lch(50, 100, 181)]).colors(8)],
+  'chroma-2': [
+    ...chroma.scale([chroma.lch(50, 0, 1), chroma.lch(50, 100, 1)]).colors(8),
+    ...chroma
+      .scale([chroma.lch(50, 0, 181), chroma.lch(50, 100, 181)])
+      .colors(9)
+      .slice(1)
+  ],
   'helix-1': chroma.cubehelix().scale().colors(16),
   'helix-2': chroma.cubehelix().scale().correctLightness().colors(16),
   'helix-3': chroma.cubehelix().rotations(6).scale().colors(24),
