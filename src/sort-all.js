@@ -1,5 +1,6 @@
 import { render } from '@/render.js'
 import { detectPaletteType } from '@/types.js'
+import BESTIES from '@/besties.json' with { type: 'json' }
 
 function renderRow(colors, palette, label, id, key, time = null) {
   return {
@@ -9,7 +10,7 @@ function renderRow(colors, palette, label, id, key, time = null) {
     palette,
     label,
     time,
-    best: false
+    best: BESTIES.some(d => d.key === key && d.label === label)
   }
 }
 
