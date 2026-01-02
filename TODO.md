@@ -2,6 +2,7 @@
 
 - [ ] name palettes 
 - [ ] best picker palettes 
+- [ ] analyze best picks (sorter vs type, ...?) 
 - [ ] evaluate palettes (distance, angles)
 - [ ] experiment with categorization + deltaE
 - [ ] investigate chroma momentum
