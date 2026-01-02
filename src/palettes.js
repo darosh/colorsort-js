@@ -28,6 +28,12 @@ export const palettes = [
   chroma.scale('YlGn').gamma(0.25).colors(13).slice(1),
   chroma.scale('Spectral').colors(12),
   chroma.scale([chroma.lch(50, 0, 1), chroma.lch(50, 100, 1)]).colors(24),
+  [...chroma.scale([chroma.lch(50, 0, 1), chroma.lch(50, 100, 1)]).colors(8),
+    ...chroma.scale([chroma.lch(50, 0, 181), chroma.lch(50, 100, 181)]).colors(8)],
+  chroma.cubehelix().scale().colors(16),
+  chroma.cubehelix().scale().correctLightness().colors(16),
+  chroma.cubehelix().rotations(6).scale().colors(24),
+  chroma.cubehelix().rotations(3).scale().correctLightness().colors(64),
   [
     '#834200',
     '#323213',

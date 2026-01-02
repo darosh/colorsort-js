@@ -53,7 +53,7 @@
 <script>
 import { reactive } from 'vue'
 import { sortAll } from '@/sort-all.js'
-import { palettes } from '@/paletes.js'
+import { palettes } from '@/palettes.js'
 import { representations, sortingMethods } from '@/sortings.js'
 import XPreview from '@/XPreview.vue'
 
