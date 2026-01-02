@@ -44,6 +44,15 @@ export function updateDistances(sorted) {
   sorted.forEach((r) => updateDistance(r, sorted))
 }
 
+export function updateDistancesPalette(sorted, palette) {
+  sorted.forEach((r) => {
+    if (r.palette === palette) {
+      r.dist = null
+      updateDistance(r, sorted)
+    }
+  })
+}
+
 export function bestMetrics(sorted) {
   const bests = {}
 

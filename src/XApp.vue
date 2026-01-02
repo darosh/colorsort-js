@@ -50,18 +50,18 @@
               <td style="width: 72px" class="text-right">
                 {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
               </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.totalDistance}">
-                <template v-if="bestMetrics.totalDistance">*</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.totalDistance}">
+                <template v-if="bestMetrics?.totalDistance">*</template>
                 <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.avgAngleChange}">
-                <template v-if="bestMetrics.avgAngleChange">*</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.avgAngleChange}">
+                <template v-if="bestMetrics?.avgAngleChange">*</template>
                 <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics.maxAngleChange}">
-                <template v-if="bestMetrics.maxAngleChange">*</template>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.maxAngleChange}">
+                <template v-if="bestMetrics?.maxAngleChange">*</template>
                 <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
@@ -90,7 +90,7 @@
 
 <script>
 import { reactive } from 'vue'
-import { bestMetrics, sortAll, updateDistances } from '@/sort-all.js'
+import { bestMetrics, sortAll, updateDistances, updateDistancesPalette } from '@/sort-all.js'
 import { palettes } from '@/palettes.js'
 import { representations, sortingMethods } from '@/sortings.js'
 import XPreview from '@/XPreview.vue'
@@ -164,6 +164,7 @@ export default {
       item.best = !item.best
       const besties = this.sorted.filter(d => d.best).map(({ key, label }) => ({ key, label }))
       console.log(JSON.stringify(besties))
+      updateDistancesPalette(this.sorted, item.palette)
     },
     sortingDone () {
       updateDistances(this.sorted)
