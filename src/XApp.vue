@@ -8,7 +8,7 @@
               <tr
                 :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
                 v-for="{
-            data: { colors, label, palette, time },
+            data: { colors, label, palette, time, key },
             skip,
             odd,
           } in filtered"
@@ -16,7 +16,7 @@
                 @mouseenter="onmouseenter(colors)"
               >
                 <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
-                  {{ palette }}<br /><br /><i>{{ types[palette - 1].type }}</i>
+                  {{ palette }}: {{key}}<br /><br /><i>{{ types[palette - 1].type }}</i>
                   <v-table density="compact" class="mt-6 bg-transparent">
                     <tbody>
                       <tr v-for="(value, key) in formatTypes(types[palette - 1].data)">

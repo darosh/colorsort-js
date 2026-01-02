@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] name palettes 
+- [x] name palettes 
 - [ ] best picker palettes 
 - [ ] analyze best picks (sorter vs type, ...?) 
 - [ ] evaluate palettes (distance, angles)
@@ -10,3 +10,5 @@
 - [ ] sorter parametrization
 - [ ] sorter result metadata
 - [ ] memoize optimization?
+- [ ] filter
+- [ ] compute filtered only

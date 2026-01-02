@@ -1,9 +1,10 @@
 import { render } from '@/render.js'
 import { detectPaletteType } from '@/types.js'
 
-function renderRow(colors, palette, label, id, time = null) {
+function renderRow(colors, palette, label, id, key, time = null) {
   return {
     id,
+    key,
     colors,
     palette,
     label,
@@ -18,19 +19,20 @@ async function pause(to = 0) {
 export async function sortAll(palettes, representations = [], sortingMethods = [], onrender) {
   const sorted = []
   const types = []
+  const entries = Object.entries(palettes)
 
-  palettes.forEach((palette, index) => {
+  entries.forEach(([key, palette], index) => {
     // Original unsorted
-    sorted.push(renderRow(palette, index + 1, 'Original', sorted.length, 0))
+    sorted.push(renderRow(palette, index + 1, 'Original', sorted.length, key, 0))
     types.push({ ...detectPaletteType(palette), id: index + 1 })
   })
 
   await pause()
 
-  palettes.forEach((palette, index) => {
+  entries.forEach(([key, palette], index) => {
     // Color space sorts using Palette class
     representations.forEach((representation) => {
-      const row = renderRow([], index + 1, `${representation.name}`, sorted.length)
+      const row = renderRow([], index + 1, `${representation.name}`, sorted.length, key)
       sorted.push(row)
 
       render({ representationLabel: representation.label, palette }).then(({ result, elapsed }) => onrender({ result, elapsed, row }))
@@ -39,10 +41,10 @@ export async function sortAll(palettes, representations = [], sortingMethods = [
 
   await pause()
 
-  palettes.forEach((palette, index) => {
+  entries.forEach(([key, palette], index) => {
     // Other sorting methods
     sortingMethods.forEach(({ name }) => {
-      const row = renderRow([], index + 1, `${name}`, sorted.length)
+      const row = renderRow([], index + 1, `${name}`, sorted.length, key)
       sorted.push(row)
 
       render({ sortName: name, palette }).then(({ result, elapsed }) => onrender({ result, elapsed, row }))
