@@ -1,4 +1,5 @@
 import chroma from 'chroma-js'
+import { oklab } from '@/oklab.js'
 
 let previous = 1
 const next = () => {
@@ -502,3 +503,12 @@ export const palettes = {
     '#453b32'
   ]
 }
+
+Object.values(palettes).forEach((result) => {
+  const first = oklab(result[0])
+  const last = oklab(result.at(-1))
+
+  if (first[0] > last[0]) {
+    result.reverse()
+  }
+})
