@@ -22,3 +22,5 @@
 - [ ] ref momentum
 - [ ] ref adaptive
 - [ ] reuse tsp? and more?
+- [ ] best momentum
+- [ ] stats table
