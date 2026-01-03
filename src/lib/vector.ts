@@ -1,4 +1,4 @@
-type Vector3 = [number, number, number]
+export type Vector3 = [number, number, number]
 
 export function distance(a: Vector3, b: Vector3): number {
   const dx = a[0] - b[0]

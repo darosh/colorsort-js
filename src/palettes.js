@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { oklab } from '@/oklab.js'
+import { oklab } from '@/lib/oklab.js'
 
 let previous = 1
 const next = () => {
@@ -7,7 +7,7 @@ const next = () => {
   return previous / 2147483647
 }
 
-export const palettes = {
+export const PALETTES = {
   grayscale: Array(16)
     .fill()
     .map((_, i) => chroma.rgb([i * 16, i * 16, i * 16]).hex()),
@@ -504,7 +504,7 @@ export const palettes = {
   ]
 }
 
-Object.values(palettes).forEach((result) => {
+Object.values(PALETTES).forEach((result) => {
   const first = oklab(result[0])
   const last = oklab(result.at(-1))
 

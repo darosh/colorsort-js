@@ -91,10 +91,9 @@
 <script>
 import { reactive } from 'vue'
 import { bestMetrics, sortAll, updateDistances, updateDistancesPalette } from '@/sort-all.js'
-import { palettes } from '@/palettes.js'
-import { representations, sortingMethods } from '@/sortings.js'
+import { PALETTES } from '@/palettes.js'
+import { SORTING_METHODS, metrics } from '@/lib'
 import XPreview from '@/XPreview.vue'
-import { metrics } from '@/metrics.js'
 
 export default {
   components: { XPreview },
@@ -112,9 +111,8 @@ export default {
   methods: {
     async sort () {
       const { sorted, types } = await sortAll(
-          palettes,
-          representations,
-          sortingMethods,
+          PALETTES,
+          SORTING_METHODS,
           this.onrender,
       )
 
@@ -124,7 +122,7 @@ export default {
       this.renderingTotal = 0
       this.rendered = 0
 
-      ;[...sorted].sort((a, b) => a.id - b.id).forEach(x => {
+      ;[...sorted].sort((a, b) => a.speed - b.speed).forEach(x => {
         if (x.render) {
           this.renderingTotal++
           x.render()

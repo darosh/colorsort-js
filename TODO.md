@@ -18,3 +18,7 @@
 - [ ] best diff
 - [ ] auto best
 - [ ] highlight best metrics
+- [ ] more metrics
+- [ ] ref momentum
+- [ ] ref adaptive
+- [ ] reuse tsp? and more?

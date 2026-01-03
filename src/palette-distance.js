@@ -1,6 +1,6 @@
 import levenshtein from 'js-levenshtein'
 
-export function distance(a, b) {
+export function paletteDistance(a, b) {
   const map = new Map()
 
   a.forEach((c) => {

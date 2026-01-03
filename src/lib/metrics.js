@@ -1,5 +1,5 @@
-import { distance, dot, normalize, subtract } from '@/vector.ts'
-import { oklab } from '@/oklab.js'
+import { distance, dot, normalize, subtract } from './vector.ts'
+import { oklab } from './oklab.js'
 
 export function metrics(colors) {
   const vectors = colors.map((c) => oklab(c))

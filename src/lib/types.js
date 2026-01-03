@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 
-import { calculateVariances } from '@/variances.js'
+import { calculateVariances } from './variances.js'
 
 export function detectPaletteType(colors) {
   const variances = calculateVariances(colors)
