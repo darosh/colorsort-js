@@ -14,7 +14,7 @@ function renderRow(colors, palette, label, id, mid, key, speed, time = null) {
     palette,
     label,
     time,
-    best: BESTIES.some((d) => d.key === key && d.label === label),
+    best: BESTIES.some((d) => d.key === key && d.mid === mid),
     dist: null,
     metrics: colors.length ? metrics(colors) : null,
     bestMetrics: null

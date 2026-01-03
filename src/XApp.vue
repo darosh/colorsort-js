@@ -160,7 +160,7 @@ export default {
     bestChange (e, id) {
       const item = this.sorted.find(s => s.id === id)
       item.best = !item.best
-      const besties = this.sorted.filter(d => d.best).map(({ key, label }) => ({ key, label }))
+      const besties = this.sorted.filter(d => d.best).map(({ key, mid }) => ({ key, mid }))
       console.log(JSON.stringify(besties))
       updateDistancesPalette(this.sorted, item.palette)
     },
