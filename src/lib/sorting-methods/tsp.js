@@ -1,7 +1,7 @@
 import chroma from 'chroma-js'
 import { graphDeltaE } from './graph-delta-e.js'
-import { pca } from './pca.js'
 import { oklab } from '../oklab.js'
+import { principalOklab } from '@/lib/sorting-methods/principal.ts'
 
 function deltaE(a, b) {
   return chroma.deltaE(a, b)
@@ -47,17 +47,17 @@ function computeOKLabStats(colors) {
 }
 
 function adaptiveOKLabDistanceFactory(colors) {
-  const σ = computeOKLabStats(colors)
+  const WHAT_A_SIGMA = computeOKLabStats(colors)
 
   return (a, b) => {
     const A = oklab(a)
     const B = oklab(b)
-    return Math.hypot((A[0] - B[0]) / σ[0], (A[1] - B[1]) / σ[1], (A[2] - B[2]) / σ[2])
+    return Math.hypot((A[0] - B[0]) / WHAT_A_SIGMA[0], (A[1] - B[1]) / WHAT_A_SIGMA[1], (A[2] - B[2]) / WHAT_A_SIGMA[2])
   }
 }
 export function adaptiveTsp(colors) {
   const distance = adaptiveOKLabDistanceFactory(colors)
-  let path = pca(colors)
+  const path = principalOklab(colors)
 
   return tsp(path, distance)
 }

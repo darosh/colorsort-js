@@ -2,8 +2,8 @@ import chroma from 'chroma-js'
 
 const map = new Map()
 
-function memoize(fn) {
-  return (a) => {
+function memoize(fn: (arg: any) => any) {
+  return (a: any) => {
     if (map.has(a)) {
       return map.get(a)
     }
@@ -15,3 +15,4 @@ function memoize(fn) {
 }
 
 export const oklab = memoize((c) => chroma(c).oklab())
+export const oklab2hex = memoize((c: [number, number, number]) => chroma.oklab(...c).hex())

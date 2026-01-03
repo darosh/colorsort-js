@@ -1,5 +1,4 @@
-import chroma from 'chroma-js'
-import { Vector3 } from '../vector.ts'
+import { colorVectors, Vector3 } from '../vector.ts'
 
 /**
  * Convert 3D coordinates to Hilbert curve index
@@ -25,41 +24,23 @@ function hilbertPointToIndex(x: number, y: number, z: number): number {
   return (x << 2) | (y << 1) | z
 }
 
-export function sortByHilbertCurve(colors: Vector3[]): Vector3[] {
+export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
   return [...colors].sort((a, b) => {
-    const indexA = hilbertIndex(a[0], a[1], a[2])
-    const indexB = hilbertIndex(b[0], b[1], b[2])
+    const indexA = hilbertIndex(a[0], a[1], a[2], order)
+    const indexB = hilbertIndex(b[0], b[1], b[2], order)
 
     return indexA - indexB
   })
 }
 
 export function hilbertRgb(colors: string[]) {
-  const vectorMap = new Map()
-
-  colors
-    .map((c) => [chroma(c).gl(), c])
-    .forEach(([key, value]) => {
-      vectorMap.set(key, value)
-    })
-
-  const vectors = <Vector3[]>(<unknown>vectorMap.keys())
-  const sorted = sortByHilbertCurve(vectors)
-
-  return sorted.map((c) => vectorMap.get(c))
+  return colorVectors(colors, sortByHilbertCurve, 'gl')
 }
 
 export function hilbertOklab(colors: string[]) {
-  const vectorMap = new Map()
+  return colorVectors(colors, sortByHilbertCurve, 'oklab')
+}
 
-  colors
-    .map((c) => [chroma(c).oklab(), c])
-    .forEach(([key, value]) => {
-      vectorMap.set(key, value)
-    })
-
-  const vectors = <Vector3[]>(<unknown>vectorMap.keys())
-  const sorted = sortByHilbertCurve(vectors)
-
-  return sorted.map((c) => vectorMap.get(c))
+export function hilbertLab(colors: string[]) {
+  return colorVectors(colors, sortByHilbertCurve, 'lab-norm')
 }

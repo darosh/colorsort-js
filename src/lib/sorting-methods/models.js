@@ -2,64 +2,68 @@ import chroma from 'chroma-js'
 import { oklab as fastOklab } from '../oklab.js'
 
 export class Color {
-  constructor (value) {
+  constructor(value) {
     this.value = value
     this.color = chroma(value)
   }
 
-  hex () {
+  hex() {
     return this.color.hex()
   }
 
-  rgb () {
+  rgb() {
     return this.color.rgb()
   }
 
-  hsl () {
+  cmyk() {
+    return this.color.cmyk()
+  }
+
+  hsl() {
     return this.color.hsl()
   }
 
-  hcl () {
+  hcl() {
     return this.color.hcl()
   }
 
-  oklch () {
+  oklch() {
     return this.color.oklch()
   }
 
-  oklab () {
+  oklab() {
     // return this.color.oklab()
     return fastOklab(this.value)
   }
 
-  lab () {
+  lab() {
     return this.color.lab()
   }
 
-  toString () {
+  toString() {
     return this.hex()
   }
 }
 
 export class Palette {
-  constructor (representation) {
+  constructor(representation) {
     this.edges = {}
     this.colors = new Set()
     this.representation = representation
   }
 
-  addColor (color) {
+  addColor(color) {
     this.edges[color] = []
     this.colors.forEach((c) => this.link(color, c))
     this.colors.add(color)
   }
 
-  link (a, b) {
+  link(a, b) {
     this.edges[a].push(b)
     this.edges[b].push(a)
   }
 
-  harmonize () {
+  harmonize() {
     if (this.colors.size === 0) {
       return []
     }
@@ -85,13 +89,13 @@ export class Palette {
   }
 }
 
-function model (palette, representation) {
+function model(palette, representation) {
   const p = new Palette(representation)
   palette.forEach((col) => p.addColor(new Color(col)))
   return p.harmonize().map((c) => chroma(c[representation.label](), representation.label).hex())
 }
 
-export function hsl (colors) {
+export function hsl(colors) {
   return model(colors, {
     label: 'hsl',
     points: (color) => {
@@ -101,37 +105,44 @@ export function hsl (colors) {
   })
 }
 
-export function hcl (colors) {
+export function hcl(colors) {
   return model(colors, {
     label: 'hcl',
     points: (color) => color.hcl().map((v, i) => (v || 0) * [1 / 360, 1 / 100, 1 / 100][i])
   })
 }
 
-export function oklch (colors) {
+export function oklch(colors) {
   return model(colors, {
     label: 'oklch',
     points: (color) => color.oklch().map((v, i) => (v || 0) * [1 / 200, 1 / 100, 1 / 360][i])
   })
 }
 
-export function oklab (colors) {
+export function oklab(colors) {
   return model(colors, {
     label: 'oklab',
     points: (color) => color.oklab()
   })
 }
 
-export function lab (colors) {
+export function lab(colors) {
   return model(colors, {
     label: 'lab',
     points: (color) => color.lab().map((v, i) => (v || 0) * [1 / 100, 1 / 95, 1 / 115][i])
   })
 }
 
-export function rgb (colors) {
+export function rgb(colors) {
   return model(colors, {
     label: 'rgb',
     points: (color) => color.rgb().map((v) => v / 255)
+  })
+}
+
+export function cmyk(colors) {
+  return model(colors, {
+    label: 'cmyk',
+    points: (color) => color.cmyk().map((v) => v / 255)
   })
 }

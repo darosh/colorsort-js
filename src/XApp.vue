@@ -25,7 +25,7 @@
             <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, label, palette, time, key, best, id, dist, metrics, bestMetrics },
+            data: { colors, mid, palette, time, key, best, id, dist, metrics, bestMetrics },
             skip,
             odd,
           } in filtered"
@@ -43,7 +43,7 @@
                   </tbody>
                 </v-table>
               </td>
-              <td style="width: 230px">{{ label }}</td>
+              <td style="width: 230px">{{ mid }}</td>
               <td style="width: 72px" class="text-right">
                 {{ colors.length || '...' }}
               </td>

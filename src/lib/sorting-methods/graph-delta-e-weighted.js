@@ -1,6 +1,7 @@
 import chroma from 'chroma-js'
 
 import { graphDeltaE } from './graph-delta-e.js'
+import { detectPaletteType } from '@/lib/index.js'
 
 function relativeDifference(palette) {
   let sumL = 0,
@@ -46,4 +47,11 @@ export function graphDeltaEWeighted(colors) {
   )
 
   return graphDeltaE(colors, relativeWeights)
+}
+
+export function graphDeltaEWeightedPlusPlus(colors) {
+  const { Kl, Kc, Kh } = detectPaletteType(colors)
+  const weights = [Kl, Kc, Kh]
+
+  return graphDeltaE(colors, weights)
 }

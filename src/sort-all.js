@@ -4,9 +4,10 @@ import { paletteDistance } from '@/palette-distance.js'
 
 import BESTIES from '@/besties.json' with { type: 'json' }
 
-function renderRow(colors, palette, label, id, key, speed, time = null) {
+function renderRow(colors, palette, label, id, mid, key, speed, time = null) {
   return {
     id,
+    mid,
     key,
     speed,
     colors,
@@ -81,13 +82,14 @@ export async function sortAll(palettes, sortingMethods = [], onrender) {
 
   entries.forEach(([key, palette], index) => {
     // Original unsorted
-    sorted.push(renderRow(palette, index + 1, 'Original', sorted.length, key, 0, 0))
+    const mid = 'Original'
+    sorted.push(renderRow(palette, index + 1, 'Original', sorted.length, mid, key, 0, 0))
     types.push({ ...detectPaletteType(palette), id: index + 1 })
   })
 
   entries.forEach(([key, palette], index) => {
-    sortingMethods.forEach(({ name, speed }) => {
-      const row = renderRow([], index + 1, `${name}`, sorted.length, key, speed)
+    sortingMethods.forEach(({ name, speed, mid }) => {
+      const row = renderRow([], index + 1, `${name}`, sorted.length, mid, key, speed)
       sorted.push(row)
       row.render = () =>
         render({ sortName: name, palette }).then(({ result, elapsed }) => {
