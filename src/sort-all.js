@@ -62,7 +62,9 @@ export function bestMetrics(sorted) {
     bests[r.palette] = bests[r.palette] || {
       totalDistance: Number.POSITIVE_INFINITY,
       avgAngleChange: Number.POSITIVE_INFINITY,
-      maxAngleChange: Number.POSITIVE_INFINITY
+      maxAngleChange: Number.POSITIVE_INFINITY,
+      meanDistance: Number.POSITIVE_INFINITY,
+      devDistance: Number.POSITIVE_INFINITY
     }
 
     const b = bests[r.palette]
@@ -70,6 +72,8 @@ export function bestMetrics(sorted) {
     b.totalDistance = Math.min(b.totalDistance, r.metrics.totalDistance)
     b.avgAngleChange = Math.min(b.avgAngleChange, r.metrics.avgAngleChange)
     b.maxAngleChange = Math.min(b.maxAngleChange, r.metrics.maxAngleChange)
+    b.meanDistance = Math.min(b.meanDistance, r.metrics.meanDistance)
+    b.devDistance = Math.min(b.devDistance, r.metrics.devDistance)
   })
 
   return bests

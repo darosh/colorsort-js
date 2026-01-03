@@ -15,7 +15,7 @@
               <th>Algorithm</th>
               <th class="text-right">Colors</th>
               <th class="text-right">Time</th>
-              <th class="text-center pr-0 pl-6" colspan="3">Length / Avg&deg; / Max&deg;</th>
+              <th class="text-center pr-0 pl-6" colspan="5">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
               <th class="text-right pr-0">Diff</th>
               <th class="text-center">Best</th>
               <th></th>
@@ -53,6 +53,16 @@
               <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.totalDistance}">
                 <template v-if="bestMetrics?.totalDistance">*</template>
                 <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.meanDistance}">
+                <template v-if="bestMetrics?.meanDistance">*</template>
+                <template v-if="metrics">{{ metrics.meanDistance.toFixed(2) }}</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.devDistance}">
+                <template v-if="bestMetrics?.devDistance">*</template>
+                <template v-if="metrics">{{ metrics.devDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </td>
               <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.avgAngleChange}">
@@ -172,7 +182,9 @@ export default {
         r.bestMetrics = {
           totalDistance: bests[r.palette].totalDistance === r.metrics.totalDistance,
           avgAngleChange: bests[r.palette].avgAngleChange === r.metrics.avgAngleChange,
-          maxAngleChange: bests[r.palette].maxAngleChange === r.metrics.maxAngleChange
+          maxAngleChange: bests[r.palette].maxAngleChange === r.metrics.maxAngleChange,
+          meanDistance: bests[r.palette].meanDistance === r.metrics.meanDistance,
+          devDistance: bests[r.palette].devDistance === r.metrics.devDistance
         }
       })
     }
