@@ -1,11 +1,11 @@
 import { render } from '@/render.js'
-import { detectPaletteType, metrics } from '@/lib'
+import { detectPaletteType } from '@/lib'
 import { paletteDistance } from '@/palette-distance.js'
 
 import BESTIES from '@/besties.json' with { type: 'json' }
 import { metricsEx } from '@/lib/metrics.ts'
 
-function renderRow (colors, palette, label, id, mid, key, speed, time = null) {
+function renderRow(colors, palette, label, id, mid, key, speed, time = null) {
   return {
     id,
     mid,
@@ -22,7 +22,7 @@ function renderRow (colors, palette, label, id, mid, key, speed, time = null) {
   }
 }
 
-function updateDistance (row, sorted) {
+function updateDistance(row, sorted) {
   if (row.dist !== null) {
     return
   }
@@ -43,11 +43,11 @@ function updateDistance (row, sorted) {
   }
 }
 
-export function updateDistances (sorted) {
+export function updateDistances(sorted) {
   sorted.forEach((r) => updateDistance(r, sorted))
 }
 
-export function updateDistancesPalette (sorted, palette) {
+export function updateDistancesPalette(sorted, palette) {
   sorted.forEach((r) => {
     if (r.palette === palette) {
       r.dist = null
@@ -56,7 +56,7 @@ export function updateDistancesPalette (sorted, palette) {
   })
 }
 
-export function bestMetrics (sorted) {
+export function bestMetrics(sorted) {
   const bests = {}
 
   sorted.forEach((r) => {
@@ -70,7 +70,7 @@ export function bestMetrics (sorted) {
       perceptualUniformity: Number.NEGATIVE_INFINITY,
       lchAvgChange: { L: Number.POSITIVE_INFINITY, C: Number.POSITIVE_INFINITY, H: Number.POSITIVE_INFINITY },
       lchMaxChange: { L: Number.POSITIVE_INFINITY, C: Number.POSITIVE_INFINITY, H: Number.POSITIVE_INFINITY },
-      lchDeviation: { L: Number.POSITIVE_INFINITY, C: Number.POSITIVE_INFINITY, H: Number.POSITIVE_INFINITY },
+      lchDeviation: { L: Number.POSITIVE_INFINITY, C: Number.POSITIVE_INFINITY, H: Number.POSITIVE_INFINITY }
     }
 
     const b = bests[r.palette]
@@ -102,7 +102,7 @@ export function bestMetrics (sorted) {
   return bests
 }
 
-export async function sortAll (palettes, sortingMethods = [], onrender) {
+export async function sortAll(palettes, sortingMethods = [], onrender) {
   const sorted = []
   const types = []
   const entries = Object.entries(palettes)

@@ -99,7 +99,9 @@ export function metricsEx(colors: string[]) {
     // Handle hue wraparound (circular 0-360) and NaN for achromatic colors
     if (!isNaN(H1) && !isNaN(H2)) {
       let hDiff = Math.abs(H2 - H1)
-      if (hDiff > 180) {hDiff = 360 - hDiff}
+      if (hDiff > 180) {
+        hDiff = 360 - hDiff
+      }
       hChanges.push(hDiff)
     } else if (isNaN(H1) && isNaN(H2)) {
       // Both achromatic - no hue change
@@ -114,13 +116,9 @@ export function metricsEx(colors: string[]) {
   }
 
   const meanDistance = totalDistance / (vectors.length - 1)
-  const devDistance = Math.sqrt(
-    distances.reduce((acc, d) => acc + Math.pow(d - meanDistance, 2), 0) / (vectors.length - 1)
-  )
+  const devDistance = Math.sqrt(distances.reduce((acc, d) => acc + Math.pow(d - meanDistance, 2), 0) / (vectors.length - 1))
 
-  const avgAngleChange = angleChanges.length > 0
-    ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length
-    : 0
+  const avgAngleChange = angleChanges.length > 0 ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length : 0
 
   const maxAngleChange = angleChanges.length > 0 ? Math.max(...angleChanges) : 0
 
@@ -152,7 +150,7 @@ export function metricsEx(colors: string[]) {
   const perceptualUniformity = 1 / (1 + devDistance)
 
   // Hue spread: how well distributed are hues across the color wheel
-  const hues = lchColors.map(([, , h]) => h).filter(h => !isNaN(h))
+  const hues = lchColors.map(([, , h]) => h).filter((h) => !isNaN(h))
   const hueSpread = hues.length > 1 ? calculateHueSpread(hues) : 0
 
   // Chroma and lightness range
@@ -163,9 +161,7 @@ export function metricsEx(colors: string[]) {
   const lightnessRange = Math.max(...lightnesses) - Math.min(...lightnesses)
 
   // Harmonic score: combines uniform spacing with good hue distribution
-  const harmonicScore = (perceptualUniformity * 0.4) +
-    (Math.min(hueSpread / 180, 1) * 0.3) +
-    (1 / (1 + lchDeviation.H / 45) * 0.3)
+  const harmonicScore = perceptualUniformity * 0.4 + Math.min(hueSpread / 180, 1) * 0.3 + (1 / (1 + lchDeviation.H / 45)) * 0.3
 
   return {
     totalDistance,
@@ -185,7 +181,9 @@ export function metricsEx(colors: string[]) {
 }
 
 function calculateHueSpread(hues: number[]): number {
-  if (hues.length < 2) {return 0}
+  if (hues.length < 2) {
+    return 0
+  }
 
   // Sort hues and calculate gaps
   const sorted = [...hues] //.sort((a, b) => a - b)

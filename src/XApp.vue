@@ -85,14 +85,17 @@
               </td>
               <td style="width: 120px;" class="text-right">
                 <template v-if="metrics">
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.L}">{{metrics.lchAvgChange.L.toFixed(0)}}</span>,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.C}">{{metrics.lchAvgChange.C.toFixed(0)}}</span>,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.H}">{{metrics.lchAvgChange.H.toFixed(0)}}</span><br>
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.L}">{{metrics.lchMaxChange.L.toFixed(0)}}</span>,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.C}">{{metrics.lchMaxChange.C.toFixed(0)}}</span>,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.H}">{{metrics.lchMaxChange.H.toFixed(0)}}</span><br>
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.L}">{{metrics.lchDeviation.L.toFixed(0)}}</span>,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.C}">{{metrics.lchDeviation.C.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.L}">{{metrics.lchAvgChange.L.toFixed(0)}}</span
+                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.C}">{{metrics.lchAvgChange.C.toFixed(0)}}</span
+                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.H}">{{metrics.lchAvgChange.H.toFixed(0)}}</span
+                  ><br />
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.L}">{{metrics.lchMaxChange.L.toFixed(0)}}</span
+                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.C}">{{metrics.lchMaxChange.C.toFixed(0)}}</span
+                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.H}">{{metrics.lchMaxChange.H.toFixed(0)}}</span
+                  ><br />
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.L}">{{metrics.lchDeviation.L.toFixed(0)}}</span
+                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.C}">{{metrics.lchDeviation.C.toFixed(0)}}</span
+                  >,
                   <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.H}">{{metrics.lchDeviation.H.toFixed(0)}}</span>
                 </template>
               </td>
