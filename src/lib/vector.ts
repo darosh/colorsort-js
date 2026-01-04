@@ -50,6 +50,26 @@ export function closest(data: Vector3[]) {
   return <[Vector3, Vector3]>[first, last]
 }
 
+export function closestList(data: Vector3[]) {
+  const list = []
+
+  for (let i = 0; i < data.length; i++) {
+    for (let j = i + 1; j < data.length; j++) {
+      const dx = data[i][0] - data[j][0]
+      const dy = data[i][1] - data[j][1]
+      const dz = data[i][2] - data[j][2]
+
+      const dist = Math.sqrt(dx * dx + dy * dy + dz * dz)
+
+      list.push({ data: [data[i], data[j]], dist })
+    }
+  }
+
+  list.sort((a, b) => a.dist - b.dist)
+
+  return <[Vector3, Vector3][]>list.map((d) => d.data)
+}
+
 export function inlinest(data: Vector3[]) {
   let bestAlignment = -Infinity
   let first: Vector3 | null = null
@@ -90,6 +110,28 @@ export function inlinest(data: Vector3[]) {
   }
 
   return <[Vector3, Vector3]>[first, last]
+}
+
+export function tspVectors(colors: Vector3[]) {
+  let improved = true
+
+  while (improved) {
+    improved = false
+
+    for (let i = 0; i < colors.length - 2; i++) {
+      for (let j = i + 1; j < colors.length - 1; j++) {
+        const d1 = distance(colors[i], colors[i + 1]) + distance(colors[j], colors[j + 1])
+        const d2 = distance(colors[i], colors[j]) + distance(colors[i + 1], colors[j + 1])
+
+        if (d2 < d1) {
+          colors = [...colors.slice(0, i + 1), ...colors.slice(i + 1, j + 1).reverse(), ...colors.slice(j + 1)]
+          improved = true
+        }
+      }
+    }
+  }
+
+  return colors
 }
 
 function normalizeLab(a: Vector3) {

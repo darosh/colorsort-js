@@ -1,18 +1,158 @@
 [
   {
     "key": "grayscale",
+    "mid": "Original"
+  },
+  {
+    "key": "grayscale-red",
+    "mid": "TSP(DE)-Lab"
+  },
+  {
+    "key": "random-8",
     "mid": "Oklab"
   },
   {
     "key": "random-16",
-    "mid": "Oklab"
+    "mid": "GEN3-Oklab"
+  },
+  {
+    "key": "random-32",
+    "mid": "GEN3-Oklab"
   },
   {
     "key": "random-48",
     "mid": "Oklab"
   },
   {
+    "key": "random-128",
+    "mid": "TSP(MOM(Closest+))-Oklab"
+  },
+  {
+    "key": "yellow-green-1",
+    "mid": "Original"
+  },
+  {
+    "key": "yellow-green-2",
+    "mid": "Original"
+  },
+  {
+    "key": "spectral",
+    "mid": "Original"
+  },
+  {
+    "key": "chroma-1",
+    "mid": "Original"
+  },
+  {
+    "key": "chroma-2",
+    "mid": "Oklab"
+  },
+  {
+    "key": "helix-1",
+    "mid": "Original"
+  },
+  {
+    "key": "helix-2",
+    "mid": "Original"
+  },
+  {
+    "key": "helix-3",
+    "mid": "MOM(Inlinest,DE)-Oklab"
+  },
+  {
+    "key": "helix-4",
+    "mid": "Original"
+  },
+  {
+    "key": "yellow-grey",
+    "mid": "Original"
+  },
+  {
+    "key": "blue-pink",
+    "mid": "Original"
+  },
+  {
+    "key": "primary",
+    "mid": "GEN3-Oklab"
+  },
+  {
     "key": "palette-a",
-    "mid": "HSL"
+    "mid": "HIL-Lab"
+  },
+  {
+    "key": "palette-b",
+    "mid": "MOM(Closest)-Oklab"
+  },
+  {
+    "key": "palette-c",
+    "mid": "MOM(Closest+)-Oklab"
+  },
+  {
+    "key": "palette-d",
+    "mid": "TSP(MOM(Closest+))-Oklab"
+  },
+  {
+    "key": "palette-e",
+    "mid": "Original"
+  },
+  {
+    "key": "palette-f",
+    "mid": "Original"
+  },
+  {
+    "key": "palette-g",
+    "mid": "TSP(DE)-Lab"
+  },
+  {
+    "key": "palette-h",
+    "mid": "MOM(Closest+)-Oklab"
+  },
+  {
+    "key": "palette-i",
+    "mid": "Original"
+  },
+  {
+    "key": "palette-j",
+    "mid": "NNA(DE) Lab"
+  },
+  {
+    "key": "palette-k",
+    "mid": "MOM(Closest)-Oklab"
+  },
+  {
+    "key": "palette-l",
+    "mid": "TSP(DE)-Lab"
+  },
+  {
+    "key": "palette-m",
+    "mid": "MOM(Closest+)-Oklab"
+  },
+  {
+    "key": "palette-32",
+    "mid": "GEN-Oklab"
+  },
+  {
+    "key": "palette-39",
+    "mid": "RGB"
+  },
+  {
+    "key": "palette-55",
+    "mid": "Original"
+  },
+  {
+    "key": "palette-64a",
+    "mid": "TSP(MOM(Closest+))-Oklab"
+  },
+  {
+    "key": "palette-64b",
+    "mid": "Original"
+  },
+  {
+    "key": "palette-64c",
+    "mid": "HIL-Lab"
+  },
+  {
+    "key": "palette-110",
+    "mid": "TSP(MOM(Closest+))-Oklab"
   }
 ]

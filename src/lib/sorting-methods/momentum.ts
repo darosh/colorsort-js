@@ -1,8 +1,9 @@
 import chroma from 'chroma-js'
-import { closest, colorVectors, distance, dot, inlinest, normalize, subtract, Vector3 } from '../vector.ts'
+import { closest, closestList, colorVectors, distance, dot, inlinest, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
 import { oklab2hex } from '../oklab.ts'
 // @ts-ignore
 import { detectPaletteType } from '../types.js'
+import { metrics } from '../metrics.js'
 
 function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, momentumWeight: number = 1e6) {
   const dist = distance(from, to)
@@ -96,6 +97,52 @@ function momentumBidiSort(
 
 export function momentumClosestOklab(colors: string[]) {
   return colorVectors(colors, (data: Vector3[]) => momentumBidiSort(data, closest(data), calculateScore), 'oklab')
+}
+
+export function momentumClosestBestOklab(colors: string[], tsp = false) {
+  return colorVectors(
+    colors,
+    (data: Vector3[]) => {
+      const list = closestList(data).slice(0, 128)
+
+      const result = list.map((start) => {
+        const vectors = momentumBidiSort(data, start, calculateScore)
+
+        return {
+          vectors,
+          metrics: metrics(vectors)
+        }
+      })
+
+      result.sort((a, b) => a.metrics.totalDistance - b.metrics.totalDistance)
+
+      return tsp ? tspVectors(result[0].vectors) : result[0].vectors
+    },
+    'oklab'
+  )
+}
+
+export function momentumClosestBestDeltaEOklab(colors: string[]) {
+  return colorVectors(
+    colors,
+    (data: Vector3[]) => {
+      const list = closestList(data).slice(0, 128)
+
+      const result = list.map((start) => {
+        const vectors = momentumBidiSort(data, start, calculateScoreDeltaE)
+
+        return {
+          vectors,
+          metrics: metrics(vectors)
+        }
+      })
+
+      result.sort((a, b) => a.metrics.totalDistance - b.metrics.totalDistance)
+
+      return result[0].vectors
+    },
+    'oklab'
+  )
 }
 
 export function momentumInlinestOklab(colors: string[]) {

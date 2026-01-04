@@ -2,10 +2,10 @@ import { distance, dot, normalize, subtract } from './vector.ts'
 import { oklab } from './oklab.js'
 
 export function metrics(colors) {
-  const vectors = colors.map((c) => oklab(c))
+  const vectors = Array.isArray(colors[0]) ? colors : colors.map((c) => oklab(c))
 
   if (vectors.length < 2) {
-    return { totalDistance: 0, avgAngleChange: 0, maxAngleChange: 0 }
+    return { totalDistance: 0, avgAngleChange: 0, maxAngleChange: 0, meanDistance: 0, devDistance: 0 }
   }
 
   let totalDistance = 0

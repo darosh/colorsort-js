@@ -7,7 +7,7 @@ import { graphDeltaE } from './graph-delta-e.js'
 import { cmyk, hcl, hsl, lab, oklab, oklch, rgb } from './models.js'
 import { principalLab, principalOklab, principalRgb } from '@/lib/sorting-methods/principal.ts'
 
-import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab } from './momentum.ts'
+import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
 import { sortByHslCylindrical, sortByHslSpiral } from '@/lib/sorting-methods/radial.ts'
 import { clusterLab, clusterOklab, clusterRgb, dbScanLab, dbScanOklab, dbScanRgb, kMeansLab, kMeansOklab, kMeansRgb } from '@/lib/sorting-methods/clustering.ts'
 
@@ -187,6 +187,36 @@ export const SORTING_METHODS = [
     }
   },
   {
+    name: 'MOM(Closest+) Oklab',
+    fn: momentumClosestBestOklab,
+    speed: 3,
+    mid: 'MOM(Closest+)-Oklab',
+    description: {
+      method: METHODS.MOM,
+      model: MODELS.OKLAB
+    }
+  },
+  {
+    name: 'TSP(MOM(Closest+)) Oklab',
+    fn: (colors) => momentumClosestBestOklab(colors, true),
+    speed: 3,
+    mid: 'TSP(MOM(Closest+))-Oklab',
+    description: {
+      method: METHODS.MOM,
+      model: MODELS.OKLAB
+    }
+  },
+  {
+    name: 'MOM(Closest+, Delta E) Oklab',
+    fn: momentumClosestBestDeltaEOklab,
+    speed: 3,
+    mid: 'MOM(Closest+,DE)-Oklab',
+    description: {
+      method: METHODS.MOM,
+      model: MODELS.OKLAB
+    }
+  },
+  {
     name: 'MOM(Inlinest) Oklab',
     fn: momentumInlinestOklab,
     speed: 3,
@@ -222,7 +252,7 @@ export const SORTING_METHODS = [
     name: 'Genetic Oklab',
     fn: evolve,
     speed: 5,
-    mid: 'GEN3-Oklab',
+    mid: 'GEN-Oklab',
     description: {
       method: METHODS.GEN,
       model: MODELS.OKLAB
