@@ -102,7 +102,7 @@ export function momentumClosestOklab(colors: string[]) {
 export function momentumClosestBestOklab(colors: string[], tsp = false) {
   return colorVectors(
     colors,
-    (data: Vector3[]) => {
+    function (data: Vector3[]) {
       const list = closestList(data).slice(0, 128)
 
       const result = list.map((start) => {
@@ -110,7 +110,8 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 
         return {
           vectors,
-          metrics: metrics(vectors)
+          // @ts-ignore
+          metrics: metrics(this.toColors(vectors))
         }
       })
 
@@ -125,7 +126,7 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 export function momentumClosestBestDeltaEOklab(colors: string[]) {
   return colorVectors(
     colors,
-    (data: Vector3[]) => {
+    function (data: Vector3[]) {
       const list = closestList(data).slice(0, 128)
 
       const result = list.map((start) => {
@@ -133,7 +134,8 @@ export function momentumClosestBestDeltaEOklab(colors: string[]) {
 
         return {
           vectors,
-          metrics: metrics(vectors)
+          // @ts-ignore
+          metrics: metrics(this.toColors(vectors))
         }
       })
 

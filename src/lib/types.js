@@ -6,10 +6,11 @@ export function detectPaletteType(colors) {
   const variances = calculateVariances(colors)
 
   // Also get the actual ranges for context
-  const labColors = colors.map((color) => chroma(color).lab())
-  const lchColors = labColors.map((lab) => chroma.lab(lab).lch())
+  // const labColors = colors.map((color) => chroma(color).lab())
+  // const lchColors = labColors.map((lab) => chroma.lab(lab).lch())
+  const lchColors = colors.map((c) => chroma(c).lch())
 
-  const lightnesses = labColors.map(([L]) => L)
+  const lightnesses = lchColors.map(([L]) => L)
   const chromas = lchColors.map(([, C]) => C)
   const hues = lchColors.map(([, , H]) => H)
 

@@ -155,8 +155,12 @@ export function colorVectors(colors: string[], fn: (vectors: Vector3[]) => Vecto
       vectorMap.set(key, value)
     })
 
+  function toColors(vectors: Vector3[]): string[] {
+    return vectors.map((c: Vector3) => vectorMap.get(c))
+  }
+
   const vectors = [...vectorMap.keys()]
-  const sorted = fn(vectors)
+  const sorted = fn.call({ toColors }, vectors)
 
   return sorted.map((c: Vector3) => vectorMap.get(c))
 }

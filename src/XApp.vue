@@ -7,7 +7,7 @@
     </v-app-bar>
 
     <v-main style="--v-layout-top: 64px;">
-      <v-container max-width="1400">
+      <v-container fluid>
         <v-table hover>
           <thead>
             <tr>
@@ -15,10 +15,10 @@
               <th>Algorithm</th>
               <th class="text-right">Colors</th>
               <th class="text-right">Time</th>
-              <th class="text-center pr-0 pl-6" colspan="5">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
+              <th class="text-center pr-0 pl-6" colspan="8">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
               <th class="text-right pr-0">Diff</th>
               <th class="text-center">Best</th>
-              <th></th>
+              <th style="min-width: 300px;"></th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +75,27 @@
                 <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.perceptualUniformity}">
+                <template v-if="metrics">{{ metrics.perceptualUniformity.toFixed(2) }}</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.harmonicScore}">
+                <template v-if="metrics">{{ metrics.harmonicScore.toFixed(2) }}</template>
+                <template v-else>...</template>
+              </td>
+              <td style="width: 120px;" class="text-right">
+                <template v-if="metrics">
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.L}">{{metrics.lchAvgChange.L.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.C}">{{metrics.lchAvgChange.C.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.H}">{{metrics.lchAvgChange.H.toFixed(0)}}</span><br>
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.L}">{{metrics.lchMaxChange.L.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.C}">{{metrics.lchMaxChange.C.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.H}">{{metrics.lchMaxChange.H.toFixed(0)}}</span><br>
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.L}">{{metrics.lchDeviation.L.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.C}">{{metrics.lchDeviation.C.toFixed(0)}}</span>,
+                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.H}">{{metrics.lchDeviation.H.toFixed(0)}}</span>
+                </template>
+              </td>
               <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !dist}">
                 {{ dist !== null ? (!dist ? 0 : dist.toFixed(2)) : '...' }}
               </td>
@@ -104,6 +125,7 @@ import { bestMetrics, sortAll, updateDistances, updateDistancesPalette } from '@
 import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS, metrics } from '@/lib'
 import XPreview from '@/XPreview.vue'
+import { metricsEx } from '@/lib/metrics.ts'
 
 export default {
   components: { XPreview },
@@ -151,7 +173,7 @@ export default {
           const { r, result, elapsed } = this.flushRenders.shift()
           r.colors = result
           r.time = elapsed
-          r.metrics = metrics(result)
+          r.metrics = metricsEx(result)
         }
 
         if (this.rendered === this.renderingTotal) {
@@ -184,7 +206,24 @@ export default {
           avgAngleChange: bests[r.palette].avgAngleChange === r.metrics.avgAngleChange,
           maxAngleChange: bests[r.palette].maxAngleChange === r.metrics.maxAngleChange,
           meanDistance: bests[r.palette].meanDistance === r.metrics.meanDistance,
-          devDistance: bests[r.palette].devDistance === r.metrics.devDistance
+          devDistance: bests[r.palette].devDistance === r.metrics.devDistance,
+          harmonicScore: bests[r.palette].harmonicScore === r.metrics.harmonicScore,
+          perceptualUniformity: bests[r.palette].perceptualUniformity === r.metrics.perceptualUniformity,
+          lchAvgChange: {
+            L: bests[r.palette].lchAvgChange.L === r.metrics.lchAvgChange.L,
+            C: bests[r.palette].lchAvgChange.C === r.metrics.lchAvgChange.C,
+            H: bests[r.palette].lchAvgChange.H === r.metrics.lchAvgChange.H
+          },
+          lchMaxChange: {
+            L: bests[r.palette].lchMaxChange.L === r.metrics.lchMaxChange.L,
+            C: bests[r.palette].lchMaxChange.C === r.metrics.lchMaxChange.C,
+            H: bests[r.palette].lchMaxChange.H === r.metrics.lchMaxChange.H
+          },
+          lchDeviation: {
+            L: bests[r.palette].lchDeviation.L === r.metrics.lchDeviation.L,
+            C: bests[r.palette].lchDeviation.C === r.metrics.lchDeviation.C,
+            H: bests[r.palette].lchDeviation.H === r.metrics.lchDeviation.H
+          }
         }
       })
     }
