@@ -13,7 +13,7 @@
             <tr>
               <th>Palette</th>
               <th>Algorithm</th>
-              <th class="text-right">Colors</th>
+<!--              <th class="text-right">Colors</th>-->
               <th class="text-right">Time</th>
               <th class="text-center pr-0 pl-6" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
               <th class="text-center pr-0" colspan="2">Avg&deg;, Max&deg;</th>
@@ -37,6 +37,12 @@
             >
               <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
                 {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
+                
+                <div style="display: flex; align-items: center" class="mt-6 pr-3">
+                  <div style="height: 10px;" :style="{width: `${v * 100}%`, background: `rgb(${r},${g},${b})`}" v-for="[r,g,b,v] in palette.gram"></div>
+                  <div class="text-no-wrap pl-2">{{palette.gram.length}} / {{palette.colors.length}}</div>
+                </div>
+                
                 <v-table density="compact" class="mt-6 bg-transparent">
                   <tbody>
                     <tr v-for="(value, key) in formatTypes(palette.type.data)">
@@ -47,9 +53,9 @@
                 </v-table>
               </td>
               <td style="width: 230px">{{ method.mid }}</td>
-              <td style="width: 72px" class="text-right">
-                {{ colors.length || '...' }}
-              </td>
+<!--              <td style="width: 72px" class="text-right">-->
+<!--                {{ colors.length || '...' }}-->
+<!--              </td>-->
               <td style="width: 72px" class="text-right">
                 {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
               </td>

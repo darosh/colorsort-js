@@ -4,6 +4,8 @@ import { getMetricsExRange, MetricsEx, metricsExQuality } from './metrics.ts'
 import { render } from '../render.js'
 import BESTIES from '../besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from '../palette-distance.ts'
+import { extract } from 'colorgram'
+import chroma from 'chroma-js'
 
 export type Method = {
   name: string
@@ -23,7 +25,8 @@ export type PaletteRecord = {
   colors: string[]
   type: PaletteType
   records: SortRecord[]
-  metricsRange: MetricsEx<[number, number]> | null
+  metricsRange: MetricsEx<[number, number]> | null,
+  gram: [number, number, number, number][]
 }
 
 export type SortRecord = {
@@ -80,7 +83,8 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
       colors: colors,
       records: <SortRecord[]>[],
       metricsRange: null,
-      type: await render({ getPaletteType: colors })
+      type: await render({ getPaletteType: colors }),
+      gram: extract({data: colors.map(c => chroma(c).rgb()).flat(), channels: 3}, colors.length).sort((a, b) => b[3] - a[3])
     }
 
     types.push(palette)

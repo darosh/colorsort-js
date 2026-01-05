@@ -2,7 +2,7 @@
 
 - [x] name palettes 
 - [x] fix bestChange
-- [ ] colorgram
+- [x] colorgram
 - [ ] generate methods
 - [ ] best picker palettes 
 - [ ] analyze best picks (sorter vs type, ...?) 
