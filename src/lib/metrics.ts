@@ -247,15 +247,13 @@ function calculateHueSpread(hues: number[]): number {
   return gaps.reduce((a, b) => a + b, 0) / gaps.length
 }
 
-function catmullRom(p0: number[], p1: number[], p2: number[], p3: number[], t: number): number[] {
+function catmullRom(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number): Vector3 {
   const t2 = t * t
   const t3 = t2 * t
 
   return [
     0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
-
     0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
-
     0.5 * (2 * p1[2] + (-p0[2] + p2[2]) * t + (2 * p0[2] - 5 * p1[2] + 4 * p2[2] - p3[2]) * t2 + (-p0[2] + 3 * p1[2] - 3 * p2[2] + p3[2]) * t3)
   ]
 }
@@ -267,7 +265,7 @@ function curveLengthBetween(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, 
 
   for (let i = 1; i <= samples; i++) {
     const t = i / samples
-    const point = <Vector3>catmullRom(p0, p1, p2, p3, t)
+    const point = catmullRom(p0, p1, p2, p3, t)
     length += distance(prevPoint, point)
     prevPoint = point
   }
