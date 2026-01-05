@@ -10,116 +10,128 @@
       <v-container fluid>
         <v-table hover>
           <thead>
-            <tr>
-              <th>Palette</th>
-              <th>Algorithm</th>
-              <th class="text-right">Colors</th>
-              <th class="text-right">Time</th>
-              <th class="text-center pr-0 pl-6" colspan="8">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
-              <th class="text-right pr-0">Diff</th>
-              <th class="text-center">Best</th>
-              <th style="min-width: 300px;"></th>
-            </tr>
+          <tr>
+            <th>Palette</th>
+            <th>Algorithm</th>
+            <th class="text-right">Colors</th>
+            <th class="text-right">Time</th>
+            <th class="text-center pr-0 pl-6" colspan="8">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
+            <th class="text-right pr-0">Diff</th>
+            <th class="text-center">Best</th>
+            <th style="min-width: 300px;"></th>
+          </tr>
           </thead>
           <tbody>
-            <tr
+          <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, method, palette, time, key, best, id, bestDistance, metrics, bestMetrics },
+            data: { colors, method, palette, time, quality, best, id, bestDistance, metrics, bestMetrics },
             skip,
             odd,
           } in filtered"
               @click="showPreview = !showPreview"
               @mouseenter="onmouseenter(colors)"
-            >
-              <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
-                {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
-                <v-table density="compact" class="mt-6 bg-transparent">
-                  <tbody>
-                    <tr v-for="(value, key) in formatTypes(palette.type.data)">
-                      <td class="pl-0">{{ key }}</td>
-                      <td class="text-right">{{ value }}</td>
-                    </tr>
-                  </tbody>
-                </v-table>
-              </td>
-              <td style="width: 230px">{{ method.mid }}</td>
-              <td style="width: 72px" class="text-right">
-                {{ colors.length || '...' }}
-              </td>
-              <td style="width: 72px" class="text-right">
-                {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.totalDistance}">
-                <template v-if="bestMetrics?.totalDistance">*</template>
-                <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.meanDistance}">
-                <template v-if="bestMetrics?.meanDistance">*</template>
-                <template v-if="metrics">{{ metrics.meanDistance.toFixed(2) }}</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.devDistance}">
-                <template v-if="bestMetrics?.devDistance">*</template>
-                <template v-if="metrics">{{ metrics.devDistance.toFixed(2) }}</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.avgAngleChange}">
-                <template v-if="bestMetrics?.avgAngleChange">*</template>
-                <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.maxAngleChange}">
-                <template v-if="bestMetrics?.maxAngleChange">*</template>
-                <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.perceptualUniformity}">
-                <template v-if="metrics">{{ metrics.perceptualUniformity.toFixed(2) }}</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-green-accent-3': bestMetrics?.harmonicScore}">
-                <template v-if="metrics">{{ metrics.harmonicScore.toFixed(2) }}</template>
-                <template v-else>...</template>
-              </td>
-              <td style="width: 120px;" class="text-right">
-                <template v-if="metrics">
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.L}">{{metrics.lchAvgChange.L.toFixed(0)}}</span
-                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.C}">{{metrics.lchAvgChange.C.toFixed(0)}}</span
-                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchAvgChange.H}">{{metrics.lchAvgChange.H.toFixed(0)}}</span
-                  ><br />
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.L}">{{metrics.lchMaxChange.L.toFixed(0)}}</span
-                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.C}">{{metrics.lchMaxChange.C.toFixed(0)}}</span
-                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchMaxChange.H}">{{metrics.lchMaxChange.H.toFixed(0)}}</span
-                  ><br />
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.L}">{{metrics.lchDeviation.L.toFixed(0)}}</span
-                  >, <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.C}">{{metrics.lchDeviation.C.toFixed(0)}}</span
-                  >,
-                  <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.H}">{{metrics.lchDeviation.H.toFixed(0)}}</span>
-                </template>
-              </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !bestDistance}">
-                {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
-              </td>
-              <td style="width: 64px" class="pr-0">
-                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best" @click.stop="e => bestChange(e, id)" />
-              </td>
-              <td class="pl-0">
-                <div style="display: flex">
-                  <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
-                </div>
-              </td>
-            </tr>
+          >
+            <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
+              {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
+              <v-table density="compact" class="mt-6 bg-transparent">
+                <tbody>
+                <tr v-for="(value, key) in formatTypes(palette.type.data)">
+                  <td class="pl-0">{{ key }}</td>
+                  <td class="text-right">{{ value }}</td>
+                </tr>
+                </tbody>
+              </v-table>
+            </td>
+            <td style="width: 230px">{{ method.mid }}</td>
+            <td style="width: 72px" class="text-right">
+              {{ colors.length || '...' }}
+            </td>
+            <td style="width: 72px" class="text-right">
+              {{ time !== null ? `${time.toFixed(0)} ms` : '...' }}
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.totalDistance)}">
+              <template v-if="quality?.totalDistance === 0">*</template>
+              <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.meanDistance)}">
+              <template v-if="quality?.meanDistance === 0">*</template>
+              <template v-if="metrics">{{ metrics.meanDistance.toFixed(2) }}</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.devDistance)}">
+              <template v-if="quality?.devDistance === 0">*</template>
+              <template v-if="metrics">{{ metrics.devDistance.toFixed(2) }}</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.avgAngleChange)}">
+              <template v-if="quality?.avgAngleChange">*</template>
+              <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.maxAngleChange)}">
+              <template v-if="quality?.maxAngleChange">*</template>
+              <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.perceptualUniformity)}">
+              <template v-if="metrics">{{ metrics.perceptualUniformity.toFixed(2) }}</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.harmonicScore)}">
+              <template v-if="metrics">{{ metrics.harmonicScore.toFixed(2) }}</template>
+              <template v-else>...</template>
+            </td>
+            <td style="width: 120px;" class="text-right">
+              <template v-if="metrics">
+                  <span :style="{color: scale(quality?.lchAvgChange.L)}">{{ metrics.lchAvgChange.L.toFixed(0) }}</span
+                  >, <span
+                  :style="{color: scale(quality?.lchAvgChange.C)}">{{ metrics.lchAvgChange.C.toFixed(0) }}</span
+              >, <span
+                  :style="{color: scale(quality?.lchAvgChange.H)}">{{ metrics.lchAvgChange.H.toFixed(0) }}</span
+              ><br />
+                <span
+                  :style="{color: scale(quality?.lchMaxChange.L)}">{{ metrics.lchMaxChange.L.toFixed(0) }}</span
+                >, <span
+                  :style="{color: scale(quality?.lchMaxChange.C)}">{{ metrics.lchMaxChange.C.toFixed(0) }}</span
+              >, <span
+                  :style="{color: scale(quality?.lchMaxChange.H)}">{{ metrics.lchMaxChange.H.toFixed(0) }}</span
+              ><br />
+                <span
+                    :style="{color: scale(quality?.lchDeviation.L)}">{{ metrics.lchDeviation.L.toFixed(0) }}</span
+                >, <span
+                  :style="{color: scale(quality?.lchDeviation.C)}">{{ metrics.lchDeviation.C.toFixed(0) }}</span
+              >, <span
+                    :style="{color: scale(quality?.lchDeviation.H)}">{{ metrics.lchDeviation.H.toFixed(0) }}</span>
+              </template>
+            </td>
+            <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !bestDistance}">
+              {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
+            </td>
+            <td style="width: 64px" class="pr-0">
+              <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best"
+                              @click.stop="e => bestChange(e, id)" />
+            </td>
+            <td class="pl-0">
+              <div style="display: flex">
+                <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px"
+                     :style="{ background: c }" />
+              </div>
+            </td>
+          </tr>
           </tbody>
         </v-table>
       </v-container>
     </v-main>
-    <div v-if="showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
+    <div v-if="showPreview"
+         style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
       <x-preview :points="selectedColors" />
     </div>
   </v-app>
-  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
+  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8"
+                     color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active
+                     :model-value="100 * rendered / renderingTotal" />
 </template>
 
 <script>
@@ -127,15 +139,24 @@ import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS } from '@/lib'
 import XPreview from '@/XPreview.vue'
 import { computePlan, computeRender } from '@/lib/compute.ts'
-import { COMPUTED } from '@/deserialize.ts'
+import chroma from 'chroma-js'
 
-function debounce(func, timeout = 25){
-  let timer;
+// import { COMPUTED } from '@/deserialize.ts'
+const COMPUTED = null
+
+function debounce (func, timeout = 25) {
+  let timer
 
   return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => { func.apply(this, args); }, timeout);
-  };
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, args) }, timeout)
+  }
+}
+
+const scale_ = chroma.scale(['#77f', '#fff'])
+
+function scale (x) {
+  return x === 0 ? '#2f0' : scale_(x)
 }
 
 export default {
@@ -175,7 +196,7 @@ export default {
         this.rendered = 1
       }
     },
-    onRender(p) {
+    onRender (p) {
       this.rendered = p.done
       this.renderingTotal = p.total
     },
@@ -190,6 +211,9 @@ export default {
     onmouseenter (colors) {
       this.debouncedPreview(colors)
     },
+    scale (v) {
+      return v === undefined ? null : scale(v)
+    }
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
