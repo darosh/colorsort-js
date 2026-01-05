@@ -15,7 +15,10 @@
               <th>Algorithm</th>
               <th class="text-right">Colors</th>
               <th class="text-right">Time</th>
-              <th class="text-center pr-0 pl-6" colspan="11">Length, Avg, Dev / Avg&deg; / Max&deg;</th>
+              <th class="text-center pr-0 pl-6" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
+              <th class="text-center pr-0" colspan="2">Avg&deg;, Max&deg;</th>
+              <th class="text-left" colspan="2">P, H</th>
+              <th class="text-center">LCH</th>
               <th class="text-right pr-0">Diff</th>
               <th class="text-center">Best</th>
               <th style="min-width: 300px;"></th>
@@ -82,25 +85,35 @@
                 <template v-else>...</template>
               </td>
 
+              <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.curveRatio)}">
+                <template v-if="quality?.curveRatio === 0">*</template>
+                <template v-if="metrics">{{ (100 * metrics.curveRatio).toFixed(1) }}%</template>
+                <template v-else>...</template>
+              </td>
               <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.avgAngleChange)}">
-                <template v-if="quality?.avgAngleChange">*</template>
+                <template v-if="quality?.avgAngleChange === 0">*</template>
                 <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
               <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.maxAngleChange)}">
-                <template v-if="quality?.maxAngleChange">*</template>
+                <template v-if="quality?.maxAngleChange === 0">*</template>
                 <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </td>
+
               <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.perceptualUniformity)}">
+                <template v-if="quality?.perceptualUniformity === 0">*</template>
                 <template v-if="metrics">{{ metrics.perceptualUniformity.toFixed(2) }}</template>
                 <template v-else>...</template>
               </td>
+
               <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.harmonicScore)}">
+                <template v-if="quality?.harmonicScore === 0">*</template>
                 <template v-if="metrics">{{ metrics.harmonicScore.toFixed(2) }}</template>
                 <template v-else>...</template>
               </td>
-              <td style="width: 120px;" class="text-right">
+
+              <td style="width: 144px; line-height: 14px; font-size: 12px;" class="text-center">
                 <template v-if="metrics">
                   <span :style="{color: scale(quality?.lchAvgChange.L)}">{{ metrics.lchAvgChange.L.toFixed(0) }}</span
                   >, <span :style="{color: scale(quality?.lchAvgChange.C)}">{{ metrics.lchAvgChange.C.toFixed(0) }}</span

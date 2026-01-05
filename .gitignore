@@ -1,6 +1,9 @@
 # IDE
 .idea/
 
+# Data
+./data-*.json
+
 # Logs
 logs
 *.log

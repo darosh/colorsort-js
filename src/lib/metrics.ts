@@ -56,6 +56,7 @@ export type MetricsEx<T> = {
   lchAvgChange: MetricsLch<T>
   lchMaxChange: MetricsLch<T>
   lchDeviation: MetricsLch<T>
+  curveRatio: T
   perceptualUniformity: T
   curveUniformity: T
   hueSpread: T
@@ -82,6 +83,7 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
       lchAvgChange: { L: 0, C: 0, H: 0 },
       lchMaxChange: { L: 0, C: 0, H: 0 },
       lchDeviation: { L: 0, C: 0, H: 0 },
+      curveRatio: 0,
       perceptualUniformity: 0,
       curveUniformity: 0,
       hueSpread: 0,
@@ -190,6 +192,7 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
   // Perceptual uniformity: lower deviation from mean distance = more uniform
   const perceptualUniformity = 1 / (1 + devDistance)
   const curveUniformity = 1 / (1 + devCurveDistance)
+  const curveRatio = totalCurveDistance / totalDistance - 1
 
   // Hue spread: how well distributed are hues across the color wheel
   const hues = lchColors.map(([, , h]) => h).filter((h) => !isNaN(h))
@@ -218,6 +221,7 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
     lchAvgChange,
     lchMaxChange,
     lchDeviation,
+    curveRatio,
     perceptualUniformity,
     curveUniformity,
     hueSpread,
@@ -289,6 +293,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     lchAvgChange: { L: [], C: [], H: [] },
     lchMaxChange: { L: [], C: [], H: [] },
     lchDeviation: { L: [], C: [], H: [] },
+    curveRatio: [],
     perceptualUniformity: [],
     curveUniformity: [],
     hueSpread: [],
@@ -316,6 +321,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     range.lchDeviation.L.push(i.lchDeviation.L)
     range.lchDeviation.C.push(i.lchDeviation.C)
     range.lchDeviation.H.push(i.lchDeviation.H)
+    range.curveRatio.push(i.curveRatio)
     range.perceptualUniformity.push(i.perceptualUniformity)
     range.curveUniformity.push(i.curveUniformity)
     range.hueSpread.push(i.hueSpread)
@@ -342,6 +348,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
   range.lchDeviation.L.sort(asc)
   range.lchDeviation.C.sort(asc)
   range.lchDeviation.H.sort(asc)
+  range.curveRatio.sort(asc)
   range.perceptualUniformity.sort(dsc)
   range.curveUniformity.sort(dsc)
   range.hueSpread.sort(asc)
@@ -374,6 +381,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
       C: [range.lchDeviation.C[0], <number>range.lchDeviation.C.at(-1)],
       H: [range.lchDeviation.H[0], <number>range.lchDeviation.H.at(-1)]
     },
+    curveRatio: [range.curveRatio[0], <number>range.curveRatio.at(-1)],
     perceptualUniformity: [range.perceptualUniformity[0], <number>range.perceptualUniformity.at(-1)],
     curveUniformity: [range.curveUniformity[0], <number>range.curveUniformity.at(-1)],
     hueSpread: [range.hueSpread[0], <number>range.hueSpread.at(-1)],
@@ -412,6 +420,7 @@ export function metricsExQuality(value: MetricsEx<number>, range: MetricsEx<[num
     lchAvgChange: interpolateLch(value.lchAvgChange, range.lchAvgChange),
     lchMaxChange: interpolateLch(value.lchMaxChange, range.lchMaxChange),
     lchDeviation: interpolateLch(value.lchDeviation, range.lchDeviation),
+    curveRatio: interpolate(value.curveRatio, range.curveRatio),
     perceptualUniformity: interpolate(value.perceptualUniformity, range.perceptualUniformity),
     curveUniformity: interpolate(value.curveUniformity, range.curveUniformity),
     hueSpread: interpolate(value.hueSpread, range.hueSpread),
