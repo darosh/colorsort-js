@@ -28,7 +28,7 @@
             <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, method, palette, time, quality, best, id, bestDistance, metrics, bestMetrics },
+            data: { colors, method, palette, time, quality, best, index, bestDistance, metrics },
             skip,
             odd,
           } in filtered"
@@ -132,7 +132,7 @@
                 {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
               </td>
               <td style="width: 64px" class="pr-0">
-                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best" @click.stop="e => bestChange(e, id)" />
+                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best" @click.stop="e => bestChange(e, index)" />
               </td>
               <td class="pl-0">
                 <div style="display: flex">
@@ -155,7 +155,7 @@
 import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS } from '@/lib'
 import XPreview from '@/XPreview.vue'
-import { computePlan, computeRender } from '@/lib/compute.ts'
+import { computePlan, computeRender, updateDistance } from '@/lib/compute.ts'
 import chroma from 'chroma-js'
 
 import { COMPUTED } from '@/deserialize.ts'
@@ -230,7 +230,14 @@ export default {
     },
     scale (v) {
       return v === undefined ? null : scale(v)
-    }
+    },
+    bestChange (e, index) {
+      const item = this.sorted.find(s => s.index === index)
+      item.best = !item.best
+      const besties = this.sorted.filter(d => d.best).map((s) => ({ key: s.palette.key, mid: s.method.mid }))
+      console.log(JSON.stringify(besties))
+      updateDistance(item.palette)
+    },
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)

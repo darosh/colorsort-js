@@ -45,10 +45,16 @@ function updateRangeAndQuality(palette: PaletteRecord) {
   for (const r of palette.records) {
     r.quality = metricsExQuality(<MetricsEx<number>>r.metrics, palette.metricsRange)
   }
+}
 
+export function updateDistance(palette: PaletteRecord) {
   const theBest = palette.records.find((r) => r.best)
 
   if (!theBest) {
+    for (const r of palette.records) {
+      r.bestDistance = null
+    }
+    
     return
   }
 
@@ -102,6 +108,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
 
               if (row.palette.records.filter((r) => r.colors).length === sortingMethods.length) {
                 updateRangeAndQuality(row.palette)
+                updateDistance(row.palette)
                 donePalettes++
               }
 

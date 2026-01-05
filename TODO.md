@@ -1,6 +1,9 @@
 # TODO
 
 - [x] name palettes 
+- [x] fix bestChange
+- [ ] colorgram
+- [ ] generate methods
 - [ ] best picker palettes 
 - [ ] analyze best picks (sorter vs type, ...?) 
 - [ ] evaluate palettes (distance, angles)
