@@ -1,8 +1,8 @@
-import { distance, dot, normalize, subtract } from './vector.ts'
+import { distance, dot, normalize, subtract, Vector3 } from './vector.ts'
 import { oklab } from './oklab.js'
 import chroma from 'chroma-js'
 
-export function metrics(colors: string[]) {
+export function metrics (colors: string[]) {
   const vectors = colors.map((c) => oklab(c))
 
   if (vectors.length < 2) {
@@ -42,7 +42,7 @@ export function metrics(colors: string[]) {
   return { totalDistance, avgAngleChange, maxAngleChange, meanDistance, devDistance }
 }
 
-export function metricsEx(colors: string[]) {
+export function metricsEx (colors: string[]) {
   const vectors = colors.map((c) => oklab(c))
   const lchColors = colors.map((c) => chroma(c).lch())
 
@@ -53,6 +53,8 @@ export function metricsEx(colors: string[]) {
       maxAngleChange: 0,
       meanDistance: 0,
       devDistance: 0,
+      meanCurveDistance: 0,
+      devCurveDistance: 0,
       lchAvgChange: { L: 0, C: 0, H: 0 },
       lchMaxChange: { L: 0, C: 0, H: 0 },
       lchDeviation: { L: 0, C: 0, H: 0 },
@@ -60,14 +62,20 @@ export function metricsEx(colors: string[]) {
       hueSpread: 0,
       chromaRange: 0,
       lightnessRange: 0,
-      harmonicScore: 0
+      harmonicScore: 0,
+      harmonicCurveScore: 0
     }
   }
 
   let totalDistance = 0
+  let totalCurveDistance = 0
   let angleChanges = []
   let prevDirection = null
   const distances = []
+  const curveDistances = []
+
+  // Extend endpoints for Catmull-Rom (duplicate first/last points)
+  const extendedVectors = [vectors[0], ...vectors, vectors[vectors.length - 1]]
 
   // LCH component changes
   const lChanges = []
@@ -78,6 +86,15 @@ export function metricsEx(colors: string[]) {
     const dist = distance(vectors[i - 1], vectors[i])
     totalDistance += dist
     distances.push(dist)
+
+    const curveDist = curveLengthBetween(
+      extendedVectors[i - 1],
+      extendedVectors[i],
+      extendedVectors[i + 1],
+      extendedVectors[i + 2]
+    )
+    totalCurveDistance += curveDist
+    curveDistances.push(curveDist)
 
     const direction = normalize(subtract(vectors[i], vectors[i - 1]))
 
@@ -118,6 +135,12 @@ export function metricsEx(colors: string[]) {
   const meanDistance = totalDistance / (vectors.length - 1)
   const devDistance = Math.sqrt(distances.reduce((acc, d) => acc + Math.pow(d - meanDistance, 2), 0) / (vectors.length - 1))
 
+  const meanCurveDistance = totalCurveDistance / (vectors.length - 1)
+
+  const devCurveDistance = Math.sqrt(
+    curveDistances.reduce((acc, d) => acc + Math.pow(d - meanCurveDistance, 2), 0) / (vectors.length - 1)
+  )
+
   const avgAngleChange = angleChanges.length > 0 ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length : 0
 
   const maxAngleChange = angleChanges.length > 0 ? Math.max(...angleChanges) : 0
@@ -148,6 +171,7 @@ export function metricsEx(colors: string[]) {
 
   // Perceptual uniformity: lower deviation from mean distance = more uniform
   const perceptualUniformity = 1 / (1 + devDistance)
+  const curveUniformity = 1 / (1 + devCurveDistance)
 
   // Hue spread: how well distributed are hues across the color wheel
   const hues = lchColors.map(([, , h]) => h).filter((h) => !isNaN(h))
@@ -162,6 +186,7 @@ export function metricsEx(colors: string[]) {
 
   // Harmonic score: combines uniform spacing with good hue distribution
   const harmonicScore = perceptualUniformity * 0.4 + Math.min(hueSpread / 180, 1) * 0.3 + (1 / (1 + lchDeviation.H / 45)) * 0.3
+  const harmonicCurveScore = curveUniformity * 0.4 + Math.min(hueSpread / 180, 1) * 0.3 + (1 / (1 + lchDeviation.H / 45)) * 0.3
 
   return {
     totalDistance,
@@ -169,18 +194,22 @@ export function metricsEx(colors: string[]) {
     maxAngleChange,
     meanDistance,
     devDistance,
+    meanCurveDistance,
+    devCurveDistance,
     lchAvgChange,
     lchMaxChange,
     lchDeviation,
     perceptualUniformity,
+    curveUniformity,
     hueSpread,
     chromaRange,
     lightnessRange,
-    harmonicScore
+    harmonicScore,
+    harmonicCurveScore
   }
 }
 
-function calculateHueSpread(hues: number[]): number {
+function calculateHueSpread (hues: number[]): number {
   if (hues.length < 2) {
     return 0
   }
@@ -197,4 +226,41 @@ function calculateHueSpread(hues: number[]): number {
 
   // Return the average gap (ideal spread = 360 / n colors)
   return gaps.reduce((a, b) => a + b, 0) / gaps.length
+}
+
+function catmullRom (p0: number[], p1: number[], p2: number[], p3: number[], t: number): number[] {
+  const t2 = t * t
+  const t3 = t2 * t
+
+  return [
+    0.5 * ((2 * p1[0]) +
+      (-p0[0] + p2[0]) * t +
+      (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 +
+      (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+
+    0.5 * ((2 * p1[1]) +
+      (-p0[1] + p2[1]) * t +
+      (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 +
+      (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
+
+    0.5 * ((2 * p1[2]) +
+      (-p0[2] + p2[2]) * t +
+      (2 * p0[2] - 5 * p1[2] + 4 * p2[2] - p3[2]) * t2 +
+      (-p0[2] + 3 * p1[2] - 3 * p2[2] + p3[2]) * t3)
+  ]
+}
+
+// Calculate curve length between two points using sampling
+function curveLengthBetween (p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, samples = 12): number {
+  let length = 0
+  let prevPoint = p1
+
+  for (let i = 1; i <= samples; i++) {
+    const t = i / samples
+    const point = <Vector3>catmullRom(p0, p1, p2, p3, t)
+    length += distance(prevPoint, point)
+    prevPoint = point
+  }
+
+  return length
 }
