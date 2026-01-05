@@ -1,5 +1,6 @@
-import { SORTING_METHODS } from '@/lib'
+import { detectPaletteType, SORTING_METHODS } from '@/lib'
 import { oklab } from '@/lib/oklab.js'
+import { metricsEx } from '@/lib/metrics.ts'
 
 export async function timed(fn) {
   const start = performance.now()
@@ -9,20 +10,26 @@ export async function timed(fn) {
 }
 
 self.onmessage = async (msg) => {
-  const { sortName, palette } = msg.data
+  const { sortName, getPaletteType, palette } = msg.data
 
-  const fn = SORTING_METHODS.find((d) => d.name === sortName).fn
+  if (sortName) {
+    const fn = SORTING_METHODS.find((d) => d.name === sortName).fn
 
-  const { result, elapsed } = await timed(async () => {
-    return await fn(palette)
-  })
+    const { result, elapsed } = await timed(async () => {
+      return await fn(palette)
+    })
 
-  const first = oklab(result[0])
-  const last = oklab(result.at(-1))
+    const first = oklab(result[0])
+    const last = oklab(result.at(-1))
 
-  if (first[0] > last[0]) {
-    result.reverse()
+    if (first[0] > last[0]) {
+      result.reverse()
+    }
+
+    const metrics = metricsEx(result)
+
+    self.postMessage({ result, metrics, elapsed })
+  } else if (getPaletteType) {
+    self.postMessage(detectPaletteType(getPaletteType) )
   }
-
-  self.postMessage({ result, elapsed })
 }

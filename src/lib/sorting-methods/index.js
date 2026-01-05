@@ -37,6 +37,15 @@ const DIFFS = {
 
 export const SORTING_METHODS = [
   {
+    name: 'Original',
+    fn: (c) => c,
+    speed: 0,
+    mid: 'ORI',
+    description: {
+      model: null
+    }
+  },
+  {
     name: 'HSL',
     fn: hsl,
     speed: 2,

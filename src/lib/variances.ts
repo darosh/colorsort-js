@@ -1,6 +1,14 @@
 import chroma from 'chroma-js'
 
-export function calculateVariances(colors) {
+export type Variances = {
+  L: number
+  C: number
+  H: number
+  meanC: number
+  meanH: number
+}
+
+export function calculateVariances(colors: string[]): Variances {
   // Convert all colors to LAB color space
   // Assuming colors are in a format you can convert (RGB, hex, etc.)
   const labColors = colors.map((color) => chroma(color).lab())
@@ -11,7 +19,7 @@ export function calculateVariances(colors) {
   // const meanB = labColors.reduce((sum, c) => sum + c.b, 0) / labColors.length;
 
   // Convert to LCH to get chroma and hue
-  const lchColors = labColors.map((lab) => chroma.lab(lab).lch())
+  const lchColors = labColors.map((lab) => chroma.lab(...lab).lch())
 
   const meanC = lchColors.reduce((sum, [, C]) => sum + C, 0) / lchColors.length
 
@@ -39,7 +47,7 @@ export function calculateVariances(colors) {
 }
 
 // Helper: Circular mean for hue angles
-function circularMean(angles) {
+function circularMean(angles: number[]) {
   if (angles.length === 0) {
     return 0
   }
@@ -58,7 +66,7 @@ function circularMean(angles) {
 }
 
 // Helper: Circular variance for hue
-function circularVariance(angles, mean) {
+function circularVariance(angles: number[], mean: number) {
   if (angles.length === 0) {
     return 0
   }

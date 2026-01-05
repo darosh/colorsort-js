@@ -42,25 +42,25 @@ export function metrics (colors: string[]) {
   return { totalDistance, avgAngleChange, maxAngleChange, meanDistance, devDistance }
 }
 
-export type MetricsLch<T> = { L: T, C: T, H: T }
+export type MetricsLch<T> = { L: T; C: T; H: T }
 
 export type MetricsEx<T> = {
-  totalDistance: T,
-  avgAngleChange: T,
-  maxAngleChange: T,
-  meanDistance: T,
-  devDistance: T,
-  meanCurveDistance: T,
-  devCurveDistance: T,
-  lchAvgChange: MetricsLch<T>,
-  lchMaxChange: MetricsLch<T>,
-  lchDeviation: MetricsLch<T>,
-  perceptualUniformity: T,
-  curveUniformity: T,
-  hueSpread: T,
-  chromaRange: T,
-  lightnessRange: T,
-  harmonicScore: T,
+  totalDistance: T
+  avgAngleChange: T
+  maxAngleChange: T
+  meanDistance: T
+  devDistance: T
+  meanCurveDistance: T
+  devCurveDistance: T
+  lchAvgChange: MetricsLch<T>
+  lchMaxChange: MetricsLch<T>
+  lchDeviation: MetricsLch<T>
+  perceptualUniformity: T
+  curveUniformity: T
+  hueSpread: T
+  chromaRange: T
+  lightnessRange: T
+  harmonicScore: T
   harmonicCurveScore: T
 }
 
@@ -110,12 +110,7 @@ export function metricsEx (colors: string[]): MetricsEx<number> {
     totalDistance += dist
     distances.push(dist)
 
-    const curveDist = curveLengthBetween(
-      extendedVectors[i - 1],
-      extendedVectors[i],
-      extendedVectors[i + 1],
-      extendedVectors[i + 2]
-    )
+    const curveDist = curveLengthBetween(extendedVectors[i - 1], extendedVectors[i], extendedVectors[i + 1], extendedVectors[i + 2])
     totalCurveDistance += curveDist
     curveDistances.push(curveDist)
 
@@ -160,9 +155,7 @@ export function metricsEx (colors: string[]): MetricsEx<number> {
 
   const meanCurveDistance = totalCurveDistance / (vectors.length - 1)
 
-  const devCurveDistance = Math.sqrt(
-    curveDistances.reduce((acc, d) => acc + Math.pow(d - meanCurveDistance, 2), 0) / (vectors.length - 1)
-  )
+  const devCurveDistance = Math.sqrt(curveDistances.reduce((acc, d) => acc + Math.pow(d - meanCurveDistance, 2), 0) / (vectors.length - 1))
 
   const avgAngleChange = angleChanges.length > 0 ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length : 0
 
@@ -256,20 +249,11 @@ function catmullRom (p0: number[], p1: number[], p2: number[], p3: number[], t: 
   const t3 = t2 * t
 
   return [
-    0.5 * ((2 * p1[0]) +
-      (-p0[0] + p2[0]) * t +
-      (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 +
-      (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
+    0.5 * (2 * p1[0] + (-p0[0] + p2[0]) * t + (2 * p0[0] - 5 * p1[0] + 4 * p2[0] - p3[0]) * t2 + (-p0[0] + 3 * p1[0] - 3 * p2[0] + p3[0]) * t3),
 
-    0.5 * ((2 * p1[1]) +
-      (-p0[1] + p2[1]) * t +
-      (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 +
-      (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
+    0.5 * (2 * p1[1] + (-p0[1] + p2[1]) * t + (2 * p0[1] - 5 * p1[1] + 4 * p2[1] - p3[1]) * t2 + (-p0[1] + 3 * p1[1] - 3 * p2[1] + p3[1]) * t3),
 
-    0.5 * ((2 * p1[2]) +
-      (-p0[2] + p2[2]) * t +
-      (2 * p0[2] - 5 * p1[2] + 4 * p2[2] - p3[2]) * t2 +
-      (-p0[2] + 3 * p1[2] - 3 * p2[2] + p3[2]) * t3)
+    0.5 * (2 * p1[2] + (-p0[2] + p2[2]) * t + (2 * p0[2] - 5 * p1[2] + 4 * p2[2] - p3[2]) * t2 + (-p0[2] + 3 * p1[2] - 3 * p2[2] + p3[2]) * t3)
   ]
 }
 
@@ -288,7 +272,7 @@ function curveLengthBetween (p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3,
   return length
 }
 
-export function getMetricsExRange (list: MetricsEx<number>[]) {
+export function getMetricsExRange (list: MetricsEx<number>[]): MetricsEx<[number, number]> {
   const range: MetricsEx<number[]> = {
     totalDistance: [],
     avgAngleChange: [],
@@ -382,6 +366,47 @@ export function getMetricsExRange (list: MetricsEx<number>[]) {
   range.lightnessRange = [range.lightnessRange[0], <number>range.lightnessRange.at(-1)]
   range.harmonicScore = [range.harmonicScore[0], <number>range.harmonicScore.at(-1)]
   range.harmonicCurveScore = [range.harmonicCurveScore[0], <number>range.harmonicCurveScore.at(-1)]
-  
-  return range
+
+  return <MetricsEx<[number, number]>>range
+}
+
+function interpolate (val: number, [min, max]: [number, number]): number {
+  if (max === min) return 0
+  return Math.max(0, Math.min(1, (val - min) / (max - min)))
+}
+
+function interpolateLch (
+  val: MetricsLch<number>,
+  rng: MetricsLch<[number, number]>
+): MetricsLch<number> {
+  return {
+    L: interpolate(val.L, rng.L),
+    C: interpolate(val.C, rng.C),
+    H: interpolate(val.H, rng.H),
+  }
+}
+
+export function metricsExQuality (
+  value: MetricsEx<number>,
+  range: MetricsEx<[number, number]>
+): MetricsEx<number> {
+  return {
+    totalDistance: interpolate(value.totalDistance, range.totalDistance),
+    avgAngleChange: interpolate(value.avgAngleChange, range.avgAngleChange),
+    maxAngleChange: interpolate(value.maxAngleChange, range.maxAngleChange),
+    meanDistance: interpolate(value.meanDistance, range.meanDistance),
+    devDistance: interpolate(value.devDistance, range.devDistance),
+    meanCurveDistance: interpolate(value.meanCurveDistance, range.meanCurveDistance),
+    devCurveDistance: interpolate(value.devCurveDistance, range.devCurveDistance),
+    lchAvgChange: interpolateLch(value.lchAvgChange, range.lchAvgChange),
+    lchMaxChange: interpolateLch(value.lchMaxChange, range.lchMaxChange),
+    lchDeviation: interpolateLch(value.lchDeviation, range.lchDeviation),
+    perceptualUniformity: interpolate(value.perceptualUniformity, range.perceptualUniformity),
+    curveUniformity: interpolate(value.curveUniformity, range.curveUniformity),
+    hueSpread: interpolate(value.hueSpread, range.hueSpread),
+    chromaRange: interpolate(value.chromaRange, range.chromaRange),
+    lightnessRange: interpolate(value.lightnessRange, range.lightnessRange),
+    harmonicScore: interpolate(value.harmonicScore, range.harmonicScore),
+    harmonicCurveScore: interpolate(value.harmonicCurveScore, range.harmonicCurveScore),
+  }
 }

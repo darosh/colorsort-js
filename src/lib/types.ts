@@ -1,8 +1,20 @@
 import chroma from 'chroma-js'
 
-import { calculateVariances } from './variances.js'
+import { calculateVariances, Variances } from './variances.ts'
 
-export function detectPaletteType(colors) {
+export type PaletteType = {
+  Kl: number
+  Kc: number
+  Kh: number
+  type: string
+  data: Variances & {
+    lightnessRange: number
+    chromaRange: number
+    hueSpread: number
+  }
+}
+
+export function detectPaletteType(colors: string[]): PaletteType {
   const variances = calculateVariances(colors)
 
   // Also get the actual ranges for context
@@ -58,7 +70,7 @@ export function detectPaletteType(colors) {
 }
 
 // Helper: Calculate hue spread (accounting for circularity)
-function calculateHueSpread(hues) {
+function calculateHueSpread(hues: number[]) {
   if (hues.length === 0) {
     return 0
   }

@@ -2,14 +2,14 @@
 
 // const workerUrl = new URL(RenderWorkerU, import.meta.url)
 
-export function RenderWorker () {
-  return new Worker(
-    new URL('./render.worker.js', import.meta.url),
-    { type: 'module' }
-  )
+export function RenderWorker() {
+  return new Worker(new URL('./render.worker.js', import.meta.url), { type: 'module' })
 }
 
 const concurrency = Math.max(globalThis.navigator.hardwareConcurrency, 4)
+
+// console.log(`Using ${concurrency} threads.`)
+
 const workers = []
 const pending = []
 
