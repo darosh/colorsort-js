@@ -2,7 +2,7 @@ import { distance, dot, normalize, subtract, Vector3 } from './vector.ts'
 import { oklab } from './oklab.js'
 import chroma from 'chroma-js'
 
-export function metrics (colors: string[]) {
+export function metrics(colors: string[]) {
   const vectors = colors.map((c) => oklab(c))
 
   if (vectors.length < 2) {
@@ -64,7 +64,7 @@ export type MetricsEx<T> = {
   harmonicCurveScore: T
 }
 
-export function metricsEx (colors: string[]): MetricsEx<number> {
+export function metricsEx(colors: string[]): MetricsEx<number> {
   const vectors = colors.map((c) => oklab(c))
   const lchColors = colors.map((c) => chroma(c).lch())
 
@@ -225,7 +225,7 @@ export function metricsEx (colors: string[]): MetricsEx<number> {
   }
 }
 
-function calculateHueSpread (hues: number[]): number {
+function calculateHueSpread(hues: number[]): number {
   if (hues.length < 2) {
     return 0
   }
@@ -244,7 +244,7 @@ function calculateHueSpread (hues: number[]): number {
   return gaps.reduce((a, b) => a + b, 0) / gaps.length
 }
 
-function catmullRom (p0: number[], p1: number[], p2: number[], p3: number[], t: number): number[] {
+function catmullRom(p0: number[], p1: number[], p2: number[], p3: number[], t: number): number[] {
   const t2 = t * t
   const t3 = t2 * t
 
@@ -258,7 +258,7 @@ function catmullRom (p0: number[], p1: number[], p2: number[], p3: number[], t: 
 }
 
 // Calculate curve length between two points using sampling
-function curveLengthBetween (p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, samples = 12): number {
+function curveLengthBetween(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, samples = 12): number {
   let length = 0
   let prevPoint = p1
 
@@ -272,7 +272,7 @@ function curveLengthBetween (p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3,
   return length
 }
 
-export function getMetricsExRange (list: MetricsEx<number>[]): MetricsEx<[number, number]> {
+export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number, number]> {
   const range: MetricsEx<number[]> = {
     totalDistance: [],
     avgAngleChange: [],
@@ -370,26 +370,22 @@ export function getMetricsExRange (list: MetricsEx<number>[]): MetricsEx<[number
   return <MetricsEx<[number, number]>>range
 }
 
-function interpolate (val: number, [min, max]: [number, number]): number {
-  if (max === min) return 0
+function interpolate(val: number, [min, max]: [number, number]): number {
+  if (max === min) {
+    return 0
+  }
   return Math.max(0, Math.min(1, (val - min) / (max - min)))
 }
 
-function interpolateLch (
-  val: MetricsLch<number>,
-  rng: MetricsLch<[number, number]>
-): MetricsLch<number> {
+function interpolateLch(val: MetricsLch<number>, rng: MetricsLch<[number, number]>): MetricsLch<number> {
   return {
     L: interpolate(val.L, rng.L),
     C: interpolate(val.C, rng.C),
-    H: interpolate(val.H, rng.H),
+    H: interpolate(val.H, rng.H)
   }
 }
 
-export function metricsExQuality (
-  value: MetricsEx<number>,
-  range: MetricsEx<[number, number]>
-): MetricsEx<number> {
+export function metricsExQuality(value: MetricsEx<number>, range: MetricsEx<[number, number]>): MetricsEx<number> {
   return {
     totalDistance: interpolate(value.totalDistance, range.totalDistance),
     avgAngleChange: interpolate(value.avgAngleChange, range.avgAngleChange),
@@ -407,6 +403,6 @@ export function metricsExQuality (
     chromaRange: interpolate(value.chromaRange, range.chromaRange),
     lightnessRange: interpolate(value.lightnessRange, range.lightnessRange),
     harmonicScore: interpolate(value.harmonicScore, range.harmonicScore),
-    harmonicCurveScore: interpolate(value.harmonicCurveScore, range.harmonicCurveScore),
+    harmonicCurveScore: interpolate(value.harmonicCurveScore, range.harmonicCurveScore)
   }
 }

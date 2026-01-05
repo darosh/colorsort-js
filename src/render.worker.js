@@ -30,6 +30,6 @@ self.onmessage = async (msg) => {
 
     self.postMessage({ result, metrics, elapsed })
   } else if (getPaletteType) {
-    self.postMessage(detectPaletteType(getPaletteType) )
+    self.postMessage(detectPaletteType(getPaletteType))
   }
 }

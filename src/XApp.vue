@@ -25,7 +25,7 @@
             <tr
               :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"
               v-for="{
-            data: { colors, mid, palette, time, key, best, id, dist, metrics, bestMetrics },
+            data: { colors, method, palette, time, key, best, id, bestDistance, metrics, bestMetrics },
             skip,
             odd,
           } in filtered"
@@ -33,17 +33,17 @@
               @mouseenter="onmouseenter(colors)"
             >
               <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="skip" :rowspan="skip">
-                {{ palette }}: {{ key }}<br /><br /><i>{{ types[palette - 1].type }}</i>
+                {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
                 <v-table density="compact" class="mt-6 bg-transparent">
                   <tbody>
-                    <tr v-for="(value, key) in formatTypes(types[palette - 1].data)">
+                    <tr v-for="(value, key) in formatTypes(palette.type.data)">
                       <td class="pl-0">{{ key }}</td>
                       <td class="text-right">{{ value }}</td>
                     </tr>
                   </tbody>
                 </v-table>
               </td>
-              <td style="width: 230px">{{ mid }}</td>
+              <td style="width: 230px">{{ method.mid }}</td>
               <td style="width: 72px" class="text-right">
                 {{ colors.length || '...' }}
               </td>
@@ -99,8 +99,8 @@
                   <span :class="{'text-green-accent-3': bestMetrics?.lchDeviation.H}">{{metrics.lchDeviation.H.toFixed(0)}}</span>
                 </template>
               </td>
-              <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !dist}">
-                {{ dist !== null ? (!dist ? 0 : dist.toFixed(2)) : '...' }}
+              <td style="width: 60px" class="text-right px-1" :class="{'text-grey-darken-2': !bestDistance}">
+                {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
               </td>
               <td style="width: 64px" class="pr-0">
                 <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="best" @click.stop="e => bestChange(e, id)" />
@@ -123,12 +123,20 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { bestMetrics, sortAll, updateDistances, updateDistancesPalette } from '@/sort-all.js'
 import { PALETTES } from '@/palettes.js'
-import { SORTING_METHODS, metrics } from '@/lib'
+import { SORTING_METHODS } from '@/lib'
 import XPreview from '@/XPreview.vue'
-import { metricsEx } from '@/lib/metrics.ts'
+import { computePlan, computeRender } from '@/lib/compute.ts'
+import { COMPUTED } from '@/deserialize.ts'
+
+function debounce(func, timeout = 25){
+  let timer;
+
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => { func.apply(this, args); }, timeout);
+  };
+}
 
 export default {
   components: { XPreview },
@@ -141,97 +149,50 @@ export default {
     rendered: 0,
     renderingTotal: 1,
     flushRenders: [],
-    flushTimeout: null
+    flushTimeout: null,
+    debouncedPreview: null
   }),
   methods: {
     async sort () {
-      const { sorted, types } = await sortAll(
-          PALETTES,
-          SORTING_METHODS,
-          this.onrender,
-      )
+      if (!COMPUTED) {
+        const { sorted, types } = await computePlan(
+            Object.entries(PALETTES), //.slice(0, 3),
+            SORTING_METHODS,
+            this.onRender
+        )
 
-      this.types = types
-      this.sorted = sorted
+        this.renderingTotal = sorted.length
+        this.rendered = 0
 
-      this.renderingTotal = 0
-      this.rendered = 0
+        await Promise.all(computeRender(sorted))
 
-      ;[...sorted].sort((a, b) => a.speed - b.speed).forEach(x => {
-        if (x.render) {
-          this.renderingTotal++
-          x.render()
-        }
-      })
+        this.types = types
+        this.sorted = sorted
+      } else {
+        const { sorted, types } = COMPUTED
+        this.types = types
+        this.sorted = sorted
+        this.rendered = 1
+      }
     },
-    onrender ({ result, elapsed, row }) {
-      const r = this.sorted.find((x) => x.id === row.id)
-      this.rendered++
-      this.flushRenders.push({ r, result, elapsed })
-
-      clearTimeout(this.flushTimeout)
-
-      this.flushTimeout = setTimeout(() => {
-        while (this.flushRenders.length) {
-          const { r, result, elapsed } = this.flushRenders.shift()
-          r.colors = result
-          r.time = elapsed
-          r.metrics = metricsEx(result)
-        }
-
-        if (this.rendered === this.renderingTotal) {
-          this.sortingDone()
-        }
-      }, 1)
+    onRender(p) {
+      this.rendered = p.done
+      this.renderingTotal = p.total
     },
     formatTypes (obj) {
       return Object.fromEntries(
           Object.entries(obj).map(([k, v]) => [k, v.toFixed(2)]),
       )
     },
-    onmouseenter (colors) {
+    setPreview (colors) {
       this.selectedColors = colors
     },
-    bestChange (e, id) {
-      const item = this.sorted.find(s => s.id === id)
-      item.best = !item.best
-      const besties = this.sorted.filter(d => d.best).map(({ key, mid }) => ({ key, mid }))
-      console.log(JSON.stringify(besties))
-      updateDistancesPalette(this.sorted, item.palette)
+    onmouseenter (colors) {
+      this.debouncedPreview(colors)
     },
-    sortingDone () {
-      updateDistances(this.sorted)
-      const bests = bestMetrics(this.sorted)
-
-      this.sorted.forEach(r => {
-        r.bestMetrics = {
-          totalDistance: bests[r.palette].totalDistance === r.metrics.totalDistance,
-          avgAngleChange: bests[r.palette].avgAngleChange === r.metrics.avgAngleChange,
-          maxAngleChange: bests[r.palette].maxAngleChange === r.metrics.maxAngleChange,
-          meanDistance: bests[r.palette].meanDistance === r.metrics.meanDistance,
-          devDistance: bests[r.palette].devDistance === r.metrics.devDistance,
-          harmonicScore: bests[r.palette].harmonicScore === r.metrics.harmonicScore,
-          perceptualUniformity: bests[r.palette].perceptualUniformity === r.metrics.perceptualUniformity,
-          lchAvgChange: {
-            L: bests[r.palette].lchAvgChange.L === r.metrics.lchAvgChange.L,
-            C: bests[r.palette].lchAvgChange.C === r.metrics.lchAvgChange.C,
-            H: bests[r.palette].lchAvgChange.H === r.metrics.lchAvgChange.H
-          },
-          lchMaxChange: {
-            L: bests[r.palette].lchMaxChange.L === r.metrics.lchMaxChange.L,
-            C: bests[r.palette].lchMaxChange.C === r.metrics.lchMaxChange.C,
-            H: bests[r.palette].lchMaxChange.H === r.metrics.lchMaxChange.H
-          },
-          lchDeviation: {
-            L: bests[r.palette].lchDeviation.L === r.metrics.lchDeviation.L,
-            C: bests[r.palette].lchDeviation.C === r.metrics.lchDeviation.C,
-            H: bests[r.palette].lchDeviation.H === r.metrics.lchDeviation.H
-          }
-        }
-      })
-    }
   },
   mounted () {
+    this.debouncedPreview = debounce(this.setPreview)
     this.sort()
   },
   computed: {
@@ -239,7 +200,7 @@ export default {
       let current = { data: {}, odd: 0 }
 
       return this.sorted.map((data) => {
-        const next = { data: reactive(data), skip: 0, odd: current.odd }
+        const next = { data, skip: 0, odd: current.odd }
 
         if (current.data.palette === next.data.palette) {
           current.skip++
