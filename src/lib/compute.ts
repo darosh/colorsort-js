@@ -1,5 +1,6 @@
 import { PaletteType } from './types.ts'
 import { getMetricsExRange, MetricsEx, metricsExQuality } from './metrics.ts'
+// @ts-ignore
 import { render } from '../render.js'
 import BESTIES from '../besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from '../palette-distance.ts'
