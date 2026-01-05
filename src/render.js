@@ -1,6 +1,15 @@
-import RenderWorker from './render.worker.js?worker'
+// import RenderWorkerU from './render.worker.js?worker&url'
 
-const concurrency = Math.max(window.navigator.hardwareConcurrency, 4)
+// const workerUrl = new URL(RenderWorkerU, import.meta.url)
+
+export function RenderWorker () {
+  return new Worker(
+    new URL('./render.worker.js', import.meta.url),
+    { type: 'module' }
+  )
+}
+
+const concurrency = Math.max(globalThis.navigator.hardwareConcurrency, 4)
 const workers = []
 const pending = []
 

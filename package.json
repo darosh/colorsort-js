@@ -23,7 +23,7 @@
     "dev": "vite",
     "lint": "oxlint ./src --fix && oxfmt ./src",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "deno run -A npm:vitest"
   },
   "type": "module"
 }
