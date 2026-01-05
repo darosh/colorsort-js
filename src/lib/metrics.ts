@@ -50,6 +50,7 @@ export type MetricsEx<T> = {
   maxAngleChange: T
   meanDistance: T
   devDistance: T
+  totalCurveDistance: T
   meanCurveDistance: T
   devCurveDistance: T
   lchAvgChange: MetricsLch<T>
@@ -75,6 +76,7 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
       maxAngleChange: 0,
       meanDistance: 0,
       devDistance: 0,
+      totalCurveDistance: 0,
       meanCurveDistance: 0,
       devCurveDistance: 0,
       lchAvgChange: { L: 0, C: 0, H: 0 },
@@ -210,6 +212,7 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
     maxAngleChange,
     meanDistance,
     devDistance,
+    totalCurveDistance,
     meanCurveDistance,
     devCurveDistance,
     lchAvgChange,
@@ -272,6 +275,9 @@ function curveLengthBetween(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, 
   return length
 }
 
+const asc = (a: number, b: number) => a - b
+const dsc = (a: number, b: number) => b - a
+
 export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number, number]> {
   const range: MetricsEx<number[]> = {
     totalDistance: [],
@@ -279,6 +285,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     maxAngleChange: [],
     meanDistance: [],
     devDistance: [],
+    totalCurveDistance: [],
     meanCurveDistance: [],
     devCurveDistance: [],
     lchAvgChange: { L: [], C: [], H: [] },
@@ -299,6 +306,7 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     range.maxAngleChange.push(i.maxAngleChange)
     range.meanDistance.push(i.meanDistance)
     range.devDistance.push(i.devDistance)
+    range.totalCurveDistance.push(i.totalCurveDistance)
     range.meanCurveDistance.push(i.meanCurveDistance)
     range.devCurveDistance.push(i.devCurveDistance)
     range.lchAvgChange.L.push(i.lchAvgChange.L)
@@ -319,55 +327,63 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     range.harmonicCurveScore.push(i.harmonicCurveScore)
   }
 
-  range.totalDistance.sort()
-  range.avgAngleChange.sort()
-  range.maxAngleChange.sort()
-  range.meanDistance.sort()
-  range.devDistance.sort()
-  range.meanCurveDistance.sort()
-  range.devCurveDistance.sort()
-  range.lchAvgChange.L.sort()
-  range.lchAvgChange.C.sort()
-  range.lchAvgChange.H.sort()
-  range.lchMaxChange.L.sort()
-  range.lchMaxChange.C.sort()
-  range.lchMaxChange.H.sort()
-  range.lchDeviation.L.sort()
-  range.lchDeviation.C.sort()
-  range.lchDeviation.H.sort()
-  range.perceptualUniformity.sort().reverse()
-  range.curveUniformity.sort().reverse()
-  range.hueSpread.sort()
-  range.chromaRange.sort()
-  range.lightnessRange.sort()
-  range.harmonicScore.sort().reverse()
-  range.harmonicCurveScore.sort().reverse()
+  range.totalDistance.sort(asc)
+  range.avgAngleChange.sort(asc)
+  range.maxAngleChange.sort(asc)
+  range.meanDistance.sort(asc)
+  range.devDistance.sort(asc)
+  range.totalCurveDistance.sort(asc)
+  range.meanCurveDistance.sort(asc)
+  range.devCurveDistance.sort(asc)
+  range.lchAvgChange.L.sort(asc)
+  range.lchAvgChange.C.sort(asc)
+  range.lchAvgChange.H.sort(asc)
+  range.lchMaxChange.L.sort(asc)
+  range.lchMaxChange.C.sort(asc)
+  range.lchMaxChange.H.sort(asc)
+  range.lchDeviation.L.sort(asc)
+  range.lchDeviation.C.sort(asc)
+  range.lchDeviation.H.sort(asc)
+  range.perceptualUniformity.sort(dsc)
+  range.curveUniformity.sort(dsc)
+  range.hueSpread.sort(asc)
+  range.chromaRange.sort(asc)
+  range.lightnessRange.sort(asc)
+  range.harmonicScore.sort(dsc)
+  range.harmonicCurveScore.sort(dsc)
 
-  range.totalDistance = [range.totalDistance[0], <number>range.totalDistance.at(-1)]
-  range.avgAngleChange = [range.avgAngleChange[0], <number>range.avgAngleChange.at(-1)]
-  range.maxAngleChange = [range.maxAngleChange[0], <number>range.maxAngleChange.at(-1)]
-  range.meanDistance = [range.meanDistance[0], <number>range.meanDistance.at(-1)]
-  range.devDistance = [range.devDistance[0], <number>range.devDistance.at(-1)]
-  range.meanCurveDistance = [range.meanCurveDistance[0], <number>range.meanCurveDistance.at(-1)]
-  range.devCurveDistance = [range.devCurveDistance[0], <number>range.devCurveDistance.at(-1)]
-  range.lchAvgChange.L = [range.lchAvgChange.L[0], <number>range.lchAvgChange.L.at(-1)]
-  range.lchAvgChange.C = [range.lchAvgChange.C[0], <number>range.lchAvgChange.C.at(-1)]
-  range.lchAvgChange.H = [range.lchAvgChange.H[0], <number>range.lchAvgChange.H.at(-1)]
-  range.lchMaxChange.L = [range.lchMaxChange.L[0], <number>range.lchMaxChange.L.at(-1)]
-  range.lchMaxChange.C = [range.lchMaxChange.C[0], <number>range.lchMaxChange.C.at(-1)]
-  range.lchMaxChange.H = [range.lchMaxChange.H[0], <number>range.lchMaxChange.H.at(-1)]
-  range.lchDeviation.L = [range.lchDeviation.L[0], <number>range.lchDeviation.L.at(-1)]
-  range.lchDeviation.C = [range.lchDeviation.C[0], <number>range.lchDeviation.C.at(-1)]
-  range.lchDeviation.H = [range.lchDeviation.H[0], <number>range.lchDeviation.H.at(-1)]
-  range.perceptualUniformity = [range.perceptualUniformity[0], <number>range.perceptualUniformity.at(-1)]
-  range.curveUniformity = [range.curveUniformity[0], <number>range.curveUniformity.at(-1)]
-  range.hueSpread = [range.hueSpread[0], <number>range.hueSpread.at(-1)]
-  range.chromaRange = [range.chromaRange[0], <number>range.chromaRange.at(-1)]
-  range.lightnessRange = [range.lightnessRange[0], <number>range.lightnessRange.at(-1)]
-  range.harmonicScore = [range.harmonicScore[0], <number>range.harmonicScore.at(-1)]
-  range.harmonicCurveScore = [range.harmonicCurveScore[0], <number>range.harmonicCurveScore.at(-1)]
-
-  return <MetricsEx<[number, number]>>range
+  return <MetricsEx<[number, number]>>{
+    totalDistance: [range.totalDistance[0], <number>range.totalDistance.at(-1)],
+    avgAngleChange: [range.avgAngleChange[0], <number>range.avgAngleChange.at(-1)],
+    maxAngleChange: [range.maxAngleChange[0], <number>range.maxAngleChange.at(-1)],
+    meanDistance: [range.meanDistance[0], <number>range.meanDistance.at(-1)],
+    devDistance: [range.devDistance[0], <number>range.devDistance.at(-1)],
+    totalCurveDistance: [range.totalCurveDistance[0], <number>range.totalCurveDistance.at(-1)],
+    meanCurveDistance: [range.meanCurveDistance[0], <number>range.meanCurveDistance.at(-1)],
+    devCurveDistance: [range.devCurveDistance[0], <number>range.devCurveDistance.at(-1)],
+    lchAvgChange: {
+      L: [range.lchAvgChange.L[0], <number>range.lchAvgChange.L.at(-1)],
+      C: [range.lchAvgChange.C[0], <number>range.lchAvgChange.C.at(-1)],
+      H: [range.lchAvgChange.H[0], <number>range.lchAvgChange.H.at(-1)]
+    },
+    lchMaxChange: {
+      L: [range.lchMaxChange.L[0], <number>range.lchMaxChange.L.at(-1)],
+      C: [range.lchMaxChange.C[0], <number>range.lchMaxChange.C.at(-1)],
+      H: [range.lchMaxChange.H[0], <number>range.lchMaxChange.H.at(-1)]
+    },
+    lchDeviation: {
+      L: [range.lchDeviation.L[0], <number>range.lchDeviation.L.at(-1)],
+      C: [range.lchDeviation.C[0], <number>range.lchDeviation.C.at(-1)],
+      H: [range.lchDeviation.H[0], <number>range.lchDeviation.H.at(-1)]
+    },
+    perceptualUniformity: [range.perceptualUniformity[0], <number>range.perceptualUniformity.at(-1)],
+    curveUniformity: [range.curveUniformity[0], <number>range.curveUniformity.at(-1)],
+    hueSpread: [range.hueSpread[0], <number>range.hueSpread.at(-1)],
+    chromaRange: [range.chromaRange[0], <number>range.chromaRange.at(-1)],
+    lightnessRange: [range.lightnessRange[0], <number>range.lightnessRange.at(-1)],
+    harmonicScore: [range.harmonicScore[0], <number>range.harmonicScore.at(-1)],
+    harmonicCurveScore: [range.harmonicCurveScore[0], <number>range.harmonicCurveScore.at(-1)]
+  }
 }
 
 function interpolate(val: number, [min, max]: [number, number]): number {
@@ -392,6 +408,7 @@ export function metricsExQuality(value: MetricsEx<number>, range: MetricsEx<[num
     maxAngleChange: interpolate(value.maxAngleChange, range.maxAngleChange),
     meanDistance: interpolate(value.meanDistance, range.meanDistance),
     devDistance: interpolate(value.devDistance, range.devDistance),
+    totalCurveDistance: interpolate(value.totalCurveDistance, range.totalCurveDistance),
     meanCurveDistance: interpolate(value.meanCurveDistance, range.meanCurveDistance),
     devCurveDistance: interpolate(value.devCurveDistance, range.devCurveDistance),
     lchAvgChange: interpolateLch(value.lchAvgChange, range.lchAvgChange),
