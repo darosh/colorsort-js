@@ -1,17 +1,33 @@
-import sorted from '../data-sorted.json' with { type: 'json' }
-import types from '../data-types.json' with { type: 'json' }
+import types from '../data.json' with { type: 'json' }
+import { PaletteRecordGrouped } from './lib/compute.ts'
+//@ts-ignore
+import { SORTING_METHODS } from '@/lib'
 
-import { PaletteRecord, SortRecord } from './lib/compute.ts'
+export function deserialize (types: PaletteRecordGrouped[]) {
+  const sorted = []
 
-export function deserialize(sorted: SortRecord[], types: PaletteRecord[]) {
-  for (const r of sorted) {
-    const p = types[r.palette.index]
-    r.palette = p
-    p.records = p.records || []
-    p.records.push(r)
+  for (const t of types) {
+    t.records = []
+
+    for (const g of t.groups) {
+      g.record.palette = t
+
+      for (const m of g.methods) {
+        t.records.push({
+          ...g.record,
+          ...m
+        })
+
+        m.method = SORTING_METHODS.find((sm: any) => sm.mid === m.method.mid)
+      }
+    }
+    
+    sorted.push(...t.records)
   }
+  
+  sorted.sort((a, b) => a.index - b.index)
 
   return { sorted, types }
 }
 
-export const COMPUTED = deserialize(<SortRecord[]>(<unknown>sorted), <PaletteRecord[]>(<unknown>types))
+export const COMPUTED = deserialize(<PaletteRecordGrouped[]>(<unknown>types))

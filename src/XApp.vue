@@ -165,6 +165,7 @@ import { computePlan, computeRender, updateDistance } from '@/lib/compute.ts'
 import chroma from 'chroma-js'
 
 import { COMPUTED } from '@/deserialize.ts'
+import { render } from '@/render.js'
 // const COMPUTED = null
 
 function debounce (func, timeout = 25) {
@@ -202,6 +203,7 @@ export default {
         const { sorted, types } = await computePlan(
             Object.entries(PALETTES), //.slice(0, 3),
             SORTING_METHODS,
+            render,
             this.onRender
         )
 
