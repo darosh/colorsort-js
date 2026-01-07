@@ -181,10 +181,9 @@ import { SORTING_METHODS } from '@/lib'
 import XPreview from '@/XPreview.vue'
 import { computePlan, computeRender, updateDistance } from '@/lib/compute.ts'
 import chroma from 'chroma-js'
-
-import { COMPUTED } from '@/deserialize.ts'
 import { render } from '@/render.js'
 
+import { COMPUTED } from '@/deserialize.ts'
 // const COMPUTED = null
 
 function debounce (func, timeout = 25) {

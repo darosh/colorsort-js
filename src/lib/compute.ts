@@ -1,5 +1,5 @@
 import { PaletteType } from './types.ts'
-import { getMetricsExRange, MetricsEx, metricsExQuality } from './metrics.ts'
+import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './metrics.ts'
 import BESTIES from '../besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from '../palette-distance.ts'
 import { extract } from 'colorgram'
@@ -44,9 +44,11 @@ export type SortRecord = {
   method: Method
   metrics: MetricsEx<number> | null
   quality: MetricsEx<number> | null
+  score: number | null
   render: Function
   best: boolean
   bestDistance: number | null
+  bestDistanceQuality: number | null
 }
 
 export type SortRecordGrouped = Omit<SortRecord, 'time' | 'method' | 'render' | 'index' | 'best'>
@@ -87,7 +89,9 @@ function groupRecords(palette: PaletteRecord) {
           palette: record.palette,
           metrics: record.metrics,
           quality: record.quality,
-          bestDistance: record.bestDistance
+          score: record.score,
+          bestDistance: record.bestDistance,
+          bestDistanceQuality: record.bestDistanceQuality
         },
         methods: [
           {
@@ -139,16 +143,20 @@ export function updateDistance(palette: PaletteRecordGrouped) {
   if (!theBest) {
     for (const r of palette.records) {
       r.bestDistance = null
+      r.bestDistanceQuality = null
     }
 
     for (const r of palette.groups) {
       r.record.bestDistance = null
+      r.record.bestDistanceQuality = null
     }
 
     return
   }
 
   const theBestMap = paletteMap(<string[]>theBest.colors)
+
+  let maxBestDistance = 0
 
   for (const r of palette.groups) {
     r.record.bestDistance = paletteDistance(theBestMap, <string[]>r.record.colors)
@@ -161,6 +169,37 @@ export function updateDistance(palette: PaletteRecordGrouped) {
       }
 
       qr.bestDistance = r.record.bestDistance
+      maxBestDistance = Math.max(maxBestDistance, qr.bestDistance)
+    }
+  }
+
+  for (const r of palette.groups) {
+    r.record.bestDistanceQuality = <number>r.record.bestDistance / maxBestDistance
+
+    for (const { index } of r.methods) {
+      const qr = palette.records.find((pr) => pr.index === index)
+
+      if (!qr) {
+        continue
+      }
+
+      qr.bestDistanceQuality = r.record.bestDistanceQuality
+    }
+  }
+}
+
+export function updateScore(palette: PaletteRecordGrouped) {
+  for (const g of palette.groups) {
+    g.record.score = metricsExQualitySum(<MetricsEx<number>>g.record.quality) + <number>g.record.bestDistanceQuality
+
+    for (const { index } of g.methods) {
+      const qr = palette.records.find((pr) => pr.index === index)
+
+      if (!qr) {
+        continue
+      }
+
+      qr.score = g.record.score
     }
   }
 }
@@ -204,8 +243,10 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
         method,
         metrics: null,
         quality: null,
+        score: null,
         best: BESTIES.some((d) => d.key === key && d.mid === method.mid),
         bestDistance: null,
+        bestDistanceQuality: null,
         render: () =>
           render({ sortName: method.name, palette: colors })
             // @ts-ignore
@@ -218,6 +259,9 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
                 groupRecords(row.palette)
                 updateRangeAndQuality(<PaletteRecordGrouped>row.palette)
                 updateDistance(<PaletteRecordGrouped>row.palette)
+                updateScore(<PaletteRecordGrouped>row.palette)
+
+                ;(<PaletteRecordGrouped>row.palette).groups.sort((a, b) => <number>a.record.score - <number>b.record.score)
                 donePalettes++
               }
 

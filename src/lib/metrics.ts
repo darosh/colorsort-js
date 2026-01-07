@@ -430,3 +430,31 @@ export function metricsExQuality(value: MetricsEx<number>, range: MetricsEx<[num
     harmonicCurveScore: interpolate(value.harmonicCurveScore, range.harmonicCurveScore)
   }
 }
+
+export function metricsExQualitySum(value: MetricsEx<number>): number {
+  const {
+    totalDistance,
+    avgAngleChange,
+    maxAngleChange,
+    meanDistance,
+    devDistance,
+    totalCurveDistance,
+    meanCurveDistance,
+    devCurveDistance,
+    lchAvgChange: { L: LA, C: CA, H: HA },
+    lchMaxChange: { L: LM, C: CM, H: HM },
+    lchDeviation: { L: LD, C: CD, H: HD },
+    curveRatio,
+    perceptualUniformity,
+    curveUniformity,
+    hueSpread,
+    chromaRange,
+    lightnessRange,
+    harmonicScore,
+    harmonicCurveScore
+  } = value
+
+  return (
+    totalDistance + avgAngleChange + maxAngleChange + meanDistance + devDistance + totalCurveDistance + meanCurveDistance + devCurveDistance + LA + CA + HA + LM + CM + HM + LD + CD + HD + curveRatio + perceptualUniformity + curveUniformity + hueSpread + chromaRange + lightnessRange + harmonicScore + harmonicCurveScore
+  )
+}
