@@ -1,6 +1,6 @@
 # TODO
 
-- [ ] group by result (method + time cols?)
+- [ ] filter: palette, method 
 - [ ] generate methods
 - [ ] analyze best picks (sorter vs type, ...?) 
 - [ ] experiment with categorization + deltaE
@@ -19,6 +19,7 @@
 
 ## Done
 
+- [x] group by result (method + time cols?)
 - [x] best diff
 - [x] name palettes
 - [x] fix bestChange

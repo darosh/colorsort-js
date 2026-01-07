@@ -79,7 +79,7 @@ export function inlinest(data: Vector3[]) {
   if (data.length === 2) {
     return <[Vector3, Vector3]>[...data]
   }
-  
+
   let bestAlignment = -Infinity
   let first: Vector3 | null = null
   let mid: Vector3 | null = null
