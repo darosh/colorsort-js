@@ -4,6 +4,8 @@
 
     <v-app-bar scroll-behavior="hide" :scroll-threshold="64">
       <v-app-bar-nav-icon @click="showNav = !showNav" />
+      <v-app-bar-title>Title</v-app-bar-title>
+      <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"> </v-btn>
     </v-app-bar>
 
     <v-main style="--v-layout-top: 64px;">
@@ -25,7 +27,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="({ groups }, typeIndex) of types">
+            <template v-for="({ groups, key }, typeIndex) of types">
               <tr :style="{ background: typeIndex % 2 ? 'rgba(0,0,0,.5)' : null }" v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
                 <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="!rowIndex" :rowspan="groups.length">
                   {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
@@ -45,9 +47,13 @@
                   </v-table>
                 </td>
 
-                <td class="text-pre py-4" style="width: 210px;">{{ methods.map(m => m.method.mid).join('\n') }}</td>
-                <td class="text-pre text-right py-4" style="width: 90px;">
-                  {{ methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') }}
+                <td class="text-pre py-4" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
+                  {{
+                    (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
+                  }}
+                </td>
+                <td class="text-pre text-right py-4" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
+                  {{ (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms` }}
                 </td>
 
                 <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.totalDistance)}">
@@ -205,7 +211,9 @@ export default {
     renderingTotal: 1,
     flushRenders: [],
     flushTimeout: null,
-    debouncedPreview: null
+    debouncedPreview: null,
+    expandedAll: false,
+    expanded: {}
   }),
   methods: {
     async sort () {
@@ -258,6 +266,22 @@ export default {
       const besties = this.sorted.filter(d => d.best).map((s) => ({ key: s.palette.key, mid: s.method.mid }))
       console.log(JSON.stringify(besties))
     },
+    isExpanded (index) {
+      return this.expandedAll ? true : this.expanded[index]
+    },
+    expandIndex(index) {
+      this.expanded[index] = !this.expanded[index]
+    },
+    onExpandAll () {
+      setTimeout(() => {
+        this.expandedAll = !this.expandedAll
+
+        if (!this.expandedAll) {
+          this.expanded = {}
+        }
+
+      }, 400)
+    }
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
