@@ -4,7 +4,7 @@
 
     <v-app-bar scroll-behavior="hide" :scroll-threshold="64">
       <v-app-bar-nav-icon @click="showNav = !showNav" />
-      <v-app-bar-title>Title</v-app-bar-title>
+      <v-app-bar-title>Color Sorting R&D, Inc.</v-app-bar-title>
       <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"> </v-btn>
     </v-app-bar>
 
