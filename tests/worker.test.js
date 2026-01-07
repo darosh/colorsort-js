@@ -9,5 +9,5 @@ test('worker', async () => {
   
   const result = await render({ sortName, palette })
   
-  console.log(result)
+  // console.log(result)
 })

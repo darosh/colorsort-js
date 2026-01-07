@@ -19,7 +19,7 @@ export type Method = {
 
 export type PaletteGroup = {
   record: SortRecordGrouped
-  methods: { index: number, best: boolean, method: Method, time: number, render: Function }[]
+  methods: { index: number; best: boolean; method: Method; time: number; render: Function }[]
 }
 
 export type PaletteRecord = {
@@ -28,7 +28,7 @@ export type PaletteRecord = {
   colors: string[]
   type: PaletteType
   records: SortRecord[]
-  metricsRange: MetricsEx<[number, number]> | null,
+  metricsRange: MetricsEx<[number, number]> | null
   gram: [number, number, number, number][]
 }
 
@@ -51,12 +51,14 @@ export type SortRecord = {
 
 export type SortRecordGrouped = Omit<SortRecord, 'time' | 'method' | 'render' | 'index' | 'best'>
 
-function groupRecords (palette: PaletteRecord) {
+function groupRecords(palette: PaletteRecord) {
   const groupsMap = new Map<string[], PaletteGroup>()
 
   for (const record of palette.records) {
     // Skip records without colors
-    if (!record.colors) continue
+    if (!record.colors) {
+      continue
+    }
 
     // Find existing group with matching colors
     let existingKey: string[] | null = null
@@ -87,36 +89,40 @@ function groupRecords (palette: PaletteRecord) {
           quality: record.quality,
           bestDistance: record.bestDistance
         },
-        methods: [{
-          index: record.index,
-          best: record.best,
-          method: record.method,
-          time: record.time ?? 0,
-          render: record.render
-        }]
+        methods: [
+          {
+            index: record.index,
+            best: record.best,
+            method: record.method,
+            time: record.time ?? 0,
+            render: record.render
+          }
+        ]
       })
     }
   }
 
-  (<PaletteRecordGrouped>palette).groups = Array.from(groupsMap.values())
+  ;(<PaletteRecordGrouped>palette).groups = Array.from(groupsMap.values())
 }
 
-function colorsEqual (a: string[], b: string[]): boolean {
+function colorsEqual(a: string[], b: string[]): boolean {
   for (let i = 0; i < a.length; i++) {
-    if (a[i] !== b[i]) return false
+    if (a[i] !== b[i]) {
+      return false
+    }
   }
 
   return true
 }
 
-function updateRangeAndQuality (palette: PaletteRecordGrouped) {
+function updateRangeAndQuality(palette: PaletteRecordGrouped) {
   palette.metricsRange = getMetricsExRange(palette.groups.map((r) => <MetricsEx<number>>r.record.metrics))
 
   for (const { record: r, methods } of palette.groups) {
     r.quality = metricsExQuality(<MetricsEx<number>>r.metrics, palette.metricsRange)
 
     for (const { index } of methods) {
-      const qr = palette.records.find(pr => pr.index === index)
+      const qr = palette.records.find((pr) => pr.index === index)
 
       if (!qr) {
         continue
@@ -127,7 +133,7 @@ function updateRangeAndQuality (palette: PaletteRecordGrouped) {
   }
 }
 
-export function updateDistance (palette: PaletteRecordGrouped) {
+export function updateDistance(palette: PaletteRecordGrouped) {
   const theBest = palette.records.find((r) => r.best)
 
   if (!theBest) {
@@ -148,7 +154,7 @@ export function updateDistance (palette: PaletteRecordGrouped) {
     r.record.bestDistance = paletteDistance(theBestMap, <string[]>r.record.colors)
 
     for (const { index } of r.methods) {
-      const qr = palette.records.find(pr => pr.index === index)
+      const qr = palette.records.find((pr) => pr.index === index)
 
       if (!qr) {
         continue
@@ -159,7 +165,7 @@ export function updateDistance (palette: PaletteRecordGrouped) {
   }
 }
 
-export async function computePlan (palettes: [key: string, colors: string[]][], sortingMethods: Method[], render: Function, onRender?: Function) {
+export async function computePlan(palettes: [key: string, colors: string[]][], sortingMethods: Method[], render: Function, onRender?: Function) {
   const sorted = []
   const types = <PaletteRecord[]>[]
   let index = 0
@@ -176,10 +182,13 @@ export async function computePlan (palettes: [key: string, colors: string[]][], 
       groups: null,
       metricsRange: null,
       type: await render({ getPaletteType: colors }),
-      gram: extract({
-        data: colors.map(c => chroma(c).rgb()).flat(),
-        channels: 3
-      }, colors.length).sort((a, b) => b[3] - a[3])
+      gram: extract(
+        {
+          data: colors.map((c) => chroma(c).rgb()).flat(),
+          channels: 3
+        },
+        colors.length
+      ).sort((a, b) => b[3] - a[3])
     }
 
     types.push(palette)
@@ -239,7 +248,7 @@ export async function computePlan (palettes: [key: string, colors: string[]][], 
   return { sorted, types }
 }
 
-export function computeRender (sorted: SortRecord[]) {
+export function computeRender(sorted: SortRecord[]) {
   const promises = []
 
   for (const item of sorted) {
@@ -249,13 +258,13 @@ export function computeRender (sorted: SortRecord[]) {
   return promises
 }
 
-export function computedSerialize (types: PaletteRecordGrouped[]) {
+export function computedSerialize(types: PaletteRecordGrouped[]) {
   return types.map((r) => ({
     ...r,
     records: null,
-    groups: r.groups.map(g => ({
+    groups: r.groups.map((g) => ({
       record: { ...g.record, palette: null },
-      methods: g.methods.map(m => ({
+      methods: g.methods.map((m) => ({
         ...m,
         method: { mid: m.method.mid }
       }))

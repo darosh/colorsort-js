@@ -1,10 +1,12 @@
 import chroma from 'chroma-js'
 
-export function sortByHslSpiral(colors: string[], model: string = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): string[] {
+export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): string[] {
+  //console.log({model, mode})
+
   // Convert all colors to HSL with original RGB reference
   const colorsWithHsl = colors.map((rgb) => ({
     rgb,
-    hsl: <number[]>(<unknown>chroma(rgb).get(model))
+    hsl: model[0] === 'h' ? <number[]>(<unknown>chroma(rgb).get(model)) : (<number[]>(<unknown>chroma(rgb).get(model))).reverse()
   }))
 
   // Sort based on the chosen spiral mode
@@ -63,10 +65,15 @@ export function sortByHslSpiral(colors: string[], model: string = 'hsl', mode: '
     .map((item) => item.rgb)
 }
 
+sortByHslSpiral.params = [
+  { name: 'model', values: ['hsl', 'hsv', 'lch', 'oklch'] },
+  { name: 'mode', values: ['outward', 'inward', 'bottom-up', 'top-down'] }
+]
+
 // Alternative: Pure cylindrical spiral
-export function sortByHslCylindrical(colors: string[], model: string = 'hsl', direction: 'ascending' | 'descending' = 'ascending'): string[] {
+export function sortByHslCylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending'): string[] {
   const colorsWithHsl = colors.map((rgb) => {
-    const hsl = <number[]>(<unknown>chroma(rgb).get(model))
+    const hsl = model[0] === 'h' ? <number[]>(<unknown>chroma(rgb).get(model)) : (<number[]>(<unknown>chroma(rgb).get(model))).reverse()
     // Calculate spiral parameter: combine hue (angle) and lightness (height)
     // Saturation affects the radius
     const spiralParam = hsl[2] * 360 + hsl[0] // Lightness * 360 + Hue
@@ -85,3 +92,8 @@ export function sortByHslCylindrical(colors: string[], model: string = 'hsl', di
 
   return colorsWithHsl.map((item) => item.rgb)
 }
+
+sortByHslCylindrical.params = [
+  { name: 'model', values: ['hsl', 'hsv', 'lch', 'oklch'] }
+  // { name: 'direction', values: ['ascending', 'descending'] }
+]

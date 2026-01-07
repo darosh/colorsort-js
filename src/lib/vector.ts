@@ -26,6 +26,11 @@ export function dot(a: Vector3, b: Vector3): number {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]
 }
 
+export function centroid(colors: Vector3[]): Vector3 {
+  const sum = colors.reduce((acc, c) => [acc[0] + c[0], acc[1] + c[1], acc[2] + c[2]], [0, 0, 0] as Vector3)
+  return [sum[0] / colors.length, sum[1] / colors.length, sum[2] / colors.length]
+}
+
 export function closest(data: Vector3[]) {
   let minDist = Infinity
   let first = null

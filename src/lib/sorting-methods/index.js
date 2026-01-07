@@ -5,11 +5,11 @@ import { graphDeltaEWeightedAdaptive1, graphDeltaEWeightedAdaptive2 } from './gr
 import { graphDeltaEWeighted, graphDeltaEWeightedPlusPlus } from './graph-delta-e-weighted.js'
 import { graphDeltaE } from './graph-delta-e.js'
 import { cmyk, hcl, hsl, lab, oklab, oklch, rgb } from './models.js'
-import { principalLab, principalOklab, principalRgb } from '@/lib/sorting-methods/principal.ts'
+import { principalLab, principalOklab, principalRgb } from './principal.ts'
+import { sortByHslCylindrical, sortByHslSpiral } from './radial.ts'
+import { cluster, dbScan, kMeans } from './clustering.ts'
 
 import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
-import { sortByHslCylindrical, sortByHslSpiral } from '@/lib/sorting-methods/radial.ts'
-import { clusterLab, clusterOklab, clusterRgb, dbScanLab, dbScanOklab, dbScanRgb, kMeansLab, kMeansOklab, kMeansRgb } from '@/lib/sorting-methods/clustering.ts'
 
 const METHODS = {
   PCA: ['PCA', 'Principal component analysis', 'https://en.wikipedia.org/wiki/Principal_component_analysis'],
@@ -35,12 +35,12 @@ const DIFFS = {
   DE: ['DE', 'Delta E', 'http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE2000.html']
 }
 
-export const SORTING_METHODS = [
+export const SORTING_METHODS_RAW = [
   {
     name: 'Original',
     fn: (c) => c,
     speed: 0,
-    mid: 'ORI',
+    mid: 'Original',
     description: {
       model: null
     }
@@ -338,94 +338,77 @@ export const SORTING_METHODS = [
     }
   },
   {
-    name: 'Spiral HSL',
+    name: 'Spiral',
     fn: sortByHslSpiral,
     speed: 1,
-    mid: 'SPI-HSL',
+    mid: 'SPI',
     description: {}
   },
   {
-    name: 'Spiral Oklch',
-    fn: (colors) => sortByHslSpiral(colors, 'oklch'),
-    speed: 1,
-    mid: 'SPI-Oklch',
-    description: {}
-  },
-  {
-    name: 'Cylindrical HSL',
+    name: 'Cylindrical',
     fn: sortByHslCylindrical,
     speed: 1,
-    mid: 'CYL-HSL',
+    mid: 'CYL',
     description: {}
   },
   {
-    name: 'Cylindrical Oklch',
-    fn: (colors) => sortByHslCylindrical(colors, 'oklch'),
+    name: 'Cluster',
+    fn: cluster,
     speed: 1,
-    mid: 'CYL-Oklch',
+    mid: 'CL',
     description: {}
   },
   {
-    name: 'Cluster RGB',
-    fn: clusterRgb,
+    name: 'K-means',
+    fn: kMeans,
     speed: 1,
-    mid: 'CL-RGB',
+    mid: 'KM',
     description: {}
   },
   {
-    name: 'Cluster LAB',
-    fn: clusterLab,
+    name: 'DBSCAN',
+    fn: dbScan,
     speed: 1,
-    mid: 'CL-LAB',
-    description: {}
-  },
-  {
-    name: 'Cluster Oklab',
-    fn: clusterOklab,
-    speed: 1,
-    mid: 'CL-Oklab',
-    description: {}
-  },
-  {
-    name: 'K-means RGB',
-    fn: kMeansRgb,
-    speed: 1,
-    mid: 'KM-RGB',
-    description: {}
-  },
-  {
-    name: 'K-means LAB',
-    fn: kMeansLab,
-    speed: 1,
-    mid: 'KM-LAB',
-    description: {}
-  },
-  {
-    name: 'K-means Oklab',
-    fn: kMeansOklab,
-    speed: 1,
-    mid: 'KM-Oklab',
-    description: {}
-  },
-  {
-    name: 'DBSCAN RGB',
-    fn: dbScanRgb,
-    speed: 1,
-    mid: 'DBSCAN-RGB',
-    description: {}
-  },
-  {
-    name: 'DBSCAN LAB',
-    fn: dbScanLab,
-    speed: 1,
-    mid: 'DBSCAN-LAB',
-    description: {}
-  },
-  {
-    name: 'DBSCAN Oklab',
-    fn: dbScanOklab,
-    speed: 1,
-    mid: 'DBSCAN-Oklab',
+    mid: 'DBSCAN',
     description: {}
   }
 ]
+
+function getCombinationsAsArrays(params) {
+  return params.reduce((acc, { values }) => acc.flatMap((combo) => values.map((value) => [...combo, value])), [[]])
+}
+
+export const SORTING_METHODS = SORTING_METHODS_RAW.reduce((acc, item) => {
+  if (item.fn.params) {
+    const combinations = getCombinationsAsArrays(item.fn.params)
+
+    for (const combination of combinations) {
+      acc.push({
+        ...item,
+        name: `${item.name} [${combination.join(',')}]`,
+        mid: `${item.mid}:[${combination.join(',')}]`,
+        fn: (c) => item.fn.call(null, c, ...combination)
+      })
+    }
+  } else {
+    acc.push(item)
+  }
+
+  return acc
+}, [])
+
+function check(arr, set) {
+  const ns = new Set(arr.map((a) => a.name))
+  const is = new Set(arr.map((a) => a.mid))
+
+  if (ns.size !== arr.length) {
+    throw new Error(`Duplicated ${set} name`)
+  }
+
+  if (is.size !== arr.length) {
+    throw new Error(`Duplicated ${set} mid`)
+  }
+}
+
+check(SORTING_METHODS_RAW, 'raw')
+check(SORTING_METHODS, 'sorting')

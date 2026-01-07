@@ -11,7 +11,7 @@ test('bench', () => {
       fn(palette)
       const elapsed = performance.now() - start
       
-      console.log(speed, name, elapsed)
+      // console.log(speed, name, elapsed)
     })
   })
 })

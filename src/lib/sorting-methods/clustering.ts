@@ -1,4 +1,5 @@
-import { colorVectors, Vector3 } from '../vector.ts'
+import { centroid, closestList, colorVectors, distance, Vector3 } from '../vector.ts'
+import { randomizer } from '../randomizer.ts'
 
 interface ClusterNode {
   colors: Vector3[]
@@ -6,18 +7,6 @@ interface ClusterNode {
   right?: ClusterNode
   centroid: Vector3
   distance: number
-}
-
-function distance(a: Vector3, b: Vector3): number {
-  const dx = a[0] - b[0]
-  const dy = a[1] - b[1]
-  const dz = a[2] - b[2]
-  return Math.sqrt(dx * dx + dy * dy + dz * dz)
-}
-
-function centroid(colors: Vector3[]): Vector3 {
-  const sum = colors.reduce((acc, c) => [acc[0] + c[0], acc[1] + c[1], acc[2] + c[2]], [0, 0, 0] as Vector3)
-  return [sum[0] / colors.length, sum[1] / colors.length, sum[2] / colors.length]
 }
 
 function clusterDistance(c1: ClusterNode, c2: ClusterNode, linkage: 'single' | 'complete' | 'average' = 'average'): number {
@@ -155,8 +144,8 @@ export function sortByHierarchicalClustering(colors: Vector3[], linkage: 'single
 // K-MEANS CLUSTERING WITH ORDERING
 // ============================================================================
 
-function randomCentroids(colors: Vector3[], k: number): Vector3[] {
-  const shuffled = [...colors].sort(() => Math.random() - 0.5)
+function randomCentroids(colors: Vector3[], k: number, random: () => number): Vector3[] {
+  const shuffled = [...colors].sort(() => random() - 0.5)
   return shuffled.slice(0, k)
 }
 
@@ -177,7 +166,7 @@ function assignClusters(colors: Vector3[], centroids: Vector3[]): number[] {
   })
 }
 
-function updateCentroids(colors: Vector3[], assignments: number[], k: number): Vector3[] {
+function updateCentroids(colors: Vector3[], assignments: number[], k: number, random: () => number): Vector3[] {
   const newCentroids: Vector3[] = []
 
   for (let i = 0; i < k; i++) {
@@ -186,7 +175,7 @@ function updateCentroids(colors: Vector3[], assignments: number[], k: number): V
       newCentroids.push(centroid(clusterColors))
     } else {
       // If cluster is empty, reinitialize randomly
-      newCentroids.push(colors[Math.floor(Math.random() * colors.length)])
+      newCentroids.push(colors[Math.floor(random() * colors.length)])
     }
   }
 
@@ -204,8 +193,10 @@ export function sortByKMeans(colors: Vector3[], k: number = 8, maxIterations: nu
     return colors
   }
 
+  const random = randomizer()
+
   // Run k-means
-  let centroids = randomCentroids(colors, k)
+  let centroids = randomCentroids(colors, k, random)
   let assignments: number[] = []
 
   for (let iter = 0; iter < maxIterations; iter++) {
@@ -217,7 +208,7 @@ export function sortByKMeans(colors: Vector3[], k: number = 8, maxIterations: nu
     }
 
     assignments = newAssignments
-    centroids = updateCentroids(colors, assignments, k)
+    centroids = updateCentroids(colors, assignments, k, random)
   }
 
   // Group colors by cluster
@@ -366,38 +357,49 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
   return result
 }
 
-export function clusterRgb(colors: string[]) {
-  return colorVectors(colors, sortByHierarchicalClustering, 'gl')
+const m = { rgb: 'gl', lab: 'lab-norm' }
+
+export function cluster(colors: string[], model: 'rgb' | 'lab' = 'rgb', linkage: 'single' | 'complete' | 'average' = 'average', traversal: 'depth-first' | 'breadth-first' | 'balanced' = 'balanced') {
+  return colorVectors(colors, (vectors) => sortByHierarchicalClustering(vectors, linkage, traversal), m[model] || model)
 }
 
-export function clusterLab(colors: string[]) {
-  return colorVectors(colors, sortByHierarchicalClustering, 'lab-norm')
+cluster.params = [
+  { name: 'modes', values: ['rgb', 'lab', 'oklab'] },
+  { name: 'linkage', values: ['single', 'complete', 'average'] },
+  { name: 'traversal', values: ['depth-first', 'breadth-first', 'balanced'] }
+]
+
+export function kMeans(colors: string[], model: 'rgb' | 'lab' = 'rgb', k: number = 0.5, iterations: number = 50) {
+  return colorVectors(
+    colors,
+    (vectors) => {
+      return sortByKMeans(vectors, Math.ceil(k * vectors.length), iterations)
+    },
+    m[model] || model
+  )
 }
 
-export function clusterOklab(colors: string[]) {
-  return colorVectors(colors, sortByHierarchicalClustering, 'oklab')
+kMeans.params = [
+  { name: 'modes', values: ['rgb', 'lab', 'oklab'] },
+  { name: 'k', values: [0.1, 0.3, 0.5, 0.7] },
+  { name: 'iterations', values: [10, 50, 100, 250] }
+]
+
+export function dbScan(colors: string[], model: 'rgb' | 'lab' = 'rgb', eps: number = 0.3, pts: number = 3) {
+  return colorVectors(
+    colors,
+    (vectors) => {
+      const [a, b] = <[Vector3, Vector3]>closestList(vectors).at(-1)
+      const d = distance(a, b) * eps
+
+      return sortByDBSCAN(vectors, d, pts)
+    },
+    m[model] || model
+  )
 }
 
-export function kMeansRgb(colors: string[]) {
-  return colorVectors(colors, sortByKMeans, 'gl')
-}
-
-export function kMeansLab(colors: string[]) {
-  return colorVectors(colors, sortByKMeans, 'lab-norm')
-}
-
-export function kMeansOklab(colors: string[]) {
-  return colorVectors(colors, sortByKMeans, 'oklab')
-}
-
-export function dbScanRgb(colors: string[]) {
-  return colorVectors(colors, sortByDBSCAN, 'gl')
-}
-
-export function dbScanLab(colors: string[]) {
-  return colorVectors(colors, sortByDBSCAN, 'lab-norm')
-}
-
-export function dbScanOklab(colors: string[]) {
-  return colorVectors(colors, sortByDBSCAN, 'oklab')
-}
+dbScan.params = [
+  { name: 'modes', values: ['rgb', 'lab', 'oklab'] },
+  { name: 'eps', values: [0.1, 0.3, 0.5] },
+  { name: 'pts', values: [3, 5, 7] }
+]

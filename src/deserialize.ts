@@ -3,7 +3,7 @@ import { PaletteRecordGrouped } from './lib/compute.ts'
 //@ts-ignore
 import { SORTING_METHODS } from '@/lib'
 
-export function deserialize (types: PaletteRecordGrouped[]) {
+export function deserialize(types: PaletteRecordGrouped[]) {
   const sorted = []
 
   for (const t of types) {
@@ -21,10 +21,10 @@ export function deserialize (types: PaletteRecordGrouped[]) {
         m.method = SORTING_METHODS.find((sm: any) => sm.mid === m.method.mid)
       }
     }
-    
+
     sorted.push(...t.records)
   }
-  
+
   sorted.sort((a, b) => a.index - b.index)
 
   return { sorted, types }
