@@ -27,10 +27,10 @@
                   <th>Algorithm</th>
                   <!--              <th class="text-right">Colors</th>-->
                   <th class="text-right">Time</th>
-                  <th class="text-center pr-0 pl-6" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
-                  <th class="text-center pr-0" colspan="2">Avg&deg;, Max&deg;</th>
-                  <th class="text-left" colspan="2">P, H</th>
-                  <th class="text-center">LCH</th>
+                  <th class="text-center pr-0 pl-0" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
+                  <th class="text-center pr-0 pl-0" colspan="2">Avg&deg;, Max&deg;</th>
+                  <th class="text-center px-0" colspan="2">P, H</th>
+                  <th class="text-center px-0">LCH</th>
                   <th class="text-right pr-0">Diff</th>
                   <th class="text-center">Best</th>
                   <th style="min-width: 300px;"></th>
@@ -128,7 +128,7 @@
                     <template v-else>...</template>
                   </td>
 
-                  <td style="width: 144px; line-height: 14px; font-size: 12px;" class="text-center">
+                  <td style="width: 144px; line-height: 14px; font-size: 12px;" class="text-center text-no-wrap">
                     <template v-if="metrics">
                       <span :style="{color: scale(quality?.lchAvgChange.L)}">{{
                         metrics.lchAvgChange.L.toFixed(0)
