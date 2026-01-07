@@ -4,6 +4,8 @@ import BESTIES from '../besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from '../palette-distance.ts'
 import { extract } from 'colorgram'
 import chroma from 'chroma-js'
+// @ts-ignore
+import { isArtist } from '../palettes.js'
 
 export type Method = {
   name: string
@@ -263,7 +265,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
         metrics: null,
         quality: null,
         score: null,
-        best: BESTIES.some((d) => d.key === key && d.mid === method.mid),
+        best: (method.mid === 'Original' && isArtist(key)) || BESTIES.some((d) => d.key === key && d.mid === method.mid),
         bestDistance: null,
         bestDistanceQuality: null,
         render: () =>

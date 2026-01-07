@@ -5,55 +5,67 @@
     <v-app-bar scroll-behavior="hide" :scroll-threshold="64">
       <v-app-bar-nav-icon @click="showNav = !showNav" />
       <v-app-bar-title>Color Sorting R&D, Inc.</v-app-bar-title>
-      <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"> </v-btn>
+      <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`"
+             @click="onExpandAll"></v-btn>
     </v-app-bar>
 
     <v-main style="--v-layout-top: 64px;">
-      <v-container fluid>
-        <v-table hover>
-          <thead>
-            <tr>
-              <th>Palette</th>
-              <th>Algorithm</th>
-              <!--              <th class="text-right">Colors</th>-->
-              <th class="text-right">Time</th>
-              <th class="text-center pr-0 pl-6" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
-              <th class="text-center pr-0" colspan="2">Avg&deg;, Max&deg;</th>
-              <th class="text-left" colspan="2">P, H</th>
-              <th class="text-center">LCH</th>
-              <th class="text-right pr-0">Diff</th>
-              <th class="text-center">Best</th>
-              <th style="min-width: 300px;"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-for="({ groups, key }, typeIndex) of types">
-              <tr :style="{ background: typeIndex % 2 ? 'rgba(0,0,0,.5)' : null }" v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
-                <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="!rowIndex" :rowspan="groups.length">
+      <v-container fluid :height="tableHeight">
+        <v-virtual-scroll :items="types" renderless :height="tableHeight">
+          <template v-slot:default="{ itemRef, item: { groups, key }, index: typeIndex }">
+            <v-table :ref="itemRef" hover class="mb-16" fixed-header>
+              <thead>
+              <tr>
+                <th>Palette</th>
+                <th>Algorithm</th>
+                <!--              <th class="text-right">Colors</th>-->
+                <th class="text-right">Time</th>
+                <th class="text-center pr-0 pl-6" colspan="7">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</th>
+                <th class="text-center pr-0" colspan="2">Avg&deg;, Max&deg;</th>
+                <th class="text-left" colspan="2">P, H</th>
+                <th class="text-center">LCH</th>
+                <th class="text-right pr-0">Diff</th>
+                <th class="text-center">Best</th>
+                <th style="min-width: 300px;"></th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <!--          :style="{ background: typeIndex % 2 ? 'rgba(0,0,0,.5)' : null }"-->
+              <tr :ref="itemRef"
+                  v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups"
+                  @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
+                <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="!rowIndex"
+                    :rowspan="groups.length">
                   {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
 
                   <div style="display: flex; align-items: center" class="mt-6 pr-3">
-                    <div style="height: 10px;" :style="{width: `${v * 100}%`, background: `rgb(${r},${g},${b})`}" v-for="[r,g,b,v] in palette.gram"></div>
+                    <div style="height: 10px;" :style="{width: `${v * 100}%`, background: `rgb(${r},${g},${b})`}"
+                         v-for="[r,g,b,v] in palette.gram"></div>
                     <div class="text-no-wrap pl-2">{{ palette.gram.length }} / {{ palette.colors.length }}</div>
                   </div>
 
                   <v-table density="compact" class="mt-6 bg-transparent">
                     <tbody>
-                      <tr v-for="(value, key) in formatTypes(palette.type.data)">
-                        <td class="pl-0">{{ key }}</td>
-                        <td class="text-right">{{ value }}</td>
-                      </tr>
+                    <tr v-for="(value, key) in formatTypes(palette.type.data)">
+                      <td class="pl-0">{{ key }}</td>
+                      <td class="text-right">{{ value }}</td>
+                    </tr>
                     </tbody>
                   </v-table>
                 </td>
 
-                <td class="text-pre py-4" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
+                <td class="text-pre py-4" style="width: 210px; cursor: pointer;"
+                    @click.stop="expandIndex(`${key}:${rowIndex}`)">
                   {{
                     (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                   }}
                 </td>
-                <td class="text-pre text-right py-4" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
-                  {{ (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms` }}
+                <td class="text-pre text-right py-4" style="width: 90px; cursor: pointer;"
+                    @click.stop="expandIndex(`${key}:${rowIndex}`)">
+                  {{
+                    (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
+                  }}
                 </td>
 
                 <td style="width: 60px" class="text-right px-1" :style="{color: scale(quality?.totalDistance)}">
@@ -120,57 +132,67 @@
                   <template v-if="metrics">
                     <span :style="{color: scale(quality?.lchAvgChange.L)}">{{
                         metrics.lchAvgChange.L.toFixed(0)
-                    }}</span
+                      }}</span
                     >,
                     <span :style="{color: scale(quality?.lchAvgChange.C)}">{{
-                    metrics.lchAvgChange.C.toFixed(0)
+                        metrics.lchAvgChange.C.toFixed(0)
+                      }}</span
+                    >, <span :style="{color: scale(quality?.lchAvgChange.H)}">{{
+                      metrics.lchAvgChange.H.toFixed(0)
                     }}</span
-                    >, <span :style="{color: scale(quality?.lchAvgChange.H)}">{{ metrics.lchAvgChange.H.toFixed(0) }}</span
-                    ><br />
+                  ><br />
                     <span :style="{color: scale(quality?.lchMaxChange.L)}">{{ metrics.lchMaxChange.L.toFixed(0) }}</span
                     >,
                     <span :style="{color: scale(quality?.lchMaxChange.C)}">{{
-                      metrics.lchMaxChange.C.toFixed(0)
-                    }}</span
+                        metrics.lchMaxChange.C.toFixed(0)
+                      }}</span
                     >,
                     <span :style="{color: scale(quality?.lchMaxChange.H)}">{{
-                    metrics.lchMaxChange.H.toFixed(0)
-                    }}</span
+                        metrics.lchMaxChange.H.toFixed(0)
+                      }}</span
                     ><br />
                     <span :style="{color: scale(quality?.lchDeviation.L)}">{{ metrics.lchDeviation.L.toFixed(0) }}</span
                     >,
                     <span :style="{color: scale(quality?.lchDeviation.C)}">{{
-                      metrics.lchDeviation.C.toFixed(0)
-                    }}</span
+                        metrics.lchDeviation.C.toFixed(0)
+                      }}</span
                     >,
                     <span :style="{color: scale(quality?.lchDeviation.H)}">{{
-                    metrics.lchDeviation.H.toFixed(0)
-                    }}</span>
+                        metrics.lchDeviation.H.toFixed(0)
+                      }}</span>
                   </template>
                 </td>
                 <td style="width: 32px" class="text-right px-1" :style="{color: scale(bestDistanceQuality)}">
                   {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
                 </td>
                 <td style="width: 64px" class="pr-0">
-                  <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, typeIndex, rowIndex, methods.some(m => m.best))" />
+                  <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;"
+                                  :model-value="methods.some(m => m.best)"
+                                  @click.stop="e => bestChange(e, typeIndex, rowIndex, methods.some(m => m.best))" />
                 </td>
 
                 <td class="pl-0">
                   <div style="display: flex">
-                    <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                    <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px"
+                         :style="{ background: c }" />
                   </div>
                 </td>
               </tr>
-            </template>
-          </tbody>
-        </v-table>
+
+              </tbody>
+            </v-table>
+          </template>
+        </v-virtual-scroll>
       </v-container>
     </v-main>
-    <div v-if="showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
+    <div v-if="showPreview"
+         style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
       <x-preview :points="selectedColors" />
     </div>
   </v-app>
-  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
+  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8"
+                     color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active
+                     :model-value="100 * rendered / renderingTotal" />
 </template>
 
 <script>
@@ -181,8 +203,9 @@ import { computePlan, computeRender, updateBest, updateDistance } from '@/lib/co
 import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
-// import { COMPUTED } from '@/deserialize.ts'
-const COMPUTED = null
+import { COMPUTED } from '@/deserialize.ts'
+
+// const COMPUTED = null
 
 function debounce (func, timeout = 25) {
   let timer
@@ -234,7 +257,7 @@ export default {
         this.sorted = sorted
       } else {
         const { sorted, types } = COMPUTED
-        this.types = types
+        this.types = types //.slice(0, 10)
         this.sorted = sorted
         this.rendered = 1
       }
@@ -269,7 +292,7 @@ export default {
     isExpanded (index) {
       return this.expandedAll ? true : this.expanded[index]
     },
-    expandIndex(index) {
+    expandIndex (index) {
       this.expanded[index] = !this.expanded[index]
     },
     onExpandAll () {
@@ -287,6 +310,10 @@ export default {
     this.debouncedPreview = debounce(this.setPreview)
     this.sort()
   },
-  computed: {},
+  computed: {
+    tableHeight () {
+      return this.$vuetify.display.height - 128 + 32
+    }
+  },
 }
 </script>

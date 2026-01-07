@@ -1,5 +1,6 @@
 import chroma from 'chroma-js'
 import { oklab } from '@/lib/oklab.js'
+import PALETTES_DATA from '../palettes.json' with { type: 'json' }
 
 let previous = 1
 const next = () => {
@@ -504,6 +505,8 @@ export const PALETTES = {
   ]
 }
 
+Object.assign(PALETTES, PALETTES_DATA)
+
 Object.values(PALETTES).forEach((result) => {
   const first = oklab(result[0])
   const last = oklab(result.at(-1))
@@ -512,3 +515,7 @@ Object.values(PALETTES).forEach((result) => {
     result.reverse()
   }
 })
+
+export function isArtist(slug) {
+  return PALETTES_DATA[slug] !== undefined
+}
