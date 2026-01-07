@@ -190,7 +190,7 @@ export function updateDistance(palette: PaletteRecordGrouped) {
 
 export function updateScore(palette: PaletteRecordGrouped) {
   for (const g of palette.groups) {
-    g.record.score = metricsExQualitySum(<MetricsEx<number>>g.record.quality) + <number>g.record.bestDistanceQuality
+    g.record.score = metricsExQualitySum(<MetricsEx<number>>g.record.quality) //+ <number>g.record.bestDistanceQuality
 
     for (const { index } of g.methods) {
       const qr = palette.records.find((pr) => pr.index === index)

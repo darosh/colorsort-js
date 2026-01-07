@@ -26,7 +26,7 @@
           </thead>
           <tbody>
             <template v-for="{ groups } of types">
-              <tr :style="{ background: false ? 'rgba(0,0,0,.5)' : null }" v-for="({ record: {colors, palette, quality, metrics, bestDistance}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
+              <tr :style="{ background: false ? 'rgba(0,0,0,.5)' : null }" v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
                 <!--            <tr-->
                 <!--              :style="{ background: odd ? 'rgba(0,0,0,.5)' : null }"-->
                 <!--              v-for="{-->
@@ -150,7 +150,7 @@
                     >, <span :style="{color: scale(quality?.lchDeviation.H)}">{{ metrics.lchDeviation.H.toFixed(0) }}</span>
                   </template>
                 </td>
-                <td style="width: 32px" class="text-right px-1" :class="{'text-grey-darken-2': !bestDistance}">
+                <td style="width: 32px" class="text-right px-1" :style="{color: scale(bestDistanceQuality)}">
                   {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
                 </td>
                 <td style="width: 64px" class="pr-0">
@@ -183,8 +183,8 @@ import { computePlan, computeRender, updateDistance } from '@/lib/compute.ts'
 import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
-import { COMPUTED } from '@/deserialize.ts'
-// const COMPUTED = null
+// import { COMPUTED } from '@/deserialize.ts'
+const COMPUTED = null
 
 function debounce (func, timeout = 25) {
   let timer
@@ -195,10 +195,10 @@ function debounce (func, timeout = 25) {
   }
 }
 
-const scale_ = chroma.scale(['#77f', '#fff'])
+const scale_ = chroma.scale(['#0f0', '#ff0', '#f00'])
 
 function scale (x) {
-  return x === 0 ? '#2f0' : scale_(x)
+  return x === 0 ? '#fff' : scale_(x)
 }
 
 export default {
