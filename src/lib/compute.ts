@@ -137,6 +137,25 @@ function updateRangeAndQuality(palette: PaletteRecordGrouped) {
   }
 }
 
+export function updateBest(palette: PaletteRecordGrouped, groupIndex: number, value: boolean) {
+  const group = palette.groups[groupIndex]
+  const method = group.methods[0]
+  
+  for(const g of palette.groups) {
+    for(const m of g.methods) {
+      m.best = m === method ? value : false
+
+      const fr = palette.records.find(r => r.index === m.index)
+      
+      if (!fr) {
+        continue
+      }
+      
+      fr.best = m.best
+    }
+  }
+}
+
 export function updateDistance(palette: PaletteRecordGrouped) {
   const theBest = palette.records.find((r) => r.best)
 
