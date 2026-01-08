@@ -4,12 +4,11 @@ import { adaptiveTsp, graphDeltaETsp } from './tsp.js'
 import { graphDeltaEWeightedAdaptive1, graphDeltaEWeightedAdaptive2 } from './graph-delta-e-weighted-adatptive.js'
 import { graphDeltaEWeighted, graphDeltaEWeightedPlusPlus } from './graph-delta-e-weighted.js'
 import { graphDeltaE } from './graph-delta-e.js'
-import { cmyk, hcl, hsl, lab, oklab, oklch, rgb } from './models.js'
 import { principalLab, principalOklab, principalRgb } from './principal.ts'
 import { sortByHslCylindrical, sortByHslSpiral } from './radial.ts'
 import { cluster, dbScan, kMeans } from './clustering.ts'
-
 import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
+import { harmonizeDelta, harmonizeModel } from './harmonize.ts'
 
 const METHODS = {
   PCA: ['PCA', 'Principal component analysis', 'https://en.wikipedia.org/wiki/Principal_component_analysis'],
@@ -46,67 +45,18 @@ export const SORTING_METHODS_RAW = [
     }
   },
   {
-    name: 'HSL',
-    fn: hsl,
-    speed: 2,
-    mid: 'HSL',
-    description: {
-      model: MODELS.HSL
-    }
-  },
-  {
-    name: 'HCL',
-    fn: hcl,
-    speed: 2,
-    mid: 'HCL',
-    description: {
-      model: MODELS.HCL
-    }
-  },
-  {
-    name: 'Oklch',
-    fn: oklch,
-    speed: 3,
-    mid: 'Oklch',
-    description: {
-      model: MODELS.OKLCH
-    }
-  },
-  {
-    name: 'Oklab',
-    fn: oklab,
-    speed: 3,
-    mid: 'Oklab',
-    description: {
-      model: MODELS.OKLAB
-    }
-  },
-  {
-    name: 'Lab',
-    fn: lab,
-    speed: 2,
-    mid: 'Lab',
-    description: {
-      model: MODELS.LAB
-    }
-  },
-  {
-    name: 'RGB',
-    fn: rgb,
+    name: 'HARM',
+    fn: harmonizeModel,
     speed: 1,
-    mid: 'RGB',
-    description: {
-      model: MODELS.RGB
-    }
+    mid: 'HARM',
+    description: {}
   },
   {
-    name: 'CMYK',
-    fn: cmyk,
+    name: 'HARMED',
+    fn: harmonizeDelta,
     speed: 1,
-    mid: 'CMYK',
-    description: {
-      model: MODELS.CMYK
-    }
+    mid: 'HARMED',
+    description: {}
   },
   {
     name: 'NNA(Delta E)',
@@ -396,19 +346,3 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce((acc, item) => {
 
   return acc
 }, [])
-
-function check(arr, set) {
-  const ns = new Set(arr.map((a) => a.name))
-  const is = new Set(arr.map((a) => a.mid))
-
-  if (ns.size !== arr.length) {
-    throw new Error(`Duplicated ${set} name`)
-  }
-
-  if (is.size !== arr.length) {
-    throw new Error(`Duplicated ${set} mid`)
-  }
-}
-
-check(SORTING_METHODS_RAW, 'raw')
-check(SORTING_METHODS, 'sorting')

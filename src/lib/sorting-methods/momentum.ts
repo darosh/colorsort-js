@@ -1,12 +1,11 @@
-import chroma from 'chroma-js'
-import { closest, closestList, colorVectors, distance, dot, inlinest, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
-import { oklab2hex } from '../oklab.ts'
+import { closest, closestList, ColorHelper, colorVectors, DistanceFn, dot, inlinest, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
+
 // @ts-ignore
 import { detectPaletteType } from '../types.js'
-import { metrics } from '../metrics.js'
+import { metrics } from '../metrics.ts'
 
-function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, momentumWeight: number = 1e6) {
-  const dist = distance(from, to)
+function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: DistanceFn, momentumWeight: number = 1e6) {
+  const dist = distanceFn(from, to)
   const direction = normalize(subtract(to, from))
   let score = dist
 
@@ -19,8 +18,8 @@ function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, mome
   return { score, direction }
 }
 
-function calculateScoreDeltaE(from: Vector3, to: Vector3, prevDirection: Vector3, weights: [number, number, number] = [1, 1, 1], momentumWeight: number = 1e6) {
-  const delta = chroma.deltaE(oklab2hex(from), oklab2hex(to), ...weights)
+function calculateScoreDeltaE(from: Vector3, to: Vector3, prevDirection: Vector3, distance: DistanceFn, deltaE: DistanceFn, momentumWeight: number = 1e6) {
+  const delta = deltaE(from, to)
   const dist = (distance(from, to) * delta) / 128
 
   const direction = normalize(subtract(to, from))
@@ -35,18 +34,16 @@ function calculateScoreDeltaE(from: Vector3, to: Vector3, prevDirection: Vector3
   return { score, direction }
 }
 
-function momentumBidiSort(
-  data: Vector3[],
-  start: [Vector3, Vector3],
-  scoring: (
-    a: Vector3,
-    b: Vector3,
-    c: Vector3
-  ) => {
-    score: number
-    direction: Vector3
-  }
-) {
+type ScoringFn = (
+  a: Vector3,
+  b: Vector3,
+  c: Vector3
+) => {
+  score: number
+  direction: Vector3
+}
+
+function momentumBidiSort(data: Vector3[], start: [Vector3, Vector3], scoring: ScoringFn) {
   const remaining = new Set(data)
   const sorted = []
 
@@ -96,17 +93,25 @@ function momentumBidiSort(
 }
 
 export function momentumClosestOklab(colors: string[]) {
-  return colorVectors(colors, (data: Vector3[]) => momentumBidiSort(data, closest(data), calculateScore), 'oklab')
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
+      return momentumBidiSort(data, closest(data), scoring)
+    },
+    'oklab'
+  )
 }
 
 export function momentumClosestBestOklab(colors: string[], tsp = false) {
   return colorVectors(
     colors,
-    function (data: Vector3[]) {
+    function (this: ColorHelper, data: Vector3[]) {
       const list = closestList(data).slice(0, 128)
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
 
       const result = list.map((start) => {
-        const vectors = momentumBidiSort(data, start, calculateScore)
+        const vectors = momentumBidiSort(data, start, scoring)
 
         return {
           vectors,
@@ -117,7 +122,7 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 
       result.sort((a, b) => a.metrics.totalDistance - b.metrics.totalDistance)
 
-      return tsp ? tspVectors(result[0].vectors) : result[0].vectors
+      return tsp ? tspVectors(result[0].vectors, this) : result[0].vectors
     },
     'oklab'
   )
@@ -126,11 +131,13 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 export function momentumClosestBestDeltaEOklab(colors: string[]) {
   return colorVectors(
     colors,
-    function (data: Vector3[]) {
+    function (this: ColorHelper, data: Vector3[]) {
       const list = closestList(data).slice(0, 128)
+      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b)
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
 
       const result = list.map((start) => {
-        const vectors = momentumBidiSort(data, start, calculateScoreDeltaE)
+        const vectors = momentumBidiSort(data, start, scoring)
 
         return {
           vectors,
@@ -148,17 +155,39 @@ export function momentumClosestBestDeltaEOklab(colors: string[]) {
 }
 
 export function momentumInlinestOklab(colors: string[]) {
-  return colorVectors(colors, (data: Vector3[]) => momentumBidiSort(data, inlinest(data), calculateScore), 'oklab')
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
+      return momentumBidiSort(data, inlinest(data, this), scoring)
+    },
+    'oklab'
+  )
 }
 
 export function momentumInlinestDeltaEOklab(colors: string[]) {
-  return colorVectors(colors, (data: Vector3[]) => momentumBidiSort(data, inlinest(data), calculateScoreDeltaE), 'oklab')
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b)
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
+      return momentumBidiSort(data, inlinest(data, this), scoring)
+    },
+    'oklab'
+  )
 }
 
 export function momentumInlinestDeltaEPlusOklab(colors: string[]) {
   const { Kl, Kc, Kh } = detectPaletteType(colors)
   const weights = <[number, number, number]>[Kl, Kc, Kh]
-  const scoring = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, weights)
 
-  return colorVectors(colors, (data: Vector3[]) => momentumBidiSort(data, inlinest(data), scoring), 'oklab')
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b, ...weights)
+      const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
+      return momentumBidiSort(data, inlinest(data, this), scoring)
+    },
+    'oklab'
+  )
 }

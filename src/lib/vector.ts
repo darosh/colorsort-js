@@ -1,12 +1,47 @@
 import chroma from 'chroma-js'
-import { oklab } from './oklab.js'
+import { okhsl, okhsv, oklab } from './oklab.js'
 
 export type Vector3 = [number, number, number]
+export type Vector4 = [number, number, number, number]
 
 export function distance(a: Vector3, b: Vector3): number {
   const dx = a[0] - b[0]
   const dy = a[1] - b[1]
   const dz = a[2] - b[2]
+
+  return Math.sqrt(dx * dx + dy * dy + dz * dz)
+}
+
+export function distance4(a: Vector4, b: Vector4): number {
+  const dx = a[0] - b[0]
+  const dy = a[1] - b[1]
+  const dz = a[2] - b[2]
+  const dw = a[3] - b[3]
+
+  return Math.sqrt(dx * dx + dy * dy + dz * dz + dw * dw)
+}
+
+export function distanceRadial0(a: Vector3, b: Vector3) {
+  let dx = Number.isNaN(a[0]) && Number.isNaN(b[0]) ? 0 : a[0] - b[0] || 0
+
+  const dy = a[1] - b[1]
+  const dz = a[2] - b[2]
+
+  dx += dx > 180 ? -360 : dx < -180 ? 360 : 0
+  dx /= 180
+
+  return Math.sqrt(dx * dx + dy * dy + dz * dz)
+}
+
+export function distanceRadial2(a: Vector3, b: Vector3) {
+  const dx = a[0] - b[0]
+  const dy = a[1] - b[1]
+
+  let dz = Number.isNaN(a[2]) && Number.isNaN(b[2]) ? 0 : a[2] - b[2] || 0
+
+  dz += dz > 180 ? -360 : dz < -180 ? 360 : 0
+  dz /= 180
+
   return Math.sqrt(dx * dx + dy * dy + dz * dz)
 }
 
@@ -75,7 +110,7 @@ export function closestList(data: Vector3[]) {
   return <[Vector3, Vector3][]>list.map((d) => d.data)
 }
 
-export function inlinest(data: Vector3[]) {
+export function inlinest(data: Vector3[], helper: ColorHelper) {
   if (data.length === 2) {
     return <[Vector3, Vector3]>[...data]
   }
@@ -112,7 +147,7 @@ export function inlinest(data: Vector3[]) {
     }
   }
 
-  if (distance(<Vector3>first, <Vector3>mid) < distance(<Vector3>mid, <Vector3>last)) {
+  if (helper.distance(<Vector3>first, <Vector3>mid) < helper.distance(<Vector3>mid, <Vector3>last)) {
     last = mid
   } else {
     first = mid
@@ -121,7 +156,7 @@ export function inlinest(data: Vector3[]) {
   return <[Vector3, Vector3]>[first, last]
 }
 
-export function tspVectors(colors: Vector3[]) {
+export function tspVectors(colors: Vector3[], helper: ColorHelper) {
   let improved = true
 
   while (improved) {
@@ -129,8 +164,8 @@ export function tspVectors(colors: Vector3[]) {
 
     for (let i = 0; i < colors.length - 2; i++) {
       for (let j = i + 1; j < colors.length - 1; j++) {
-        const d1 = distance(colors[i], colors[i + 1]) + distance(colors[j], colors[j + 1])
-        const d2 = distance(colors[i], colors[j]) + distance(colors[i + 1], colors[j + 1])
+        const d1 = helper.distance(colors[i], colors[i + 1]) + helper.distance(colors[j], colors[j + 1])
+        const d2 = helper.distance(colors[i], colors[j]) + helper.distance(colors[i + 1], colors[j + 1])
 
         if (d2 < d1) {
           colors = [...colors.slice(0, i + 1), ...colors.slice(i + 1, j + 1).reverse(), ...colors.slice(j + 1)]
@@ -147,29 +182,87 @@ function normalizeLab(a: Vector3) {
   return [(a[0] + 128) / 255, (a[1] + 128) / 255, (a[2] + 128) / 255]
 }
 
-export function colorVectors(colors: string[], fn: (vectors: Vector3[]) => Vector3[], model: string = 'gl'): string[] {
-  const vectorMap = new Map()
+export interface ColorHelper {
+  toColors(vectors: Vector3[]): string[]
 
-  colors
-    .map((c) => {
-      if (model === 'oklab') {
-        return [oklab(c), c]
-      } else if (model === 'lab-norm') {
-        return [normalizeLab(chroma(c).lab()), c]
-      } else {
-        return [chroma(c).get(model), c]
+  toColor(vector: Vector3): string
+
+  distance(a: Vector3, b: Vector3): number
+
+  deltaE(a: Vector3, b: Vector3, ...args: number[]): number
+}
+
+// https://github.com/w3c/csswg-drafts/issues/6642#issuecomment-945714988
+const OK2_SCALE = (2.016 + 2.045) / 2
+
+export function distanceOk2([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
+  let dL = L1 - L2
+  let da = OK2_SCALE * (a1 - a2)
+  let db = OK2_SCALE * (b1 - b2)
+  return Math.sqrt(dL ** 2 + da ** 2 + db ** 2)
+}
+
+export type DistanceFn = (a: Vector3, b: Vector3) => number
+
+function createDistanceCache(distanceFn: DistanceFn): Omit<ColorHelper, 'toColors' | 'toColor' | 'deltaE'> {
+  const cache = new Map<string, number>()
+
+  return {
+    distance: (a: Vector3, b: Vector3) => {
+      const key = [a, b].sort().join('|')
+      let value = cache.get(key)
+
+      if (value === undefined) {
+        value = distanceFn(a, b)
+        cache.set(key, value)
       }
-    })
-    .forEach(([key, value]) => {
-      vectorMap.set(key, value)
-    })
+
+      return value
+    }
+  }
+}
+
+function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
+  return chroma.deltaE(a, b, x, y, z)
+}
+
+export function colorVectors(colors: string[], fn: (vectors: Vector3[]) => Vector3[], model: string = 'gl', distanceMethod_?: DistanceFn): string[] {
+  const vectorMap = new Map()
+  const distanceMethod = distanceMethod_ ?? (model.at(-1) === 'h' ? distanceRadial2 : model.at(-3) === 'h' ? distanceRadial0 : model === 'oklab' ? distanceOk2 : distance)
+
+  let vs: [Vector3, string][]
+
+  if (model === 'oklab') {
+    vs = colors.map((c) => [oklab(c), c])
+  } else if (model === 'lab-norm') {
+    vs = colors.map((c) => <[Vector3, string]>[normalizeLab(chroma(c).lab()), c])
+  } else if (model === 'okhsl') {
+    vs = colors.map((c) => [okhsl(c), c])
+  } else if (model === 'okhsv') {
+    vs = colors.map((c) => [okhsv(c), c])
+  } else {
+    vs = colors.map((c) => <[Vector3, string]>(<unknown>[chroma(c).get(model), c]))
+  }
+
+  for (const [key, value] of vs) {
+    vectorMap.set(key, value)
+  }
 
   function toColors(vectors: Vector3[]): string[] {
     return vectors.map((c: Vector3) => vectorMap.get(c))
   }
 
+  function toColor(vector: Vector3): string {
+    return vectorMap.get(vector)
+  }
+
+  const helper = <ColorHelper>createDistanceCache(distanceMethod)
+  helper.toColors = toColors
+  helper.toColor = toColor
+  helper.deltaE = (a, b, ...c) => deltaE(toColor(a), toColor(b), ...c)
+
   const vectors = [...vectorMap.keys()]
-  const sorted = fn.call({ toColors }, vectors)
+  const sorted = fn.call(helper, vectors)
 
   return sorted.map((c: Vector3) => vectorMap.get(c))
 }

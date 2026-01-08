@@ -17,6 +17,14 @@
 - [ ] reuse tsp? and more?
 - [ ] stats table
 
+## Notes
+
+- https://github.com/bottosson/bottosson.github.io
+- https://bottosson.github.io/
+- https://colorjs.io/
+- https://gka.github.io/chroma.js/
+- https://oklch.com/
+
 ## Done
 
 - [x] group by result (method + time cols?)

@@ -323,7 +323,7 @@ export default {
 
       let number
 
-      if (this.filterPalette[0] === '<' || this.filterPalette[0] === '>') {
+      if (this?.filterPalette?.[0] === '<' || this?.filterPalette?.[0] === '>') {
         number = Number.parseInt(this.filterPalette.slice(1), 10)
       }
 

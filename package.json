@@ -8,6 +8,7 @@
     "@vitejs/plugin-vue": "^6.0.3",
     "chroma-js": "^3.2.0",
     "colorgram": "^0.2.0",
+    "colorjs.io": "^0.6.0",
     "js-levenshtein": "^1.1.6",
     "json-stringify-pretty-compact": "^4.0.0",
     "oxfmt": "^0.21.0",
@@ -27,7 +28,8 @@
     "dev": "vite",
     "lint": "oxlint ./src --fix && oxfmt ./src",
     "preview": "vite preview",
-    "test": "deno run -A npm:vitest"
+    "test:all": "deno run -A npm:vitest",
+    "test:fast": "deno run -A npm:vitest --exclude ./tests/compute.test.js --exclude ./tests/palettes.test.js --exclude ./tests/bench.test.js"
   },
   "type": "module"
 }

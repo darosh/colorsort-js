@@ -1,6 +1,8 @@
 import { test } from 'vitest'
 import { writeFile, readFile } from 'node:fs/promises'
 import stringify from 'json-stringify-pretty-compact'
+import { SORTING_METHODS_RAW } from '@/lib/sorting-methods/index.js'
+import { SORTING_METHODS } from '@/lib/index.js'
 
 test('palettes', async () => {
   const txt = await readFile('./tests/palettes.txt', 'utf8')
@@ -21,4 +23,22 @@ test('palettes', async () => {
   console.log(obj)
 
   // await writeFile('./palettes.json', serialized)
+})
+
+test('check', () => {
+  function check (arr, set) {
+    const ns = new Set(arr.map((a) => a.name))
+    const is = new Set(arr.map((a) => a.mid))
+
+    if (ns.size !== arr.length) {
+      throw new Error(`Duplicated ${set} name`)
+    }
+
+    if (is.size !== arr.length) {
+      throw new Error(`Duplicated ${set} mid`)
+    }
+  }
+
+  check(SORTING_METHODS_RAW, 'raw')
+  check(SORTING_METHODS, 'sorting')
 })

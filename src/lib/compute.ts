@@ -3,9 +3,9 @@ import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } f
 import BESTIES from '../besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from '../palette-distance.ts'
 import { extract } from 'colorgram'
-import chroma from 'chroma-js'
 // @ts-ignore
 import { isArtist } from '../palettes.js'
+import { flatRgb } from './oklab.ts'
 
 export type Method = {
   name: string
@@ -244,7 +244,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
       type: await render({ getPaletteType: colors }),
       gram: extract(
         {
-          data: colors.map((c) => chroma(c).rgb()).flat(),
+          data: flatRgb(colors),
           channels: 3
         },
         colors.length
