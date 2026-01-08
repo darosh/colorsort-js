@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Hilbert distance dev metrics 
 - [ ] filter: palette, method 
 - [ ] generate methods
 - [ ] analyze best picks (sorter vs type, ...?) 

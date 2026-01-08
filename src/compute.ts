@@ -1,11 +1,11 @@
-import { PaletteType } from './types.ts'
-import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './metrics.ts'
-import BESTIES from '../besties.json' with { type: 'json' }
-import { paletteDistance, paletteMap } from '../palette-distance.ts'
+import { PaletteType } from './lib/types.ts'
+import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './lib/metrics.ts'
+import BESTIES from './besties.json' with { type: 'json' }
+import { paletteDistance, paletteMap } from './palette-distance.ts'
 import { extract } from 'colorgram'
 // @ts-ignore
-import { isArtist } from '../palettes.js'
-import { flatRgb } from './oklab.ts'
+import { isArtist } from './palettes.js'
+import { flatRgb } from './lib/oklab.ts'
 
 export type Method = {
   name: string

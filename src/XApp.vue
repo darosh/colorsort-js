@@ -194,7 +194,7 @@
 import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS } from '@/lib'
 import XPreview from '@/XPreview.vue'
-import { computePlan, computeRender, updateBest, updateDistance } from '@/lib/compute.ts'
+import { computePlan, computeRender, updateBest, updateDistance } from '@/compute.ts'
 import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
