@@ -1,7 +1,7 @@
 import { closest, closestList, ColorHelper, colorVectors, DistanceFn, dot, inlinest, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
 
 // @ts-ignore
-import { detectPaletteType } from '../types.js'
+import { detectPaletteType } from '../metrics-type.ts'
 import { metrics } from '../metrics.ts'
 
 function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: DistanceFn, momentumWeight: number = 1e6) {
@@ -122,7 +122,7 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 
       result.sort((a, b) => a.metrics.totalDistance - b.metrics.totalDistance)
 
-      return tsp ? tspVectors(result[0].vectors, this) : result[0].vectors
+      return tsp ? tspVectors(result[0].vectors, this.distance) : result[0].vectors
     },
     'oklab'
   )

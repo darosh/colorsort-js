@@ -1,4 +1,4 @@
-import { calculateVariances, Variances } from './variances.ts'
+import { calculateVariances, MetricsVariances } from './metrics-variances.ts'
 import { lch } from './color.ts'
 
 export type PaletteType = {
@@ -6,7 +6,7 @@ export type PaletteType = {
   Kc: number
   Kh: number
   type: string
-  data: Variances & {
+  data: MetricsVariances & {
     lightnessRange: number
     chromaRange: number
     hueSpread: number

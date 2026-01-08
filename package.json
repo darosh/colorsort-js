@@ -26,7 +26,7 @@
   "scripts": {
     "build": "tsc && vite build --outDir docs",
     "dev": "vite",
-    "lint": "oxlint ./src --fix && oxfmt ./src",
+    "lint": "tsc && oxlint ./src --fix && oxfmt ./src",
     "preview": "vite preview",
     "test:all": "deno run -A npm:vitest",
     "test:bench": "deno run -A npm:vitest ./tests/bench.test.js",

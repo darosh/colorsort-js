@@ -1,6 +1,6 @@
 import { lab, lab2lch } from './color.ts'
 
-export type Variances = {
+export type MetricsVariances = {
   L: number
   C: number
   H: number
@@ -8,7 +8,7 @@ export type Variances = {
   meanH: number
 }
 
-export function calculateVariances(colors: string[]): Variances {
+export function calculateVariances(colors: string[]): MetricsVariances {
   // Convert all colors to LAB color space
   const labColors = colors.map((c) => lab(c))
 
@@ -83,4 +83,14 @@ function circularVariance(angles: number[], mean: number) {
   })
 
   return diffs.reduce((sum, d) => sum + d, 0) / angles.length
+}
+
+export function calculateAdaptiveWeights(variances: { L: number; C: number; H: number }) {
+  const total = Math.max(Number.EPSILON, variances.L + variances.C + (variances.H ?? 0))
+
+  return {
+    Kl: (total - variances.L) / (2 * total),
+    Kc: (total - variances.C) / (2 * total),
+    Kh: (total - variances.H) / (2 * total)
+  }
 }

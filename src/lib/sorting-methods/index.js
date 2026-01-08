@@ -1,14 +1,12 @@
-import { hilbertLab, hilbertOklab, hilbertRgb } from './hilbert.ts'
+import { hilbert } from './hilbert.ts'
 import { evolve, evolveMulti } from './genetic.js'
-import { adaptiveTsp, graphDeltaETsp } from './tsp.js'
-import { graphDeltaEWeightedAdaptive1, graphDeltaEWeightedAdaptive2 } from './graph-delta-e-weighted-adatptive.js'
-import { graphDeltaEWeighted, graphDeltaEWeightedPlusPlus } from './graph-delta-e-weighted.js'
-import { graphDeltaE } from './graph-delta-e.js'
-import { principalLab, principalOklab, principalRgb } from './principal.ts'
+import { principal } from './principal.ts'
 import { cylindrical, spiral } from './radial.ts'
 import { cluster, dbScan, kMeans } from './clustering.ts'
-import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
 import { harmonizeDelta, harmonizeModel } from './harmonize.ts'
+import { graph, graphWeighted, graphWeightedAdaptive1, graphWeightedAdaptive2, graphWeightedPlusPlus } from './graph.ts'
+import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
+
 import BENCH from '../../../bench.json' with { type: 'json' }
 
 const METHODS = {
@@ -58,7 +56,7 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'NNA(Delta E)',
-    fn: graphDeltaE,
+    fn: graph,
     mid: 'NNA(DE) Lab',
     description: {
       method: METHODS.NNA,
@@ -68,7 +66,7 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'NNA(Delta E+)',
-    fn: graphDeltaEWeighted,
+    fn: graphWeighted,
     mid: 'NNA(DE+) Lab',
     description: {
       method: METHODS.NNA,
@@ -78,7 +76,7 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'NNA(Delta E++)',
-    fn: graphDeltaEWeightedPlusPlus,
+    fn: graphWeightedPlusPlus,
     mid: 'NNA(DE++) Lab',
     description: {
       method: METHODS.NNA,
@@ -88,7 +86,7 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'NNA(Delta E+1)',
-    fn: graphDeltaEWeightedAdaptive1,
+    fn: graphWeightedAdaptive1,
     mid: 'NNA(DE+1) Lab',
     description: {
       method: METHODS.NNA,
@@ -98,30 +96,10 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'NNA(Delta E+2)',
-    fn: graphDeltaEWeightedAdaptive2,
+    fn: graphWeightedAdaptive2,
     mid: 'NNA(DE+2) Lab',
     description: {
       method: METHODS.NNA,
-      model: MODELS.LAB,
-      diff: DIFFS.DE
-    }
-  },
-  {
-    name: 'TSP(Delta E) Lab',
-    fn: graphDeltaETsp,
-    mid: 'TSP(DE)-Lab',
-    description: {
-      method: [METHODS.TSP, METHODS['2-OPT']],
-      model: MODELS.LAB,
-      diff: DIFFS.DE
-    }
-  },
-  {
-    name: 'TSP(PCA(Delta E+)) Lab',
-    fn: adaptiveTsp,
-    mid: 'TSP(PCA(DE+))-Lab',
-    description: {
-      method: [METHODS.TSP, METHODS['2-OPT'], METHODS.PCA],
       model: MODELS.LAB,
       diff: DIFFS.DE
     }
@@ -211,7 +189,7 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'Hilbert RGB',
-    fn: hilbertRgb,
+    fn: hilbert,
     mid: 'HIL-RGB',
     description: {
       method: METHODS.HIL,
@@ -219,48 +197,11 @@ export const SORTING_METHODS_RAW = [
     }
   },
   {
-    name: 'Hilbert Lab',
-    fn: hilbertLab,
-    mid: 'HIL-Lab',
+    name: 'PCA',
+    fn: principal,
+    mid: 'PCA',
     description: {
-      method: METHODS.HIL,
-      model: MODELS.LAB
-    }
-  },
-  {
-    name: 'Hilbert Oklab',
-    fn: hilbertOklab,
-    mid: 'HIL-Oklab',
-    description: {
-      method: METHODS.HIL,
-      model: MODELS.OKLAB
-    }
-  },
-  {
-    name: 'PCA RGB',
-    fn: principalRgb,
-    mid: 'PCA-RGB',
-    description: {
-      method: METHODS.PCA,
-      model: MODELS.RGB
-    }
-  },
-  {
-    name: 'PCA Lab',
-    fn: principalLab,
-    mid: 'PCA-Lab',
-    description: {
-      method: METHODS.PCA,
-      model: MODELS.LAB
-    }
-  },
-  {
-    name: 'PCA Oklab',
-    fn: principalOklab,
-    mid: 'PCA-Oklab',
-    description: {
-      method: METHODS.PCA,
-      model: MODELS.OKLAB
+      method: METHODS.PCA
     }
   },
   {

@@ -33,14 +33,8 @@ export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
   })
 }
 
-export function hilbertRgb(colors: string[]) {
-  return colorVectors(colors, sortByHilbertCurve, 'gl')
+export function hilbert(colors: string[], model: 'gl' | 'oklab' | 'lab-norm' = 'gl') {
+  return colorVectors(colors, sortByHilbertCurve, model)
 }
 
-export function hilbertOklab(colors: string[]) {
-  return colorVectors(colors, sortByHilbertCurve, 'oklab')
-}
-
-export function hilbertLab(colors: string[]) {
-  return colorVectors(colors, sortByHilbertCurve, 'lab-norm')
-}
+hilbert.params = [{ name: 'model', values: ['gl', 'oklab', 'lab-norm'] }]

@@ -156,7 +156,7 @@ export function inlinest(data: Vector3[], helper: ColorHelper) {
   return <[Vector3, Vector3]>[first, last]
 }
 
-export function tspVectors(colors: Vector3[], helper: ColorHelper) {
+export function tspVectors(colors: Vector3[], distance: DistanceFn) {
   let improved = true
 
   while (improved) {
@@ -164,8 +164,8 @@ export function tspVectors(colors: Vector3[], helper: ColorHelper) {
 
     for (let i = 0; i < colors.length - 2; i++) {
       for (let j = i + 1; j < colors.length - 1; j++) {
-        const d1 = helper.distance(colors[i], colors[i + 1]) + helper.distance(colors[j], colors[j + 1])
-        const d2 = helper.distance(colors[i], colors[j]) + helper.distance(colors[i + 1], colors[j + 1])
+        const d1 = distance(colors[i], colors[i + 1]) + distance(colors[j], colors[j + 1])
+        const d2 = distance(colors[i], colors[j]) + distance(colors[i + 1], colors[j + 1])
 
         if (d2 < d1) {
           colors = [...colors.slice(0, i + 1), ...colors.slice(i + 1, j + 1).reverse(), ...colors.slice(j + 1)]
@@ -242,6 +242,8 @@ export function colorVectors(colors: string[], fn: (vectors: Vector3[]) => Vecto
     vs = colors.map((c) => [okhsl(c), c])
   } else if (model === 'okhsv') {
     vs = colors.map((c) => [okhsv(c), c])
+  } else if (model === 'hex') {
+    vs = <[Vector3, string][]>(<unknown>colors.map((c) => [c, c]))
   } else {
     vs = colors.map((c) => <[Vector3, string]>(<unknown>[chroma(c).get(model), c]))
   }

@@ -1,7 +1,9 @@
-import { colorVectors, dot, normalize, subtract, Vector3 } from '../vector.ts'
+import { ColorHelper, colorVectors, dot, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
+import { oklab } from '../color.ts'
 
 function mean(vectors: Vector3[]): Vector3 {
   const sum = vectors.reduce((acc, v) => [acc[0] + v[0], acc[1] + v[1], acc[2] + v[2]], [0, 0, 0] as Vector3)
+
   return [sum[0] / vectors.length, sum[1] / vectors.length, sum[2] / vectors.length]
 }
 
@@ -54,14 +56,52 @@ export function sortByPrincipalComponent(colors: Vector3[]): Vector3[] {
   })
 }
 
-export function principalRgb(colors: string[]) {
-  return colorVectors(colors, sortByPrincipalComponent, 'gl')
+function oklabStats(labs: Vector3[]) {
+  const n = labs.length
+  const mean = labs.reduce((acc, l) => [acc[0] + l[0], acc[1] + l[1], acc[2] + l[2]], [0, 0, 0]).map((v) => v / n)
+  const variance = labs.reduce((acc, l) => [acc[0] + (l[0] - mean[0]) ** 2, acc[1] + (l[1] - mean[1]) ** 2, acc[2] + (l[2] - mean[2]) ** 2], [0, 0, 0])
+
+  return variance.map((v) => Math.sqrt(v / n) || 1e-6)
 }
 
-export function principalLab(colors: string[]) {
-  return colorVectors(colors, sortByPrincipalComponent, 'lab')
+function adaptiveOklabDistanceFactory(colors: Vector3[]) {
+  const WHAT_A_SIGMA = oklabStats(colors)
+
+  return (A: Vector3, B: Vector3) => {
+    return Math.hypot((A[0] - B[0]) / WHAT_A_SIGMA[0], (A[1] - B[1]) / WHAT_A_SIGMA[1], (A[2] - B[2]) / WHAT_A_SIGMA[2])
+  }
 }
 
-export function principalOklab(colors: string[]) {
-  return colorVectors(colors, sortByPrincipalComponent, 'oklab')
+export function principal(colors: string[], model: 'gl' | 'lab' | 'oklab', post: 'raw' | 'tsp' | 'tsp-adapt' = 'raw') {
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      const vec = sortByPrincipalComponent(data)
+
+      if (post === 'raw') {
+        return vec
+      }
+
+      let distance = this.distance
+      let toColor = this.toColor
+
+      if (post === 'tsp-adapt') {
+        if (model === 'oklab') {
+          distance = adaptiveOklabDistanceFactory(data)
+        } else {
+          const oklabs = colors.map((c) => oklab(c))
+          const okdist = adaptiveOklabDistanceFactory(oklabs)
+          distance = (a, b) => okdist(oklab(toColor(a)), oklab(toColor(b)))
+        }
+      }
+
+      return tspVectors(vec, distance)
+    },
+    model
+  )
 }
+
+principal.params = [
+  { name: 'model', values: ['gl', 'lab', 'oklab'] },
+  { name: 'post', values: ['raw', 'tsp', 'tsp-adapt'] }
+]

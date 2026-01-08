@@ -1,5 +1,5 @@
-import { PaletteType } from './lib/types.ts'
-import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './lib/metrics.ts'
+import { PaletteType } from './lib/metrics-type.ts'
+import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './lib/metrics-extended.ts'
 import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'
 import { extract } from 'colorgram'
