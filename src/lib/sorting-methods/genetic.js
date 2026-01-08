@@ -1,4 +1,4 @@
-import { oklab } from '../oklab.js'
+import { oklab } from '../color.ts'
 import { distance } from '../vector.ts'
 import { GeneticAlgorithm } from '../genetic-algo.js'
 import { metrics } from '../metrics.js'

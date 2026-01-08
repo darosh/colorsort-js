@@ -1,6 +1,6 @@
 import chroma from 'chroma-js'
 import { graphDeltaE } from './graph-delta-e.js'
-import { oklab } from '../oklab.js'
+import { oklab } from '../color.ts'
 import { principalOklab } from '@/lib/sorting-methods/principal.ts'
 
 function deltaE(a, b) {

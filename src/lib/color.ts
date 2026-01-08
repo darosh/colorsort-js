@@ -1,9 +1,10 @@
 // @ts-ignore
-import { srgb_transfer_function_inv, srgb_transfer_function, srgb_to_okhsl, srgb_to_okhsv } from './oklab-conversion.js'
-
-const map = new Map()
+import { srgb_transfer_function_inv, srgb_transfer_function, srgb_to_okhsl, srgb_to_okhsv } from './color-conversion.js'
+import chroma from 'chroma-js'
 
 function memoize(fn: (arg: any) => any) {
+  const map = new Map()
+
   return (a: any) => {
     if (map.has(a)) {
       return map.get(a)
@@ -20,15 +21,21 @@ function hexToRgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
+export const gl = memoize((c) => hexToRgb(c).map(x => x/255))
 export const oklab = memoize((c) => rgb2oklab(hexToRgb(c)))
 export const okhsl = memoize((c) => rgb2okhsl(c))
 export const okhsv = memoize((c) => rgb2okhsv(c))
+export const oklch = memoize((c) => OKLab_to_OKLCH(oklab(c)))
+export const lch = memoize((c) => chroma(c).lch())
+export const lab = memoize((c) => chroma(c).lab())
+export const lab2lch = memoize((c: [number, number, number]) => chroma.lab(...c).lch())
+export const luminance = memoize((c: string) => chroma(c).luminance())
 
 // https://bottosson.github.io/posts/oklab/
 export function rgb2oklab([r_, g_, b_]: [number, number, number]) {
-  const r = srgb_transfer_function_inv(r_)
-  const g = srgb_transfer_function_inv(g_)
-  const b = srgb_transfer_function_inv(b_)
+  const r = srgb_transfer_function_inv(r_/255)
+  const g = srgb_transfer_function_inv(g_/255)
+  const b = srgb_transfer_function_inv(b_/255)
 
   const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
   const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
@@ -63,4 +70,57 @@ export function rgb2okhsv(hex: string) {
 
 export function flatRgb(hexes: string[]) {
   return hexes.map((c) => hexToRgb(c)).flat()
+}
+
+// https://www.w3.org/TR/css-color-4/#color-conversion-code
+const RAD2DEG = 180 / Math.PI
+// const DEG2RAD = Math.PI / 180
+
+/*
+function Lab_to_LCH (Lab: [number, number, number]) {
+  const chroma = Math.sqrt(Math.pow(Lab[1], 2) + Math.pow(Lab[2], 2)) // Chroma
+  let hue = Math.atan2(Lab[2], Lab[1]) * RAD2DEG
+
+  if (hue < 0) {
+    hue = hue + 360
+  }
+
+  if (chroma <= 0.0015) {
+    hue = NaN
+  }
+
+  return [
+    Lab[0], // L is still L
+    chroma, // Chroma
+    hue // Hue, in degrees [0 to 360)
+  ]
+}
+
+function LCH_to_Lab (LCH: [number, number, number]) {
+  // Convert from polar form
+  return [
+    LCH[0], // L is still L
+    LCH[1] * Math.cos(LCH[2] * DEG2RAD), // a
+    LCH[1] * Math.sin(LCH[2] * DEG2RAD) // b
+  ]
+}
+ */
+
+function OKLab_to_OKLCH(OKLab: [number, number, number]) {
+  const chroma = Math.sqrt(Math.pow(OKLab[1], 2) + Math.pow(OKLab[2], 2)) // Chroma
+  let hue = Math.atan2(OKLab[2], OKLab[1]) * RAD2DEG
+
+  if (hue < 0) {
+    hue = hue + 360
+  }
+
+  if (chroma <= 0.000004) {
+    hue = NaN
+  }
+
+  return [
+    OKLab[0], // L is still L
+    chroma, // Chroma
+    hue // Hue, in degrees [0 to 360)
+  ]
 }

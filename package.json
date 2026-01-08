@@ -29,6 +29,8 @@
     "lint": "oxlint ./src --fix && oxfmt ./src",
     "preview": "vite preview",
     "test:all": "deno run -A npm:vitest",
+    "test:bench": "deno run -A npm:vitest ./tests/bench.test.js",
+    "test:compute": "deno run -A npm:vitest ./tests/compute.test.js",
     "test:fast": "deno run -A npm:vitest --exclude ./tests/compute.test.js --exclude ./tests/palettes.test.js --exclude ./tests/bench.test.js"
   },
   "type": "module"

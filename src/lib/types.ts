@@ -1,6 +1,5 @@
-import chroma from 'chroma-js'
-
 import { calculateVariances, Variances } from './variances.ts'
+import { lch } from './color.ts'
 
 export type PaletteType = {
   Kl: number
@@ -20,7 +19,7 @@ export function detectPaletteType(colors: string[]): PaletteType {
   // Also get the actual ranges for context
   // const labColors = colors.map((color) => chroma(color).lab())
   // const lchColors = labColors.map((lab) => chroma.lab(lab).lch())
-  const lchColors = colors.map((c) => chroma(c).lch())
+  const lchColors = colors.map((c) => lch(c))
 
   const lightnesses = lchColors.map(([L]) => L)
   const chromas = lchColors.map(([, C]) => C)

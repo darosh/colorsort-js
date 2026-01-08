@@ -1,6 +1,5 @@
 import { distance, dot, normalize, subtract, Vector3 } from './vector.ts'
-import { oklab } from './oklab.js'
-import chroma from 'chroma-js'
+import { lch, oklab } from './color.ts'
 
 export function metrics(colors: string[]) {
   const vectors = colors.map((c) => oklab(c))
@@ -68,7 +67,7 @@ export type MetricsEx<T> = {
 
 export function metricsEx(colors: string[]): MetricsEx<number> {
   const vectors = colors.map((c) => oklab(c))
-  const lchColors = colors.map((c) => chroma(c).lch())
+  const lchColors = colors.map((c) => lch(c))
 
   if (vectors.length < 2) {
     return {

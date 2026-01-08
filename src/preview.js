@@ -4,7 +4,7 @@ import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Vector3 } from 'three'
-import chroma from 'chroma-js'
+import { gl, oklab } from '@/lib/color.ts'
 
 let line, renderer, scene, camera, controls
 let geometry
@@ -25,7 +25,7 @@ export function initPoints(P) {
     P = ['#000', '#777', '#fff']
   }
 
-  const R = P.map((c) => chroma(c).oklab())
+  const R = P.map((c) => oklab(c))
   const points = R.map((c) => new Vector3((c[0] - 0.5) * S, (c[1] - 0) * S * 1.5, (c[2] - 0) * S))
 
   // Position and THREE.Color Data
@@ -38,7 +38,7 @@ export function initPoints(P) {
   for (let i = 0, l = divisions; i < l; i++) {
     const point = points[i]
     positions.push(point.x, point.y, point.z)
-    const c = chroma(P[i]).gl()
+    const c = gl(P[i])
     colors.push(c[0], c[1], c[2])
   }
 

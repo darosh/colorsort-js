@@ -1,5 +1,5 @@
 import { detectPaletteType, SORTING_METHODS } from '@/lib'
-import { oklab } from '@/lib/oklab.js'
+import { oklab } from '@/lib/color.ts'
 import { metricsEx } from '@/lib/metrics.ts'
 
 export async function timed(fn) {

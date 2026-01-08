@@ -1,5 +1,5 @@
 import types from '../data.json' with { type: 'json' }
-import { PaletteRecordGrouped } from './lib/compute.ts'
+import { PaletteRecordGrouped } from './compute.ts'
 //@ts-ignore
 import { SORTING_METHODS } from '@/lib'
 

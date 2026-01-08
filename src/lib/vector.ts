@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { okhsl, okhsv, oklab } from './oklab.js'
+import { okhsl, okhsv, oklab, oklch } from './color.ts'
 
 export type Vector3 = [number, number, number]
 export type Vector4 = [number, number, number, number]
@@ -236,6 +236,8 @@ export function colorVectors(colors: string[], fn: (vectors: Vector3[]) => Vecto
     vs = colors.map((c) => [oklab(c), c])
   } else if (model === 'lab-norm') {
     vs = colors.map((c) => <[Vector3, string]>[normalizeLab(chroma(c).lab()), c])
+  } else if (model === 'oklch') {
+    vs = colors.map((c) => [oklch(c), c])
   } else if (model === 'okhsl') {
     vs = colors.map((c) => [okhsl(c), c])
   } else if (model === 'okhsv') {

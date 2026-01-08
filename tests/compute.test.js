@@ -3,7 +3,7 @@ import { writeFile } from 'node:fs/promises'
 import stringify from 'json-stringify-pretty-compact'
 import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS } from '@/lib/index.js'
-import { computedSerialize, computePlan, computeRender } from '@/lib/compute.ts'
+import { computedSerialize, computePlan, computeRender } from '@/compute.ts'
 import { render } from '@/render.js'
 
 test('compute', async () => {
@@ -12,6 +12,8 @@ test('compute', async () => {
   const computed = await computePlan(palettes, SORTING_METHODS, render, ({done, progress, progressPalettes}) => {
     console.log(`Rows / Rows % / Palettes %: ${done} / ${progress.toFixed(2)}% / ${progressPalettes.toFixed(2)}%`)
   })
+  
+  // const sorted = [...computed.sorted].sort((a, b) => a.method.speed - b.method.speed)
   
   const promises = computeRender(computed.sorted)
   await Promise.all(promises)

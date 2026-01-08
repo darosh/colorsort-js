@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { oklab } from '@/lib/oklab.js'
+import { oklab } from '@/lib/color.ts'
 import PALETTES_DATA from '../palettes.json' with { type: 'json' }
 
 let previous = 1

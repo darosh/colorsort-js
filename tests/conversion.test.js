@@ -2,7 +2,7 @@ import { test } from 'vitest'
 
 import Color from 'colorjs.io'
 import chroma from 'chroma-js'
-import { oklab2rgb, rgb2oklab } from '@/lib/oklab.ts'
+import { oklab2rgb, rgb2oklab } from '@/lib/color.ts'
 import { distance, distanceOk2 } from '@/lib/vector.ts'
 
 export function timed(fn) {

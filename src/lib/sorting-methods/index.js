@@ -9,6 +9,7 @@ import { sortByHslCylindrical, sortByHslSpiral } from './radial.ts'
 import { cluster, dbScan, kMeans } from './clustering.ts'
 import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
 import { harmonizeDelta, harmonizeModel } from './harmonize.ts'
+import BENCH from '../../../bench.json' with { type: 'json' }
 
 const METHODS = {
   PCA: ['PCA', 'Principal component analysis', 'https://en.wikipedia.org/wiki/Principal_component_analysis'],
@@ -38,7 +39,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Original',
     fn: (c) => c,
-    speed: 0,
     mid: 'Original',
     description: {
       model: null
@@ -47,21 +47,18 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'HARM',
     fn: harmonizeModel,
-    speed: 1,
     mid: 'HARM',
     description: {}
   },
   {
     name: 'HARMED',
     fn: harmonizeDelta,
-    speed: 1,
     mid: 'HARMED',
     description: {}
   },
   {
     name: 'NNA(Delta E)',
     fn: graphDeltaE,
-    speed: 3,
     mid: 'NNA(DE) Lab',
     description: {
       method: METHODS.NNA,
@@ -72,7 +69,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'NNA(Delta E+)',
     fn: graphDeltaEWeighted,
-    speed: 3,
     mid: 'NNA(DE+) Lab',
     description: {
       method: METHODS.NNA,
@@ -83,7 +79,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'NNA(Delta E++)',
     fn: graphDeltaEWeightedPlusPlus,
-    speed: 3,
     mid: 'NNA(DE++) Lab',
     description: {
       method: METHODS.NNA,
@@ -94,7 +89,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'NNA(Delta E+1)',
     fn: graphDeltaEWeightedAdaptive1,
-    speed: 3,
     mid: 'NNA(DE+1) Lab',
     description: {
       method: METHODS.NNA,
@@ -105,7 +99,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'NNA(Delta E+2)',
     fn: graphDeltaEWeightedAdaptive2,
-    speed: 3,
     mid: 'NNA(DE+2) Lab',
     description: {
       method: METHODS.NNA,
@@ -116,7 +109,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'TSP(Delta E) Lab',
     fn: graphDeltaETsp,
-    speed: 5,
     mid: 'TSP(DE)-Lab',
     description: {
       method: [METHODS.TSP, METHODS['2-OPT']],
@@ -127,7 +119,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'TSP(PCA(Delta E+)) Lab',
     fn: adaptiveTsp,
-    speed: 2,
     mid: 'TSP(PCA(DE+))-Lab',
     description: {
       method: [METHODS.TSP, METHODS['2-OPT'], METHODS.PCA],
@@ -138,7 +129,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Closest) Oklab',
     fn: momentumClosestOklab,
-    speed: 1,
     mid: 'MOM(Closest)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -148,7 +138,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Closest+) Oklab',
     fn: momentumClosestBestOklab,
-    speed: 3,
     mid: 'MOM(Closest+)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -158,7 +147,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'TSP(MOM(Closest+)) Oklab',
     fn: (colors) => momentumClosestBestOklab(colors, true),
-    speed: 3,
     mid: 'TSP(MOM(Closest+))-Oklab',
     description: {
       method: METHODS.MOM,
@@ -168,7 +156,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Closest+, Delta E) Oklab',
     fn: momentumClosestBestDeltaEOklab,
-    speed: 3,
     mid: 'MOM(Closest+,DE)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -178,7 +165,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Inlinest) Oklab',
     fn: momentumInlinestOklab,
-    speed: 3,
     mid: 'MOM(Inlinest)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -188,7 +174,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Inlinest, Delta E) Oklab',
     fn: momentumInlinestDeltaEOklab,
-    speed: 4,
     mid: 'MOM(Inlinest,DE)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -199,7 +184,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'MOM(Inlinest, Delta E++) Oklab',
     fn: momentumInlinestDeltaEPlusOklab,
-    speed: 4,
     mid: 'MOM(Inlinest,DE++)-Oklab',
     description: {
       method: METHODS.MOM,
@@ -210,7 +194,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Genetic Oklab',
     fn: evolve,
-    speed: 5,
     mid: 'GEN-Oklab',
     description: {
       method: METHODS.GEN,
@@ -220,7 +203,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Genetic3 Oklab',
     fn: evolveMulti,
-    speed: 6,
     mid: 'GEN3-Oklab',
     description: {
       method: METHODS.GEN,
@@ -230,7 +212,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Hilbert RGB',
     fn: hilbertRgb,
-    speed: 1,
     mid: 'HIL-RGB',
     description: {
       method: METHODS.HIL,
@@ -240,7 +221,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Hilbert Lab',
     fn: hilbertLab,
-    speed: 1,
     mid: 'HIL-Lab',
     description: {
       method: METHODS.HIL,
@@ -250,7 +230,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Hilbert Oklab',
     fn: hilbertOklab,
-    speed: 1,
     mid: 'HIL-Oklab',
     description: {
       method: METHODS.HIL,
@@ -260,7 +239,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'PCA RGB',
     fn: principalRgb,
-    speed: 1,
     mid: 'PCA-RGB',
     description: {
       method: METHODS.PCA,
@@ -270,7 +248,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'PCA Lab',
     fn: principalLab,
-    speed: 1,
     mid: 'PCA-Lab',
     description: {
       method: METHODS.PCA,
@@ -280,7 +257,6 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'PCA Oklab',
     fn: principalOklab,
-    speed: 1,
     mid: 'PCA-Oklab',
     description: {
       method: METHODS.PCA,
@@ -290,35 +266,30 @@ export const SORTING_METHODS_RAW = [
   {
     name: 'Spiral',
     fn: sortByHslSpiral,
-    speed: 1,
     mid: 'SPI',
     description: {}
   },
   {
     name: 'Cylindrical',
     fn: sortByHslCylindrical,
-    speed: 1,
     mid: 'CYL',
     description: {}
   },
   {
     name: 'Cluster',
     fn: cluster,
-    speed: 1,
     mid: 'CL',
     description: {}
   },
   {
     name: 'K-means',
     fn: kMeans,
-    speed: 1,
     mid: 'KM',
     description: {}
   },
   {
     name: 'DBSCAN',
     fn: dbScan,
-    speed: 1,
     mid: 'DBSCAN',
     description: {}
   }
@@ -337,6 +308,7 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce((acc, item) => {
         ...item,
         name: `${item.name} [${combination.join(',')}]`,
         mid: `${item.mid}:[${combination.join(',')}]`,
+        speed: BENCH[item.mid] || 0,
         fn: (c) => item.fn.call(null, c, ...combination)
       })
     }

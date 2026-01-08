@@ -1,4 +1,4 @@
-import chroma from 'chroma-js'
+import { lab, lab2lch } from './color.ts'
 
 export type Variances = {
   L: number
@@ -10,8 +10,7 @@ export type Variances = {
 
 export function calculateVariances(colors: string[]): Variances {
   // Convert all colors to LAB color space
-  // Assuming colors are in a format you can convert (RGB, hex, etc.)
-  const labColors = colors.map((color) => chroma(color).lab())
+  const labColors = colors.map((c) => lab(c))
 
   // Calculate means
   const meanL = labColors.reduce((sum, [L]) => sum + L, 0) / labColors.length
@@ -19,7 +18,7 @@ export function calculateVariances(colors: string[]): Variances {
   // const meanB = labColors.reduce((sum, c) => sum + c.b, 0) / labColors.length;
 
   // Convert to LCH to get chroma and hue
-  const lchColors = labColors.map((lab) => chroma.lab(...lab).lch())
+  const lchColors = labColors.map((lab) => lab2lch(lab))
 
   const meanC = lchColors.reduce((sum, [, C]) => sum + C, 0) / lchColors.length
 

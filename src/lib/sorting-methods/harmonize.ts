@@ -1,5 +1,5 @@
-import chroma from 'chroma-js'
 import { ColorHelper, colorVectors, distance4, Vector3 } from '../vector.ts'
+import { luminance } from '../color.ts'
 
 interface HarmonizeOptions {
   selectStart: (colors: Vector3[]) => Vector3
@@ -69,7 +69,7 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 
         const hexes = toColors(colors)
 
         const hex = hexes.reduce((brightest, color) => {
-          return chroma(color).luminance() > chroma(brightest).luminance() ? color : brightest
+          return luminance(color) > luminance(brightest) ? color : brightest
         })
 
         return colors[hexes.indexOf(hex)]
@@ -79,7 +79,7 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 
         const hexes = toColors(colors)
 
         const hex = hexes.reduce((darkest, color) => {
-          return chroma(color).luminance() < chroma(darkest).luminance() ? color : darkest
+          return luminance(color) < luminance(darkest) ? color : darkest
         })
 
         return colors[hexes.indexOf(hex)]

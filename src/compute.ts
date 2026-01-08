@@ -5,7 +5,7 @@ import { paletteDistance, paletteMap } from './palette-distance.ts'
 import { extract } from 'colorgram'
 // @ts-ignore
 import { isArtist } from './palettes.js'
-import { flatRgb } from './lib/oklab.ts'
+import { flatRgb } from './lib/color.ts'
 
 export type Method = {
   name: string
