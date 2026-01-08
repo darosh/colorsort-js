@@ -10,7 +10,9 @@
         <v-btn @click="showStats = true">Statistics</v-btn>
       </v-toolbar-items>
       <v-spacer />
-      <span class="mx-4" v-show="filtered.length < types.length">{{ filtered.length }} {{filtered.length === 1 ? 'palette' : 'palettes'}}</span>
+      <span class="ml-4 text-grey-lighten-1">{{ methodsCount }} {{methodsCount === 1 ? 'method' : 'methods'}}</span>
+      <span class="mx-8 text-grey-lighten-1" v-show="filtered.length === types.length">{{ types.length }} {{types.length === 1 ? 'palette' : 'palettes'}}</span>
+      <span class="mx-8 text-grey-lighten-3" v-show="filtered.length < types.length">{{ filtered.length }} of {{types.length}} {{types.length === 1 ? 'palette' : 'palettes'}}</span>
       <v-text-field prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="180" />
       <v-text-field v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="140" />
       <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
@@ -199,6 +201,7 @@ import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
 import { COMPUTED } from '@/deserialize.ts'
+
 // const COMPUTED = null
 
 function debounce (func, timeout = 25) {
@@ -239,7 +242,8 @@ export default {
     async sort () {
       if (!COMPUTED) {
         const { sorted, types } = await computePlan(
-            Object.entries(PALETTES), //.slice(0, 3),
+            Object.entries(PALETTES),
+            // Object.entries(PALETTES).slice(0, 10),
             SORTING_METHODS,
             render,
             this.onRender
@@ -308,6 +312,9 @@ export default {
     this.sort()
   },
   computed: {
+    methodsCount () {
+      return SORTING_METHODS.length
+    },
     tableHeight () {
       return this.$vuetify.display.height - 128 + 32
     },
