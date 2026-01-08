@@ -9,6 +9,7 @@
 - [ ] auto best
 - [ ] reuse tsp? and more?
 - [ ] stats table
+- [ ] try colorjs.io deltaE
 - [ ] revisit metrics models
 
 ## Notes
