@@ -5,7 +5,7 @@ import { graphDeltaEWeightedAdaptive1, graphDeltaEWeightedAdaptive2 } from './gr
 import { graphDeltaEWeighted, graphDeltaEWeightedPlusPlus } from './graph-delta-e-weighted.js'
 import { graphDeltaE } from './graph-delta-e.js'
 import { principalLab, principalOklab, principalRgb } from './principal.ts'
-import { sortByHslCylindrical, sortByHslSpiral } from './radial.ts'
+import { cylindrical, spiral } from './radial.ts'
 import { cluster, dbScan, kMeans } from './clustering.ts'
 import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
 import { harmonizeDelta, harmonizeModel } from './harmonize.ts'
@@ -265,13 +265,13 @@ export const SORTING_METHODS_RAW = [
   },
   {
     name: 'Spiral',
-    fn: sortByHslSpiral,
+    fn: spiral,
     mid: 'SPI',
     description: {}
   },
   {
     name: 'Cylindrical',
-    fn: sortByHslCylindrical,
+    fn: cylindrical,
     mid: 'CYL',
     description: {}
   },

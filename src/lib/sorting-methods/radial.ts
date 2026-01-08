@@ -1,19 +1,20 @@
-import chroma from 'chroma-js'
+import { ColorHelper, colorVectors, Vector3 } from '../vector.ts'
 
-export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): string[] {
-  //console.log({model, mode})
-
+export function sortByHslSpiral(this: any, colors: Vector3[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): Vector3[] {
   // Convert all colors to HSL with original RGB reference
-  const colorsWithHsl = colors.map((rgb) => ({
-    rgb,
-    hsl: model[0] === 'h' ? <number[]>(<unknown>chroma(rgb).get(model)) : (<number[]>(<unknown>chroma(rgb).get(model))).reverse()
+  const colorsWithHsl = colors.map((vec) => ({
+    vec,
+    hsl: model.at(-1) === 'h' ? [...vec].reverse() : vec
   }))
 
   // Sort based on the chosen spiral mode
   return colorsWithHsl
     .sort((a, b) => {
-      const [h1, s1, l1] = a.hsl
-      const [h2, s2, l2] = b.hsl
+      let [h1, s1, l1] = a.hsl
+      let [h2, s2, l2] = b.hsl
+
+      h1 = h1 || 0
+      h2 = h2 || 0
 
       switch (mode) {
         case 'bottom-up':
@@ -22,9 +23,11 @@ export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv
           if (Math.abs(l1 - l2) > 0.05) {
             return l1 - l2
           }
+
           if (Math.abs(h1 - h2) > 5) {
             return h1 - h2
           }
+
           return s1 - s2
 
         case 'top-down':
@@ -32,9 +35,11 @@ export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv
           if (Math.abs(l1 - l2) > 0.05) {
             return l2 - l1
           }
+
           if (Math.abs(h1 - h2) > 5) {
             return h1 - h2
           }
+
           return s1 - s2
 
         case 'outward':
@@ -43,9 +48,11 @@ export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv
           if (Math.abs(s1 - s2) > 0.05) {
             return s1 - s2
           }
+
           if (Math.abs(h1 - h2) > 5) {
             return h1 - h2
           }
+
           return l1 - l2
 
         case 'inward':
@@ -53,31 +60,44 @@ export function sortByHslSpiral(this: any, colors: string[], model: 'hsl' | 'hsv
           if (Math.abs(s1 - s2) > 0.05) {
             return s2 - s1
           }
+
           if (Math.abs(h1 - h2) > 5) {
             return h1 - h2
           }
+
           return l1 - l2
 
         default:
           return 0
       }
     })
-    .map((item) => item.rgb)
+    .map((item) => item.vec)
 }
 
-sortByHslSpiral.params = [
-  { name: 'model', values: ['hsl', 'hsv', 'lch', 'oklch'] },
+export function spiral(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up') {
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      return sortByHslSpiral(data, model, mode)
+    },
+    model
+  )
+}
+
+spiral.params = [
+  { name: 'model', values: ['hsl', 'hsv', 'lch', 'okhsl', 'okhsv', 'oklch'] },
   { name: 'mode', values: ['outward', 'inward', 'bottom-up', 'top-down'] }
 ]
 
 // Alternative: Pure cylindrical spiral
-export function sortByHslCylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending'): string[] {
-  const colorsWithHsl = colors.map((rgb) => {
-    const hsl = model[0] === 'h' ? <number[]>(<unknown>chroma(rgb).get(model)) : (<number[]>(<unknown>chroma(rgb).get(model))).reverse()
+export function sortByHslCylindrical(colors: Vector3[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending'): Vector3[] {
+  const colorsWithHsl = colors.map((vec) => {
+    const hsl = model.at(-1) === 'h' ? [...vec].reverse() : vec
+
     // Calculate spiral parameter: combine hue (angle) and lightness (height)
     // Saturation affects the radius
-    const spiralParam = hsl[2] * 360 + hsl[0] // Lightness * 360 + Hue
-    return { rgb, hsl, spiralParam }
+    const spiralParam = (hsl[2] || 0) * 360 + hsl[0] // Lightness * 360 + Hue
+    return { vec, hsl, spiralParam }
   })
 
   colorsWithHsl.sort((a, b) => {
@@ -87,13 +107,24 @@ export function sortByHslCylindrical(colors: string[], model: 'hsl' | 'hsv' | 'l
     if (Math.abs(diff) < 1) {
       return a.hsl[1] - b.hsl[1]
     }
+
     return diff
   })
 
-  return colorsWithHsl.map((item) => item.rgb)
+  return colorsWithHsl.map((item) => item.vec)
 }
 
-sortByHslCylindrical.params = [
-  { name: 'model', values: ['hsl', 'hsv', 'lch', 'oklch'] }
-  // { name: 'direction', values: ['ascending', 'descending'] }
+export function cylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending') {
+  return colorVectors(
+    colors,
+    function (this: ColorHelper, data: Vector3[]) {
+      return sortByHslCylindrical(data, model, direction)
+    },
+    model
+  )
+}
+
+cylindrical.params = [
+  { name: 'model', values: ['hsl', 'hsv', 'lch', 'okhsl', 'okhsv', 'oklch'] },
+  { name: 'direction', values: ['ascending', 'descending'] }
 ]

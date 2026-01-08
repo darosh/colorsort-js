@@ -21,7 +21,7 @@ function hexToRgb(hex: string): [number, number, number] {
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
 
-export const gl = memoize((c) => hexToRgb(c).map(x => x/255))
+export const gl = memoize((c) => hexToRgb(c).map((x) => x / 255))
 export const oklab = memoize((c) => rgb2oklab(hexToRgb(c)))
 export const okhsl = memoize((c) => rgb2okhsl(c))
 export const okhsv = memoize((c) => rgb2okhsv(c))
@@ -33,9 +33,9 @@ export const luminance = memoize((c: string) => chroma(c).luminance())
 
 // https://bottosson.github.io/posts/oklab/
 export function rgb2oklab([r_, g_, b_]: [number, number, number]) {
-  const r = srgb_transfer_function_inv(r_/255)
-  const g = srgb_transfer_function_inv(g_/255)
-  const b = srgb_transfer_function_inv(b_/255)
+  const r = srgb_transfer_function_inv(r_ / 255)
+  const g = srgb_transfer_function_inv(g_ / 255)
+  const b = srgb_transfer_function_inv(b_ / 255)
 
   const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
   const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
