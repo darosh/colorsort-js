@@ -1,13 +1,14 @@
 {
   "Original": 0,
-  "HIL-RGB": 2,
   "SPI": 2,
   "CYL": 2,
+  "HIL-RGB": 2,
   "KM": 2,
   "HARM": 3,
-  "DBSCAN": 3,
   "CL": 3,
+  "DBSCAN": 3,
   "HARMED": 4,
+  "NNA(DE) Lab": 4,
   "NNA(DE+) Lab": 4,
   "NNA(DE++) Lab": 4,
   "NNA(DE+1) Lab": 4,
@@ -17,11 +18,9 @@
   "MOM(Inlinest,DE)-Oklab": 4,
   "MOM(Inlinest,DE++)-Oklab": 4,
   "PCA": 4,
-  "NNA(DE) Lab": 5,
-  "MOM(Closest+)-Oklab": 6,
-  "TSP(MOM(Closest+))-Oklab": 6,
+  "MOM(Closest+)-Oklab": 5,
+  "GEN-Oklab": 5,
   "MOM(Closest+,DE)-Oklab": 6,
-  "GEN-Oklab": 6,
   "GEN3-Oklab": 6,
-  "_TOTAL": 92
+  "_TOTAL": 83
 }
