@@ -8,8 +8,16 @@ import { render } from '@/render.js'
 
 test('compute', async () => {
   const palettes = Object.entries(PALETTES)
+  let lastLog = Date.now()
   
   const computed = await computePlan(palettes, SORTING_METHODS, render, ({done, progress, progressPalettes}) => {
+    const now = Date.now()
+    
+    if ((progress < 100) && ((lastLog + 1000) > now)) {
+      return
+    }
+    
+    lastLog = now
     console.log(`Rows / Rows % / Palettes %: ${done} / ${progress.toFixed(2)}% / ${progressPalettes.toFixed(2)}%`)
   })
   
