@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] set sticky info on mouseover 
 - [ ] culori 
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
