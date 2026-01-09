@@ -1,6 +1,7 @@
-import { centroid, closestList, distance, Vector3 } from '../vector.ts'
+import { centroid, distance, Vector3 } from '../vector.ts'
 import { randomizer } from '../randomizer.ts'
 import { methodRunner } from '../method-runner.ts'
+import { closestList } from '../uni-neighbors.ts'
 
 interface ClusterNode {
   colors: Vector3[]

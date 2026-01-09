@@ -1,8 +1,9 @@
-import { tspVectors, Vector3 } from '../vector.ts'
+import { Vector3 } from '../vector.ts'
 import { relativeDifference } from '../metrics-relative.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { calculateAdaptiveWeights, calculateVariances } from '../metrics-variances.ts'
 import { ColorHelper, DistanceFn, methodRunner } from '../method-runner.ts'
+import { tspVectors } from '../uni-tsp.ts'
 
 export function graphDeltaE(colors: Vector3[], deltaE: DistanceFn): Vector3[] {
   const graph = new Map()

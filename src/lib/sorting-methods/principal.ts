@@ -1,6 +1,7 @@
-import { dot, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
+import { dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { oklab } from '../color.ts'
 import { ColorHelper, methodRunner } from '../method-runner.ts'
+import { tspVectors } from '../uni-tsp.ts'
 
 function mean(vectors: Vector3[]): Vector3 {
   const sum = vectors.reduce((acc, v) => [acc[0] + v[0], acc[1] + v[1], acc[2] + v[2]], [0, 0, 0] as Vector3)

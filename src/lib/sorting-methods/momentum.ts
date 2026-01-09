@@ -1,9 +1,9 @@
-import { closest, closestList, dot, inlinest, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
-
-// @ts-ignore
+import { dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { metrics } from '../metrics.ts'
 import { ColorHelper, DistanceFn, methodRunner } from '../method-runner.ts'
+import { tspVectors } from '../uni-tsp.ts'
+import { closest, closestList, inlinest } from '../uni-neighbors.ts'
 
 function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: DistanceFn, momentumWeight: number = 1e6) {
   const dist = distanceFn(from, to)

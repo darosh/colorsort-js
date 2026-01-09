@@ -1,6 +1,8 @@
 import chroma from 'chroma-js'
 import { distanceOk2, okhsl, okhsv, oklab, oklch } from './color.ts'
-import { distance, distanceRadial0, distanceRadial2, Vector3 } from './vector.ts'
+import { distance, distanceRadial0, distanceRadial2, Vector3, Vector4 } from './vector.ts'
+
+export type UniColor = Vector3 | Vector4 | any
 
 function normalizeLab(a: Vector3) {
   return [(a[0] + 128) / 255, (a[1] + 128) / 255, (a[2] + 128) / 255]
@@ -16,6 +18,8 @@ export interface ColorHelper {
   deltaE(a: Vector3, b: Vector3, ...args: number[]): number
 }
 
+export type DistanceT<T> = (a: T, b: T) => number
+export type DistanceUni = DistanceT<UniColor>
 export type DistanceFn = (a: Vector3, b: Vector3) => number
 
 function createDistanceCache(distanceFn: DistanceFn): Omit<ColorHelper, 'toColors' | 'toColor' | 'deltaE'> {
@@ -40,11 +44,11 @@ function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
   return chroma.deltaE(a, b, x, y, z)
 }
 
-export function methodRunner(colors: string[], fn: (vectors: Vector3[]) => Vector3[], model: string = 'gl', distanceMethod_?: DistanceFn): string[] {
+export function methodRunner(colors: string[], fn: (vectors: UniColor[]) => UniColor[], model: string = 'gl', distanceMethod_?: DistanceFn): string[] {
   const vectorMap = new Map()
   const distanceMethod = distanceMethod_ ?? (model.at(-1) === 'h' ? distanceRadial2 : model.at(-3) === 'h' ? distanceRadial0 : model === 'oklab' ? distanceOk2 : distance)
 
-  let vs: [Vector3, string][]
+  let vs: [UniColor, string][]
 
   if (model === 'oklab') {
     vs = colors.map((c) => [oklab(c), c])
