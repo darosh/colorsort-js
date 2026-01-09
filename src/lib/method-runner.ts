@@ -24,9 +24,12 @@ export type Distance4 = Distance<Vector4>
 export type DistanceU = Distance<UniColor>
 export type DistanceC = Distance<string>
 
-function createDistanceCache<T>(distanceFn: Distance<T>): Distance<T> {
-  const cache = new Map<string, number>()
+const CACHE: {[index: string]: Map<string, number>} = {}
 
+function createDistanceCache<T>(distanceFn: Distance<T>): Distance<T> {
+  const ds = distanceFn.toString()
+  const cache = CACHE[ds] = CACHE[ds] || new Map<string, number>()
+  
   return (a: T, b: T) => {
     const key = [a, b].sort().join('|')
     let value = cache.get(key)
