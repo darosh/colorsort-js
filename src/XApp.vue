@@ -107,8 +107,8 @@
       <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#333' : '#999'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
-              <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #999 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8">
+            <div :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette)">
+              <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8">
                 {{ `${palette.index + 1}: ${palette.key}` }}
               </div>
 
@@ -356,7 +356,8 @@ export default {
     setPreview (colors) {
       this.selectedColors = colors
     },
-    onmouseenter (colors) {
+    onmouseenter (colors, palette) {
+      this.palette = palette
       this.debouncedPreview(colors)
     },
     scale (v) {
