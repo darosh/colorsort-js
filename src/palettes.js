@@ -15,21 +15,6 @@ export const PALETTES = {
   'grayscale-red': Array(16)
     .fill()
     .map((_, i) => (!i ? '#ff0000' : chroma.rgb([i * 16, i * 16, i * 16]).hex())),
-  'random-8': Array(8)
-    .fill()
-    .map(() => chroma.random(next).hex()),
-  'random-16': Array(16)
-    .fill()
-    .map(() => chroma.random(next).hex()),
-  'random-32': Array(32)
-    .fill()
-    .map(() => chroma.random(next).hex()),
-  'random-48': Array(48)
-    .fill()
-    .map(() => chroma.random(next).hex()),
-  'random-128': Array(128)
-    .fill()
-    .map(() => chroma.random(next).hex()),
   'yellow-green-1': chroma.scale('YlGn').colors(12),
   'yellow-green-2': chroma.scale('YlGn').gamma(0.25).colors(13).slice(1),
   spectral: chroma.scale('Spectral').colors(12),
@@ -503,6 +488,21 @@ export const PALETTES = {
     '#766051',
     '#453b32'
   ],
+  'random-8': Array(8)
+    .fill()
+    .map(() => chroma.random(next).hex()),
+  'random-16': Array(16)
+    .fill()
+    .map(() => chroma.random(next).hex()),
+  'random-32': Array(32)
+    .fill()
+    .map(() => chroma.random(next).hex()),
+  'random-48': Array(48)
+    .fill()
+    .map(() => chroma.random(next).hex()),
+  'random-128': Array(128)
+    .fill()
+    .map(() => chroma.random(next).hex()),
   'material-deep-purple': ['#311b92', '#4527a0', '#512da8', '#5e35b1', '#673ab7', '#7e57c2', '#9575cd', '#b39ddb', '#d1c4e9', '#ede7f6', '#6200ea', '#651fff', '#7c4dff', '#b388ff'],
   'material-teal': ['#004d40', '#00695c', '#00796b', '#00897b', '#009688', '#26a69a', '#4db6ac', '#80cbc4', '#b2dfdb', '#e0f2f1', '#00bfa5', '#1de9b6', '#64ffda', '#a7ffeb'],
   'tailwind3-red-orange-amber': [
@@ -542,7 +542,7 @@ export const PALETTES = {
   ]
 }
 
-Object.assign(PALETTES, PALETTES_DATA)
+Object.assign(PALETTES, Object.fromEntries(Object.entries(PALETTES_DATA).map(([key, value]) => [`lo-${key}`, value])))
 
 Object.values(PALETTES).forEach((result) => {
   const first = oklab(result[0])
@@ -554,5 +554,5 @@ Object.values(PALETTES).forEach((result) => {
 })
 
 export function isArtist(slug) {
-  return PALETTES_DATA[slug] !== undefined
+  return PALETTES_DATA[`lo-${slug}`] !== undefined
 }
