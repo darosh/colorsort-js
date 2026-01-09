@@ -1,4 +1,4 @@
-import { detectPaletteType, SORTING_METHODS } from '@/lib'
+import { detectPaletteType, SORTING_METHODS } from '@/lib/index.ts'
 import { oklab } from '@/lib/color.ts'
 import { metricsEx } from '@/lib/metrics-extended.ts'
 

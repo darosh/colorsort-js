@@ -1,7 +1,7 @@
 import { test } from 'vitest'
 import { render } from '@/render.js'
 import { PALETTES } from '@/palettes.js'
-import { SORTING_METHODS } from '@/lib/index.js'
+import { SORTING_METHODS } from '@/lib/index.ts'
 
 test('worker', async () => {
   const palette = PALETTES.grayscale

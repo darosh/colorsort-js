@@ -1,8 +1,8 @@
 import { test } from 'vitest'
 import { writeFile, readFile } from 'node:fs/promises'
 import stringify from 'json-stringify-pretty-compact'
-import { SORTING_METHODS_RAW } from '@/lib/sorting-methods/index.js'
-import { SORTING_METHODS } from '@/lib/index.js'
+import { SORTING_METHODS_RAW } from '@/lib/sorting-methods/index.ts'
+import { SORTING_METHODS } from '@/lib/index.ts'
 
 test('palettes', async () => {
   const txt = await readFile('./tests/palettes.txt', 'utf8')

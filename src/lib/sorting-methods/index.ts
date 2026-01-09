@@ -1,5 +1,5 @@
 import { hilbert } from './hilbert.ts'
-import { evolve, evolveMulti } from './genetic.js'
+import { evolve, evolveMulti } from './genetic.ts'
 import { principal } from './principal.ts'
 import { cylindrical, spiral } from './radial.ts'
 import { cluster, dbScan, kMeans } from './clustering.ts'
@@ -8,6 +8,7 @@ import { graph, graphWeighted, graphWeightedAdaptive1, graphWeightedAdaptive2, g
 import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOklab, momentumInlinestDeltaEPlusOklab, momentumClosestBestOklab, momentumClosestBestDeltaEOklab } from './momentum.ts'
 
 import BENCH from '../../../bench.json' with { type: 'json' }
+import { UniColor } from '../method-runner.ts'
 
 const METHODS = {
   PCA: ['PCA', 'Principal component analysis', 'https://en.wikipedia.org/wiki/Principal_component_analysis'],
@@ -33,10 +34,24 @@ const DIFFS = {
   DE: ['DE', 'Delta E', 'http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE2000.html']
 }
 
-export const SORTING_METHODS_RAW = [
+export type SortingFunction = Function & { params?: { name: string; values: any[] }[] }
+
+export type SortingMethod = {
+  name: string
+  mid: string
+  description?: {
+    model?: any | null
+    method?: any | null
+    diff?: any | null
+  }
+  fn: SortingFunction
+  speed?: number
+}
+
+export const SORTING_METHODS_RAW: SortingMethod[] = [
   {
     name: 'Original',
-    fn: (c) => c,
+    fn: (c: UniColor) => c,
     mid: 'Original',
     description: {
       model: null
@@ -117,15 +132,6 @@ export const SORTING_METHODS_RAW = [
     name: 'MOM(Closest+) Oklab',
     fn: momentumClosestBestOklab,
     mid: 'MOM(Closest+)-Oklab',
-    description: {
-      method: METHODS.MOM,
-      model: MODELS.OKLAB
-    }
-  },
-  {
-    name: 'TSP(MOM(Closest+)) Oklab',
-    fn: (colors) => momentumClosestBestOklab(colors, true),
-    mid: 'TSP(MOM(Closest+))-Oklab',
     description: {
       method: METHODS.MOM,
       model: MODELS.OKLAB
@@ -236,26 +242,29 @@ export const SORTING_METHODS_RAW = [
   }
 ]
 
-function getCombinationsAsArrays(params) {
-  return params.reduce((acc, { values }) => acc.flatMap((combo) => values.map((value) => [...combo, value])), [[]])
+function getCombinationsAsArrays(params: { values: any[] }[]): any[][] {
+  return params.reduce<any[][]>((acc, { values }) => acc.flatMap((combo) => values.map((value) => [...combo, value])), [[]])
 }
 
-export const SORTING_METHODS = SORTING_METHODS_RAW.reduce((acc, item) => {
-  if (item.fn.params) {
-    const combinations = getCombinationsAsArrays(item.fn.params)
+export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
+  (acc, item) => {
+    if (item.fn.params) {
+      const combinations = getCombinationsAsArrays(item.fn.params)
 
-    for (const combination of combinations) {
-      acc.push({
-        ...item,
-        name: `${item.name} [${combination.join(',')}]`,
-        mid: `${item.mid}:[${combination.join(',')}]`,
-        speed: BENCH[item.mid] || 0,
-        fn: (c) => item.fn.call(null, c, ...combination)
-      })
+      for (const combination of combinations) {
+        acc.push({
+          ...item,
+          name: `${item.name} [${combination.join(',')}]`,
+          mid: `${item.mid}:[${combination.join(',')}]`,
+          speed: (<{ [index: string]: number }>BENCH)[item.mid] || 0,
+          fn: (c: UniColor) => item.fn.call(null, c, ...combination)
+        })
+      }
+    } else {
+      acc.push(item)
     }
-  } else {
-    acc.push(item)
-  }
 
-  return acc
-}, [])
+    return acc
+  },
+  <SortingMethod[]>[]
+)

@@ -2,8 +2,61 @@
  * Simple Genetic Algorithm implementation for permutation problems
  */
 
-export class GeneticAlgorithm {
-  constructor(config = {}) {
+export interface GAConfig<T, F> {
+  populationSize?: number
+  generations?: number
+  maxStagnation?: number
+  mutationRate?: number
+  crossoverRate?: number
+  eliteSize?: number
+  tournamentSize?: number
+  random?: () => number
+  fitness: (genome: T[]) => F
+  seed: () => T[]
+  compare?: (a: F, b: F) => number
+  onGeneration?: (stats: GenerationStats<T, F>) => void
+}
+
+export interface Individual<T, F> {
+  genome: T[]
+  fitness: F
+}
+
+export interface GenerationStats<T, F> {
+  generation: number
+  bestFitness: F
+  bestGenome: T[]
+  averageFitness: number
+}
+
+export interface GAResult<T, F> {
+  bestGenome: T[]
+  bestFitness: F
+  finalPopulation: Individual<T, F>[]
+  peakGeneration: number
+}
+
+export class GeneticAlgorithm<T, F> {
+  private readonly populationSize: number
+  private readonly generations: number
+  private readonly maxStagnation: number
+  private readonly mutationRate: number
+  private readonly crossoverRate: number
+  private readonly eliteSize: number
+  private readonly tournamentSize: number
+  private readonly random: () => number
+  private readonly fitnessFunc: (genome: T[]) => F
+  private readonly seedFunc: () => T[]
+  private readonly fitnessCompare: (a: F, b: F) => number
+  private readonly onGeneration?: (stats: GenerationStats<T, F>) => void
+
+  private population: Individual<T, F>[]
+  private currentGeneration: number
+  private bestIndividual: T[] | null
+  private bestFitness: F
+  private peakGeneration: number
+
+  constructor(config: GAConfig<T, F>) {
     // Configuration
     this.populationSize = config.populationSize || 100
     this.generations = config.generations || 200
@@ -12,24 +65,25 @@ export class GeneticAlgorithm {
     this.crossoverRate = config.crossoverRate || 0.9
     this.eliteSize = config.eliteSize || 5
     this.tournamentSize = config.tournamentSize || 5
-    this.random = config.random || this.random
+    this.random = config.random || Math.random
 
     // User-provided functions
     this.fitnessFunc = config.fitness || (() => 0)
-    this.seedFunc = config.seed || (() => [])
-    this.fitnessCompare = config.compare || ((a, b) => b - a)
+    this.seedFunc = config.seed
+    // @ts-ignore
+    this.fitnessCompare = config.compare || ((a: number, b: number) => b - a)
     this.onGeneration = config.onGeneration
 
     // State
     this.population = []
     this.currentGeneration = 0
     this.bestIndividual = null
-    this.bestFitness = -Infinity
+    this.bestFitness = <F>-Infinity
     this.peakGeneration = 0
   }
 
   // Initialize population
-  initializePopulation() {
+  private initializePopulation(): void {
     this.population = []
     for (let i = 0; i < this.populationSize; i++) {
       const genome = this.seedFunc()
@@ -41,12 +95,12 @@ export class GeneticAlgorithm {
   }
 
   // Sort population by fitness (descending)
-  sortPopulation() {
+  private sortPopulation(): void {
     this.population.sort((a, b) => this.fitnessCompare(a.fitness, b.fitness))
   }
 
   // Update the best individual tracker
-  updateBest() {
+  private updateBest(): void {
     if (this.bestFitness === -Infinity || this.fitnessCompare(this.population[0].fitness, this.bestFitness) < 0) {
       this.peakGeneration = this.currentGeneration
       this.bestFitness = this.population[0].fitness
@@ -55,8 +109,8 @@ export class GeneticAlgorithm {
   }
 
   // Tournament selection
-  tournamentSelect() {
-    const tournament = []
+  private tournamentSelect(): Individual<T, F> {
+    const tournament: Individual<T, F>[] = []
     for (let i = 0; i < this.tournamentSize; i++) {
       const idx = Math.floor(this.random() * this.population.length)
       tournament.push(this.population[idx])
@@ -67,12 +121,12 @@ export class GeneticAlgorithm {
   }
 
   // Order Crossover (OX) for permutations
-  orderCrossover(parent1, parent2) {
+  private orderCrossover(parent1: T[], parent2: T[]): T[] {
     const size = parent1.length
     const start = Math.floor(this.random() * size)
     const end = start + Math.floor(this.random() * (size - start))
 
-    const child = Array(size).fill(null)
+    const child: (T | null)[] = Array(size).fill(null)
 
     // Copy segment from parent1
     for (let i = start; i <= end; i++) {
@@ -91,11 +145,11 @@ export class GeneticAlgorithm {
       parent2Pos = (parent2Pos + 1) % size
     }
 
-    return child
+    return child as T[]
   }
 
   // Swap mutation for permutations
-  swapMutate(genome) {
+  private swapMutate(genome: T[]): T[] {
     const mutated = [...genome]
     const idx1 = Math.floor(this.random() * mutated.length)
     const idx2 = Math.floor(this.random() * mutated.length)
@@ -103,15 +157,13 @@ export class GeneticAlgorithm {
     return mutated
   }
 
-  shiftMutate(genome) {
+  private shiftMutate(genome: T[]): T[] {
     const mutated = [...genome]
-
-    mutated.push(mutated.shift())
-
+    mutated.push(mutated.shift()!)
     return mutated
   }
 
-  cheatMutate(genome) {
+  private cheatMutate(genome: T[]): T[] {
     let mutated = this.shiftMutate(genome)
     let best = mutated
     let bestScore = this.fitnessFunc(best)
@@ -136,8 +188,8 @@ export class GeneticAlgorithm {
   }
 
   // Create new generation
-  evolve() {
-    const newPopulation = []
+  private evolve(): void {
+    const newPopulation: Individual<T, F>[] = []
 
     // Elitism - keep best individuals
     for (let i = 0; i < this.eliteSize; i++) {
@@ -153,7 +205,7 @@ export class GeneticAlgorithm {
       const parent2 = this.tournamentSelect()
 
       // Crossover
-      let childGenome
+      let childGenome: T[]
       if (this.random() < this.crossoverRate) {
         childGenome = this.orderCrossover(parent1.genome, parent2.genome)
       } else {
@@ -185,7 +237,7 @@ export class GeneticAlgorithm {
   }
 
   // Run the algorithm
-  run() {
+  public run(): GAResult<T, F> {
     this.initializePopulation()
 
     for (let gen = 0; gen < this.generations; gen++) {
@@ -197,7 +249,7 @@ export class GeneticAlgorithm {
           generation: gen,
           bestFitness: this.population[0].fitness,
           bestGenome: this.population[0].genome,
-          averageFitness: this.population.reduce((sum, ind) => sum + ind.fitness, 0) / this.population.length
+          averageFitness: this.population.reduce((sum, ind) => sum + (typeof ind.fitness === 'number' ? ind.fitness : 0), 0) / this.population.length
         })
       }
 
@@ -208,13 +260,8 @@ export class GeneticAlgorithm {
       this.evolve()
     }
 
-    // console.log({
-    //   colors: this.bestIndividual.length,
-    //   peak: this.peakGeneration
-    // })
-
     return {
-      bestGenome: this.cheatMutate(this.bestIndividual),
+      bestGenome: this.cheatMutate(this.bestIndividual!),
       bestFitness: this.bestFitness,
       finalPopulation: this.population,
       peakGeneration: this.peakGeneration

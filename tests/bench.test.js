@@ -1,6 +1,6 @@
 import { test } from 'vitest'
 import { PALETTES } from '@/palettes.js'
-import { SORTING_METHODS } from '@/lib/index.js'
+import { SORTING_METHODS } from '@/lib/index.ts'
 import { writeFile } from 'node:fs/promises'
 
 test('bench', async () => {

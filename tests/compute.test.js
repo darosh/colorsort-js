@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { writeFile } from 'node:fs/promises'
 import stringify from 'json-stringify-pretty-compact'
 import { PALETTES } from '@/palettes.js'
-import { SORTING_METHODS } from '@/lib/index.js'
+import { SORTING_METHODS } from '@/lib/index.ts'
 import { computedSerialize, computePlan, computeRender } from '@/compute.ts'
 import { render } from '@/render.js'
 

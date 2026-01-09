@@ -104,7 +104,7 @@ export function momentumClosestOklab(colors: string[]) {
   )
 }
 
-export function momentumClosestBestOklab(colors: string[], tsp = false) {
+export function momentumClosestBestOklab(colors: string[], post: 'raw' | 'tsp' = 'raw') {
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
@@ -123,11 +123,13 @@ export function momentumClosestBestOklab(colors: string[], tsp = false) {
 
       result.sort((a, b) => a.metrics.totalDistance - b.metrics.totalDistance)
 
-      return tsp ? tspVectors(result[0].vectors, this.distance) : result[0].vectors
+      return post === 'tsp' ? tspVectors(result[0].vectors, this.distance) : result[0].vectors
     },
     'oklab'
   )
 }
+
+momentumClosestBestOklab.params = [{ name: 'post', values: ['raw', 'tsp'] }]
 
 export function momentumClosestBestDeltaEOklab(colors: string[]) {
   return methodRunner(

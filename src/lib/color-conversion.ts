@@ -22,15 +22,15 @@
  */
 
 // https://bottosson.github.io/posts/colorwrong/#what-can-we-do%3F
-export function srgb_transfer_function(a) {
+export function srgb_transfer_function(a: number) {
   return 0.0031308 >= a ? 12.92 * a : 1.055 * Math.pow(a, 0.4166666666666667) - 0.055
 }
 
-export function srgb_transfer_function_inv(a) {
+export function srgb_transfer_function_inv(a: number) {
   return 0.04045 < a ? Math.pow((a + 0.055) / 1.055, 2.4) : a / 12.92
 }
 
-function linear_srgb_to_oklab(r, g, b) {
+function linear_srgb_to_oklab(r: number, g: number, b: number) {
   const l = 0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b
   const m = 0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b
   const s = 0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b
@@ -42,7 +42,7 @@ function linear_srgb_to_oklab(r, g, b) {
   return [0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_, 1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_, 0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_]
 }
 
-function oklab_to_linear_srgb(L, a, b) {
+function oklab_to_linear_srgb(L: number, a: number, b: number) {
   const l_ = L + 0.3963377774 * a + 0.2158037573 * b
   const m_ = L - 0.1055613458 * a - 0.0638541728 * b
   const s_ = L - 0.0894841775 * a - 1.291485548 * b
@@ -54,7 +54,7 @@ function oklab_to_linear_srgb(L, a, b) {
   return [+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s, -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s, -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s]
 }
 
-function toe(x) {
+function toe(x: number) {
   const k_1 = 0.206
   const k_2 = 0.03
   const k_3 = (1 + k_1) / (1 + k_2)
@@ -62,7 +62,7 @@ function toe(x) {
   return 0.5 * (k_3 * x - k_1 + Math.sqrt((k_3 * x - k_1) * (k_3 * x - k_1) + 4 * k_2 * k_3 * x))
 }
 
-function toe_inv(x) {
+function toe_inv(x: number) {
   const k_1 = 0.206
   const k_2 = 0.03
   const k_3 = (1 + k_1) / (1 + k_2)
@@ -72,7 +72,7 @@ function toe_inv(x) {
 // Finds the maximum saturation possible for a given hue that fits in sRGB
 // Saturation here is defined as S = C/L
 // a and b must be normalized so a^2 + b^2 == 1
-function compute_max_saturation(a, b) {
+function compute_max_saturation(a: number, b: number) {
   // Max saturation will be when one of r, g or b goes below zero.
 
   // Select different coefficients depending on which component goes below zero first
@@ -144,7 +144,7 @@ function compute_max_saturation(a, b) {
   return S - (f * f1) / (f1 * f1 - 0.5 * f * f2)
 }
 
-function find_cusp(a, b) {
+function find_cusp(a: number, b: number) {
   // First, find the maximum saturation (saturation S = C/L)
   const S_cusp = compute_max_saturation(a, b)
 
@@ -160,7 +160,7 @@ function find_cusp(a, b) {
 // L = L0 * (1 - t) + t * L1;
 // C = t * C1;
 // a and b must be normalized so a^2 + b^2 == 1
-function find_gamut_intersection(a, b, L1, C1, L0, cusp = null) {
+function find_gamut_intersection(a: number, b: number, L1: number, C1: number, L0: number, cusp: number[] | null = null) {
   if (!cusp) {
     // Find the cusp of the gamut triangle
     cusp = find_cusp(a, b)
@@ -244,7 +244,7 @@ function find_gamut_intersection(a, b, L1, C1, L0, cusp = null) {
   return t
 }
 
-function get_ST_max(a_, b_, cusp = null) {
+function get_ST_max(a_: number, b_: number, cusp: number[] | null = null) {
   if (!cusp) {
     cusp = find_cusp(a_, b_)
   }
@@ -255,7 +255,7 @@ function get_ST_max(a_, b_, cusp = null) {
   return [C / L, C / (1 - L)]
 }
 
-function get_Cs(L, a_, b_) {
+function get_Cs(L: number, a_: number, b_: number) {
   const cusp = find_cusp(a_, b_)
 
   const C_max = find_gamut_intersection(a_, b_, L, 1, L, cusp)
@@ -286,7 +286,7 @@ function get_Cs(L, a_, b_) {
   return [C_0, C_mid, C_max]
 }
 
-export function okhsl_to_srgb([h, s, l]) {
+export function okhsl_to_srgb([h, s, l]: [number, number, number]) {
   if (l === 1) {
     return [255, 255, 255]
   } else if (l === 0) {
@@ -327,7 +327,7 @@ export function okhsl_to_srgb([h, s, l]) {
   return [255 * srgb_transfer_function(rgb[0]), 255 * srgb_transfer_function(rgb[1]), 255 * srgb_transfer_function(rgb[2])]
 }
 
-export function srgb_to_okhsl([r, g, b]) {
+export function srgb_to_okhsl([r, g, b]: [number, number, number]) {
   const lab = linear_srgb_to_oklab(srgb_transfer_function_inv(r / 255), srgb_transfer_function_inv(g / 255), srgb_transfer_function_inv(b / 255))
 
   const C = Math.sqrt(lab[1] * lab[1] + lab[2] * lab[2])
@@ -365,7 +365,7 @@ export function srgb_to_okhsl([r, g, b]) {
   return [h, s, l]
 }
 
-export function okhsv_to_srgb([h, s, v]) {
+export function okhsv_to_srgb([h, s, v]: [number, number, number]) {
   const a_ = Math.cos(2 * Math.PI * h)
   const b_ = Math.sin(2 * Math.PI * h)
 
@@ -405,7 +405,7 @@ export function okhsv_to_srgb([h, s, v]) {
   return [255 * srgb_transfer_function(rgb[0]), 255 * srgb_transfer_function(rgb[1]), 255 * srgb_transfer_function(rgb[2])]
 }
 
-export function srgb_to_okhsv([r, g, b]) {
+export function srgb_to_okhsv([r, g, b]: [number, number, number]) {
   const lab = linear_srgb_to_oklab(srgb_transfer_function_inv(r / 255), srgb_transfer_function_inv(g / 255), srgb_transfer_function_inv(b / 255))
 
   const C = Math.sqrt(lab[1] * lab[1] + lab[2] * lab[2])

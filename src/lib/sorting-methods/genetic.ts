@@ -1,9 +1,9 @@
 import { oklab } from '../color.ts'
 import { distance } from '../vector.ts'
-import { GeneticAlgorithm } from '../genetic-algo.js'
+import { GeneticAlgorithm } from '../genetic-algo.ts'
 import { metrics } from '../metrics.js'
 
-function fitness1D(palette) {
+function fitness1D(palette: string[]) {
   let totalDistance = 0
 
   for (let i = 0; i < palette.length - 1; i++) {
@@ -16,11 +16,15 @@ function fitness1D(palette) {
   return -totalDistance // Minimize distance
 }
 
-function compare1D(a, b) {
+function compare1D(a: number, b: number) {
   return b - a
 }
 
-export function evolve(colors, fitness = fitness1D, compare = compare1D) {
+export function evolve(colors: string[]) {
+  return evolveT(colors, fitness1D, compare1D)
+}
+
+export function evolveT<T>(colors: string[], fitness: (colors: string[]) => T, compare: (a: T, b: T) => number) {
   let previous = 1
 
   const random = () => {
@@ -50,12 +54,12 @@ export function evolve(colors, fitness = fitness1D, compare = compare1D) {
   return ga.run().bestGenome
 }
 
-function fitness3D(palette) {
+function fitness3D(palette: string[]) {
   const { avgAngleChange, maxAngleChange, totalDistance } = metrics(palette)
   return [-totalDistance, -avgAngleChange, -maxAngleChange] // Minimize distance
 }
 
-function compare3D(fitnessA, fitnessB, tolerance = 0.01) {
+function compare3D(fitnessA: number[], fitnessB: number[], tolerance = 0.01) {
   for (let i = 0; i < fitnessA.length; i++) {
     const avg = (fitnessA[i] + fitnessB[i]) / 2
     const threshold = Math.abs(avg * tolerance)
@@ -73,6 +77,6 @@ function compare3D(fitnessA, fitnessB, tolerance = 0.01) {
   return fitnessB[0] - fitnessA[0]
 }
 
-export function evolveMulti(colors) {
-  return evolve(colors, fitness3D, compare3D)
+export function evolveMulti(colors: string[]) {
+  return evolveT(colors, fitness3D, compare3D)
 }

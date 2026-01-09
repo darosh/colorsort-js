@@ -1,5 +1,5 @@
 // @ts-ignore
-import { srgb_transfer_function_inv, srgb_transfer_function, srgb_to_okhsl, srgb_to_okhsv } from './color-conversion.js'
+import { srgb_transfer_function_inv, srgb_transfer_function, srgb_to_okhsl, srgb_to_okhsv } from './color-conversion.ts'
 import chroma from 'chroma-js'
 import { Vector3 } from './vector.ts'
 
