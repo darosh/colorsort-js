@@ -1,6 +1,7 @@
 // @ts-ignore
 import { srgb_transfer_function_inv, srgb_transfer_function, srgb_to_okhsl, srgb_to_okhsv } from './color-conversion.js'
 import chroma from 'chroma-js'
+import { Vector3 } from './vector.ts'
 
 function memoize(fn: (arg: any) => any) {
   const map = new Map()
@@ -57,11 +58,7 @@ export function oklab2rgb([L, a, b]: [number, number, number]) {
   const m = m_ * m_ * m_
   const s = s_ * s_ * s_
 
-  return [
-    srgb_transfer_function(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s) * 255, 
-    srgb_transfer_function(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s) * 255, 
-    srgb_transfer_function(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s) * 255
-  ]
+  return [srgb_transfer_function(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s) * 255, srgb_transfer_function(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s) * 255, srgb_transfer_function(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s) * 255]
 }
 
 export function rgb2okhsl(hex: string) {
@@ -127,4 +124,14 @@ function OKLab_to_OKLCH(OKLab: [number, number, number]) {
     chroma, // Chroma
     hue // Hue, in degrees [0 to 360)
   ]
+}
+
+// https://github.com/w3c/csswg-drafts/issues/6642#issuecomment-945714988
+const OK2_SCALE = (2.016 + 2.045) / 2
+
+export function distanceOk2([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
+  let dL = L1 - L2
+  let da = OK2_SCALE * (a1 - a2)
+  let db = OK2_SCALE * (b1 - b2)
+  return Math.sqrt(dL ** 2 + da ** 2 + db ** 2)
 }

@@ -1,4 +1,5 @@
-import { ColorHelper, colorVectors, Vector3 } from '../vector.ts'
+import { Vector3 } from '../vector.ts'
+import { ColorHelper, methodRunner } from '../method-runner.ts'
 
 export function sortByHslSpiral(this: any, colors: Vector3[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): Vector3[] {
   // Convert all colors to HSL with original RGB reference
@@ -75,7 +76,7 @@ export function sortByHslSpiral(this: any, colors: Vector3[], model: 'hsl' | 'hs
 }
 
 export function spiral(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up') {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       return sortByHslSpiral(data, model, mode)
@@ -115,7 +116,7 @@ export function sortByHslCylindrical(colors: Vector3[], model: 'hsl' | 'hsv' | '
 }
 
 export function cylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending') {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       return sortByHslCylindrical(data, model, direction)

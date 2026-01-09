@@ -1,4 +1,5 @@
-import { colorVectors, Vector3 } from '../vector.ts'
+import { Vector3 } from '../vector.ts'
+import { methodRunner } from '../method-runner.ts'
 
 /**
  * Convert 3D coordinates to Hilbert curve index
@@ -34,7 +35,7 @@ export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
 }
 
 export function hilbert(colors: string[], model: 'gl' | 'oklab' | 'lab-norm' = 'gl') {
-  return colorVectors(colors, sortByHilbertCurve, model)
+  return methodRunner(colors, sortByHilbertCurve, model)
 }
 
 hilbert.params = [{ name: 'model', values: ['gl', 'oklab', 'lab-norm'] }]

@@ -1,7 +1,8 @@
-import { ColorHelper, colorVectors, DistanceFn, tspVectors, Vector3 } from '../vector.ts'
+import { tspVectors, Vector3 } from '../vector.ts'
 import { relativeDifference } from '../metrics-relative.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { calculateAdaptiveWeights, calculateVariances } from '../metrics-variances.ts'
+import { ColorHelper, DistanceFn, methodRunner } from '../method-runner.ts'
 
 export function graphDeltaE(colors: Vector3[], deltaE: DistanceFn): Vector3[] {
   const graph = new Map()
@@ -43,7 +44,7 @@ export function graphDeltaE(colors: Vector3[], deltaE: DistanceFn): Vector3[] {
 }
 
 export function graph(colors: string[], post: 'tsp' | 'raw' = 'raw') {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       const vectors = graphDeltaE(data, this.deltaE)
@@ -61,7 +62,7 @@ export function graph(colors: string[], post: 'tsp' | 'raw' = 'raw') {
 graph.params = [{ name: 'post', values: ['raw', 'tsp'] }]
 
 export function graphWeighted(colors: string[]) {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       const weights = relativeDifference(data)
@@ -75,7 +76,7 @@ export function graphWeightedPlusPlus(colors: string[]) {
   const { Kl, Kc, Kh } = detectPaletteType(colors)
   const weights = [Kl, Kc, Kh]
 
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
@@ -89,7 +90,7 @@ export function graphWeightedAdaptive1(colors: string[]) {
   const { Kc, Kh, Kl } = calculateAdaptiveWeights(variances)
   const weights = [Kl, Kc, Kh]
 
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
@@ -103,7 +104,7 @@ export function graphWeightedAdaptive2(colors: string[]) {
   const { Kc, Kh, Kl } = calculateAdaptiveWeights(variances)
   const weights = [Kl, Kc, Kh + 0.5]
 
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))

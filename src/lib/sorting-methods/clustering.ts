@@ -1,5 +1,6 @@
-import { centroid, closestList, colorVectors, distance, Vector3 } from '../vector.ts'
+import { centroid, closestList, distance, Vector3 } from '../vector.ts'
 import { randomizer } from '../randomizer.ts'
+import { methodRunner } from '../method-runner.ts'
 
 interface ClusterNode {
   colors: Vector3[]
@@ -360,7 +361,7 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
 const m = { rgb: 'gl', lab: 'lab-norm' }
 
 export function cluster(colors: string[], model: 'rgb' | 'lab' = 'rgb', linkage: 'single' | 'complete' | 'average' = 'average', traversal: 'depth-first' | 'breadth-first' | 'balanced' = 'balanced') {
-  return colorVectors(colors, (vectors) => sortByHierarchicalClustering(vectors, linkage, traversal), m[model] || model)
+  return methodRunner(colors, (vectors) => sortByHierarchicalClustering(vectors, linkage, traversal), m[model] || model)
 }
 
 cluster.params = [
@@ -370,7 +371,7 @@ cluster.params = [
 ]
 
 export function kMeans(colors: string[], model: 'rgb' | 'lab' = 'rgb', k: number = 0.5, iterations: number = 50) {
-  return colorVectors(
+  return methodRunner(
     colors,
     (vectors) => {
       return sortByKMeans(vectors, Math.ceil(k * vectors.length), iterations)
@@ -386,7 +387,7 @@ kMeans.params = [
 ]
 
 export function dbScan(colors: string[], model: 'rgb' | 'lab' = 'rgb', eps: number = 0.3, pts: number = 3) {
-  return colorVectors(
+  return methodRunner(
     colors,
     (vectors) => {
       const [a, b] = <[Vector3, Vector3]>closestList(vectors).at(-1)

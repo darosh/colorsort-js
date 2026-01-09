@@ -1,5 +1,6 @@
-import { ColorHelper, colorVectors, distance4, Vector3 } from '../vector.ts'
+import { distance4, Vector3 } from '../vector.ts'
 import { luminance } from '../color.ts'
+import { ColorHelper, methodRunner } from '../method-runner.ts'
 
 interface HarmonizeOptions {
   selectStart: (colors: Vector3[]) => Vector3
@@ -60,7 +61,7 @@ export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3
 }
 
 export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 'oklch' | 'oklab' | 'okhsl' | 'okhsv' | 'lch' | 'lab' | 'rgb' | 'cmyk' = 'rgb', start: 'bright' | 'dark' = 'bright', distance: 'euclidean' | 'delta' = 'euclidean') {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       const { toColors } = this

@@ -1,5 +1,6 @@
-import { ColorHelper, colorVectors, dot, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
+import { dot, normalize, subtract, tspVectors, Vector3 } from '../vector.ts'
 import { oklab } from '../color.ts'
+import { ColorHelper, methodRunner } from '../method-runner.ts'
 
 function mean(vectors: Vector3[]): Vector3 {
   const sum = vectors.reduce((acc, v) => [acc[0] + v[0], acc[1] + v[1], acc[2] + v[2]], [0, 0, 0] as Vector3)
@@ -73,7 +74,7 @@ function adaptiveOklabDistanceFactory(colors: Vector3[]) {
 }
 
 export function principal(colors: string[], model: 'gl' | 'lab' | 'oklab', post: 'raw' | 'tsp' | 'tsp-adapt' = 'raw') {
-  return colorVectors(
+  return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
       const vec = sortByPrincipalComponent(data)
