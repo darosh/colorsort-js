@@ -27,7 +27,7 @@ export type DistanceC = Distance<string>
 const CACHE: {[index: string]: Map<string, number>} = {}
 
 function createDistanceCache<T>(distanceFn: Distance<T>): Distance<T> {
-  const ds = distanceFn.toString()
+  const ds = distanceFn.name || distanceFn.toString()
   const cache = CACHE[ds] = CACHE[ds] || new Map<string, number>()
   
   return (a: T, b: T) => {
