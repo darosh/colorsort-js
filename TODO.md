@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] N+ sort as "pagination" 
 - [ ] Hilbert distance dev metrics 
 - [ ] analyze best picks (sorter vs type, ...?) 
 - [ ] experiment with categorization + deltaE
