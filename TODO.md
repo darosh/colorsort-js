@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] set sticky info on mouseover 
 - [ ] culori 
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
@@ -26,6 +25,7 @@
 
 ## Done
 
+- [x] set sticky info on mouseover
 - [x] N+ sort as "pagination"
 - [x] filter: palette, method
 - [x] generate methods
