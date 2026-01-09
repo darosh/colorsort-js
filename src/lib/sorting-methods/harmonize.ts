@@ -1,6 +1,6 @@
-import { distance4, Vector3 } from '../vector.ts'
-import { luminance } from '../color.ts'
-import { ColorHelper, methodRunner } from '../method-runner.ts'
+import { Vector3 } from '../vector.ts'
+import { deltaE, luminance } from '../color.ts'
+import { ColorHelperDelta, methodRunner } from '../method-runner.ts'
 
 interface HarmonizeOptions {
   selectStart: (colors: Vector3[]) => Vector3
@@ -63,7 +63,7 @@ export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3
 export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 'oklch' | 'oklab' | 'okhsl' | 'okhsv' | 'lch' | 'lab' | 'rgb' | 'cmyk' = 'rgb', start: 'bright' | 'dark' = 'bright', distance: 'euclidean' | 'delta' = 'euclidean') {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
+    function (this: ColorHelperDelta, data: Vector3[]) {
       const { toColors } = this
 
       function selectBrightest(colors: Vector3[]): Vector3 {
@@ -88,11 +88,11 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 
 
       return harmonize(data, {
         selectStart: start === 'bright' ? selectBrightest : selectDarkest,
-        distance: distance === 'euclidean' ? this.distance : this.deltaE
+        distance: distance === 'euclidean' ? this.distance : this.delta
       })
     },
     model,
-    model === 'cmyk' ? <any>distance4 : undefined
+    { fn: deltaE, color: true }
   )
 }
 

@@ -1,9 +1,10 @@
 import { dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { metrics } from '../metrics.ts'
-import { ColorHelper, Distance3, methodRunner } from '../method-runner.ts'
+import { ColorHelper, ColorHelperDelta, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
 import { closest, closestList, inlinest } from '../uni-neighbors.ts'
+import { deltaE } from '../color.ts'
 
 function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: Distance3, momentumWeight: number = 1e6) {
   const dist = distanceFn(from, to)
@@ -134,9 +135,9 @@ momentumClosestBestOklab.params = [{ name: 'post', values: ['raw', 'tsp'] }]
 export function momentumClosestBestDeltaEOklab(colors: string[]) {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
+    function (this: ColorHelperDelta, data: Vector3[]) {
       const list = closestList(data).slice(0, 128)
-      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b)
+      const de = (a: Vector3, b: Vector3) => this.delta(a, b)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
 
       const result = list.map((start) => {
@@ -153,7 +154,8 @@ export function momentumClosestBestDeltaEOklab(colors: string[]) {
 
       return result[0].vectors
     },
-    'oklab'
+    'oklab',
+    { fn: deltaE, color: true }
   )
 }
 
@@ -171,12 +173,13 @@ export function momentumInlinestOklab(colors: string[]) {
 export function momentumInlinestDeltaEOklab(colors: string[]) {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b)
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      const de = (a: Vector3, b: Vector3) => this.delta(a, b)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
       return momentumBidiSort(data, inlinest(data, this), scoring)
     },
-    'oklab'
+    'oklab',
+    { fn: deltaE, color: true }
   )
 }
 
@@ -186,11 +189,12 @@ export function momentumInlinestDeltaEPlusOklab(colors: string[]) {
 
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      const de = (a: Vector3, b: Vector3) => this.deltaE(a, b, ...weights)
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      const de = (a: Vector3, b: Vector3) => this.delta(a, b, ...weights)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
       return momentumBidiSort(data, inlinest(data, this), scoring)
     },
-    'oklab'
+    'oklab',
+    { fn: deltaE, color: true }
   )
 }

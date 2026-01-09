@@ -2,10 +2,11 @@ import { Vector3 } from '../vector.ts'
 import { relativeDifference } from '../metrics-relative.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { calculateAdaptiveWeights, calculateVariances } from '../metrics-variances.ts'
-import { ColorHelper, Distance3, methodRunner } from '../method-runner.ts'
+import { ColorHelperDelta, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
+import { deltaE } from '../color.ts'
 
-export function graphDeltaE(colors: Vector3[], deltaE: Distance3): Vector3[] {
+export function graphDeltaE(colors: Vector3[], delta: Distance3): Vector3[] {
   const graph = new Map()
 
   for (let i = 0; i < colors.length; i++) {
@@ -15,7 +16,7 @@ export function graphDeltaE(colors: Vector3[], deltaE: Distance3): Vector3[] {
       if (i !== j) {
         node.add({
           color: colors[j],
-          distance: deltaE(colors[i], colors[j])
+          distance: delta(colors[i], colors[j])
         })
       }
     }
@@ -47,16 +48,17 @@ export function graphDeltaE(colors: Vector3[], deltaE: Distance3): Vector3[] {
 export function graph(colors: string[], post: 'tsp' | 'raw' = 'raw') {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      const vectors = graphDeltaE(data, this.deltaE)
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      const vectors = graphDeltaE(data, this.delta)
 
       if (post === 'raw') {
         return vectors
       }
 
-      return tspVectors(vectors, this.deltaE)
+      return tspVectors(vectors, this.delta)
     },
-    'hex'
+    'hex',
+    deltaE
   )
 }
 
@@ -65,11 +67,12 @@ graph.params = [{ name: 'post', values: ['raw', 'tsp'] }]
 export function graphWeighted(colors: string[]) {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
+    function (this: ColorHelperDelta, data: Vector3[]) {
       const weights = relativeDifference(data)
-      return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
+      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
     },
-    'lch'
+    'lch',
+    { fn: deltaE, color: true }
   )
 }
 
@@ -79,10 +82,11 @@ export function graphWeightedPlusPlus(colors: string[]) {
 
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
     },
-    'hex'
+    'hex',
+    deltaE
   )
 }
 
@@ -93,10 +97,11 @@ export function graphWeightedAdaptive1(colors: string[]) {
 
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
     },
-    'hex'
+    'hex',
+    deltaE
   )
 }
 
@@ -107,9 +112,10 @@ export function graphWeightedAdaptive2(colors: string[]) {
 
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      return graphDeltaE(data, (a: Vector3, b: Vector3) => this.deltaE(a, b, ...weights))
+    function (this: ColorHelperDelta, data: Vector3[]) {
+      return graphDeltaE(data, (a: Vector3, b: Vector3) => this.delta(a, b, ...weights))
     },
-    'hex'
+    'hex',
+    deltaE
   )
 }

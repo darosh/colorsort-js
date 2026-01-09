@@ -135,3 +135,7 @@ export function distanceOk2([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
   let db = OK2_SCALE * (b1 - b2)
   return Math.sqrt(dL ** 2 + da ** 2 + db ** 2)
 }
+
+export function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
+  return chroma.deltaE(a, b, x, y, z)
+}
