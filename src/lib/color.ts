@@ -57,7 +57,11 @@ export function oklab2rgb([L, a, b]: [number, number, number]) {
   const m = m_ * m_ * m_
   const s = s_ * s_ * s_
 
-  return [srgb_transfer_function(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s), srgb_transfer_function(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s), srgb_transfer_function(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s)]
+  return [
+    srgb_transfer_function(+4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s) * 255, 
+    srgb_transfer_function(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s) * 255, 
+    srgb_transfer_function(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s) * 255
+  ]
 }
 
 export function rgb2okhsl(hex: string) {
