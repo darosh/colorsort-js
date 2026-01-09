@@ -194,15 +194,14 @@
 
 <script>
 import { PALETTES } from '@/palettes.js'
-import { SORTING_METHODS } from '@/lib'
+import { SORTING_METHODS } from '@/lib/index.ts'
 import XPreview from '@/XPreview.vue'
 import { computePlan, computeRender, updateBest, updateDistance } from '@/compute.ts'
 import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
-import { COMPUTED } from '@/deserialize.ts'
-
-// const COMPUTED = null
+// import { COMPUTED } from '@/deserialize.ts'
+const COMPUTED = null
 
 function debounce (func, timeout = 25) {
   let timer
@@ -242,8 +241,8 @@ export default {
     async sort () {
       if (!COMPUTED) {
         const { sorted, types } = await computePlan(
-            Object.entries(PALETTES),
-            // Object.entries(PALETTES).slice(0, 10),
+            // Object.entries(PALETTES),
+            Object.entries(PALETTES).slice(0, 10),
             SORTING_METHODS,
             render,
             this.onRender
@@ -332,7 +331,11 @@ export default {
       if (this?.filterPalette?.[0] === '<' || this?.filterPalette?.[0] === '>') {
         number = Number.parseInt(this.filterPalette.slice(1), 10)
       }
-
+      
+      const more = this.filterPalette.at(-1) === '+'
+      const text = more ? this.filterPalette.slice(0, -1) : this.filterPalette
+      let afterMore = false
+      
       const filtered = !this.filterPalette ? this.types : this.types.filter(t => {
         if (this.filterPalette[0] === '<') {
           return t.colors.length < number
@@ -340,7 +343,11 @@ export default {
           return t.colors.length > number
         }
 
-        return `${t.key}:${t.index + 1}`.includes(this.filterPalette)
+        const match = afterMore || `${t.key}:${t.index + 1}`.includes(text)
+
+        afterMore = more && match
+        
+        return match
       })
 
       if (!this.filterMethod) {

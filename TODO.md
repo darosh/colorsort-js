@@ -1,7 +1,6 @@
 # TODO
 
 - [ ] culori 
-- [ ] N+ sort as "pagination" 
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
 - [ ] analyze best picks (sorter vs type, ...?) 
@@ -26,6 +25,7 @@
 
 ## Done
 
+- [x] N+ sort as "pagination"
 - [x] filter: palette, method
 - [x] generate methods
 - [x] sorter parametrization
