@@ -3,8 +3,8 @@ import { test } from 'vitest'
 import Color from 'colorjs.io'
 import chroma from 'chroma-js'
 import { oklab, rgb } from 'culori'
-import { oklab2rgb, rgb2oklab } from '@/lib/color.ts'
-import { distance, distanceOk2 } from '@/lib/vector.ts'
+import { oklab2rgb, rgb2oklab, distanceOk2 } from '@/lib/color.ts'
+import { distance } from '@/lib/vector.ts'
 
 export function timed (fn) {
   const start = performance.now()

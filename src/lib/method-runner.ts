@@ -9,24 +9,26 @@ function normalizeLab(a: Vector3) {
 }
 
 export interface ColorHelper {
-  toColors(vectors: Vector3[]): string[]
+  toColors(vectors: UniColor[]): string[]
 
-  toColor(vector: Vector3): string
+  toColor(vector: UniColor): string
 
-  distance(a: Vector3, b: Vector3): number
+  distance: Distance<UniColor>
 
   deltaE(a: Vector3, b: Vector3, ...args: number[]): number
 }
 
-export type DistanceT<T> = (a: T, b: T) => number
-export type DistanceUni = DistanceT<UniColor>
-export type DistanceFn = (a: Vector3, b: Vector3) => number
+export type Distance<T> = (a: T, b: T) => number
+export type Distance3 = Distance<Vector3>
+export type Distance4 = Distance<Vector4>
+export type DistanceU = Distance<UniColor>
+export type DistanceC = Distance<string>
 
-function createDistanceCache(distanceFn: DistanceFn): Omit<ColorHelper, 'toColors' | 'toColor' | 'deltaE'> {
+function createDistanceCache<T>(distanceFn: Distance<T>): Omit<ColorHelper, 'toColors' | 'toColor' | 'deltaE'> {
   const cache = new Map<string, number>()
 
   return {
-    distance: (a: Vector3, b: Vector3) => {
+    distance: (a: T, b: T) => {
       const key = [a, b].sort().join('|')
       let value = cache.get(key)
 
@@ -44,7 +46,7 @@ function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
   return chroma.deltaE(a, b, x, y, z)
 }
 
-export function methodRunner(colors: string[], fn: (vectors: UniColor[]) => UniColor[], model: string = 'gl', distanceMethod_?: DistanceFn): string[] {
+export function methodRunner(colors: string[], fn: (vectors: UniColor[]) => UniColor[], model: string = 'gl', distanceMethod_?: Distance<any>): string[] {
   const vectorMap = new Map()
   const distanceMethod = distanceMethod_ ?? (model.at(-1) === 'h' ? distanceRadial2 : model.at(-3) === 'h' ? distanceRadial0 : model === 'oklab' ? distanceOk2 : distance)
 
@@ -78,7 +80,7 @@ export function methodRunner(colors: string[], fn: (vectors: UniColor[]) => UniC
     return vectorMap.get(vector)
   }
 
-  const helper = <ColorHelper>createDistanceCache(<DistanceFn>distanceMethod)
+  const helper = <ColorHelper>createDistanceCache(distanceMethod)
   helper.toColors = toColors
   helper.toColor = toColor
   helper.deltaE = (a, b, ...c) => deltaE(toColor(a), toColor(b), ...c)

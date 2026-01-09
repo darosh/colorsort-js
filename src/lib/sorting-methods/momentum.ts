@@ -1,11 +1,11 @@
 import { dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { metrics } from '../metrics.ts'
-import { ColorHelper, DistanceFn, methodRunner } from '../method-runner.ts'
+import { ColorHelper, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
 import { closest, closestList, inlinest } from '../uni-neighbors.ts'
 
-function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: DistanceFn, momentumWeight: number = 1e6) {
+function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: Distance3, momentumWeight: number = 1e6) {
   const dist = distanceFn(from, to)
   const direction = normalize(subtract(to, from))
   let score = dist
@@ -19,7 +19,7 @@ function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, dist
   return { score, direction }
 }
 
-function calculateScoreDeltaE(from: Vector3, to: Vector3, prevDirection: Vector3, distance: DistanceFn, deltaE: DistanceFn, momentumWeight: number = 1e6) {
+function calculateScoreDeltaE(from: Vector3, to: Vector3, prevDirection: Vector3, distance: Distance3, deltaE: Distance3, momentumWeight: number = 1e6) {
   const delta = deltaE(from, to)
   const dist = (distance(from, to) * delta) / 128
 

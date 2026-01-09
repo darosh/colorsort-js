@@ -2,10 +2,10 @@ import { Vector3 } from '../vector.ts'
 import { relativeDifference } from '../metrics-relative.ts'
 import { detectPaletteType } from '../metrics-type.ts'
 import { calculateAdaptiveWeights, calculateVariances } from '../metrics-variances.ts'
-import { ColorHelper, DistanceFn, methodRunner } from '../method-runner.ts'
+import { ColorHelper, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
 
-export function graphDeltaE(colors: Vector3[], deltaE: DistanceFn): Vector3[] {
+export function graphDeltaE(colors: Vector3[], deltaE: Distance3): Vector3[] {
   const graph = new Map()
 
   for (let i = 0; i < colors.length; i++) {
@@ -108,7 +108,7 @@ export function graphWeightedAdaptive2(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
-      return graphDeltaE(data, (a, b) => this.deltaE(a, b, ...weights))
+      return graphDeltaE(data, (a: Vector3, b: Vector3) => this.deltaE(a, b, ...weights))
     },
     'hex'
   )

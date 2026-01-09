@@ -1,6 +1,6 @@
-import { DistanceT } from './method-runner.ts'
+import { Distance } from './method-runner.ts'
 
-export function tspVectors<T>(colors: T[], distance: DistanceT<T>) {
+export function tspVectors<T>(colors: T[], distance: Distance<T>) {
   let improved = true
 
   while (improved) {
