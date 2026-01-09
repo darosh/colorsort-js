@@ -13,10 +13,50 @@
       <span class="ml-4 text-grey-lighten-1">{{ methodsCount }} {{methodsCount === 1 ? 'method' : 'methods'}}</span>
       <span class="mx-8 text-grey-lighten-1" v-show="filtered.length === types.length">{{ types.length }} {{types.length === 1 ? 'palette' : 'palettes'}}</span>
       <span class="mx-8 text-grey-lighten-3" v-show="filtered.length < types.length">{{ filtered.length }} of {{types.length}} {{types.length === 1 ? 'palette' : 'palettes'}}</span>
-      <v-text-field prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="180" />
-      <v-text-field v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="140" />
+      <v-text-field id="help" clearable prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+        <template v-slot:append-inner>
+          <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }">mdi-help-circle</v-icon>
+        </template>
+      </v-text-field>
+      <v-text-field clearable v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
       <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
     </v-app-bar>
+
+    <v-menu :model-value="menu" z-index="100000" target="#help">
+      <v-card min-width="200" class="bg-surface-light">
+        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
+          <tbody>
+            <tr>
+              <td><b>&lt;12</b></td>
+              <td>less tdan 12 colors</td>
+            </tr>
+            <tr>
+              <td><b>&gt;64</b></td>
+              <td>more tdan 64 colors</td>
+            </tr>
+            <tr>
+              <td><b>100</b></td>
+              <td>search number</td>
+            </tr>
+            <tr>
+              <td><b>nintendo</b></td>
+              <td>search name</td>
+            </tr>
+            <tr>
+              <td><b>random+</b></td>
+              <td>show all after name</td>
+            </tr>
+            <tr>
+              <td><b>lo-</b></td>
+              <td>palettes from lospec.com</td>
+            </tr>
+            <tr>
+              <td colspan="2">search is case sensitive</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-menu>
 
     <v-main style="--v-layout-top: 64px;">
       <v-container v-show="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column">
@@ -239,6 +279,7 @@ export default {
     isVisible: {},
     isVisiblePending: {},
     isVisibleTimer: null,
+    menu: false
   }),
   methods: {
     async sort () {
