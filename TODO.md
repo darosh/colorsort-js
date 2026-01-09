@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] culori 
 - [ ] N+ sort as "pagination" 
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
