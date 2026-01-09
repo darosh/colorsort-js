@@ -19,8 +19,8 @@
     </v-app-bar>
 
     <v-main style="--v-layout-top: 64px;">
-      <v-container v-show="!showStats" fluid :height="tableHeight" class="px-4">
-        <v-virtual-scroll :items="filtered" item-key="key" renderless :height="tableHeight">
+      <v-container v-show="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column">
+        <v-virtual-scroll :items="filtered" renderless :height="tableHeight" item-key="key" item-height="1000">
           <template v-slot:default="{ itemRef, item: { groups, key }, index: typeIndex }">
             <v-table style="background: rgb(18, 18, 18);" :ref="itemRef" hover class="mb-16" fixed-header>
               <thead>
@@ -40,7 +40,7 @@
               </thead>
               <tbody>
                 <!--          :style="{ background: typeIndex % 2 ? 'rgba(0,0,0,.5)' : null }"-->
-                <tr :ref="itemRef" v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
+                <tr v-for="({ record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, rowIndex) in groups" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors)">
                   <td style="width: 90px; vertical-align: top; padding-top: 14px" v-if="!rowIndex" :rowspan="groups.length">
                     {{ palette.index + 1 }}: {{ palette.key }}<br /><br /><i>{{ palette.type.type }}</i>
 
@@ -173,8 +173,8 @@
                   </td>
 
                   <td class="pl-0">
-                    <div style="display: flex">
-                      <div v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                    <div style="display: flex" v-intersect="v => onIntersect(v, `${key}-${rowIndex}`)">
+                      <div v-if="!rowIndex || isVisible[`${key}-${rowIndex}`]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                     </div>
                   </td>
                 </tr>
@@ -200,8 +200,8 @@ import { computePlan, computeRender, updateBest, updateDistance } from '@/comput
 import chroma from 'chroma-js'
 import { render } from '@/render.js'
 
-// import { COMPUTED } from '@/deserialize.ts'
-const COMPUTED = null
+import { COMPUTED } from '@/deserialize.ts'
+// const COMPUTED = null
 
 function debounce (func, timeout = 25) {
   let timer
@@ -236,13 +236,16 @@ export default {
     filterPalette: null,
     filterMethod: null,
     showStats: false,
+    isVisible: {},
+    isVisiblePending: {},
+    isVisibleTimer: null,
   }),
   methods: {
     async sort () {
       if (!COMPUTED) {
         const { sorted, types } = await computePlan(
-            // Object.entries(PALETTES),
-            Object.entries(PALETTES).slice(0, 10),
+            Object.entries(PALETTES),
+            // Object.entries(PALETTES).slice(0, 10),
             SORTING_METHODS,
             render,
             this.onRender
@@ -304,6 +307,19 @@ export default {
         }
 
       }, 400)
+    },
+    onIntersect(visible, key) {
+      this.isVisiblePending[key] = visible
+
+      if (this.isVisibleTimer) {
+        clearTimeout(this.isVisibleTimer)
+      }
+
+      this.isVisibleTimer = setTimeout(() => {
+        requestAnimationFrame(() => {
+          Object.assign(this.isVisible, this.isVisiblePending)
+        })
+      }, 24)
     }
   },
   mounted () {
@@ -331,11 +347,11 @@ export default {
       if (this?.filterPalette?.[0] === '<' || this?.filterPalette?.[0] === '>') {
         number = Number.parseInt(this.filterPalette.slice(1), 10)
       }
-      
+
       const more = this.filterPalette.at(-1) === '+'
       const text = more ? this.filterPalette.slice(0, -1) : this.filterPalette
       let afterMore = false
-      
+
       const filtered = !this.filterPalette ? this.types : this.types.filter(t => {
         if (this.filterPalette[0] === '<') {
           return t.colors.length < number
@@ -346,7 +362,7 @@ export default {
         const match = afterMore || `${t.key}:${t.index + 1}`.includes(text)
 
         afterMore = more && match
-        
+
         return match
       })
 
