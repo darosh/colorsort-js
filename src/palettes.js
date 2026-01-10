@@ -1,11 +1,17 @@
 import chroma from 'chroma-js'
 import { oklab } from '@/lib/color.ts'
 import PALETTES_DATA from '../palettes.json' with { type: 'json' }
+import { Poline, positionFunctions } from 'poline'
+import { formatHex } from 'culori'
 
 let previous = 1
 const next = () => {
   previous = (previous * 16807) % 2147483647
   return previous / 2147483647
+}
+
+function toHex([h, s, l]) {
+  return formatHex({ mode: 'okhsl', h, s, l })
 }
 
 export const PALETTES = {
@@ -32,6 +38,52 @@ export const PALETTES = {
   'helix-4': chroma.cubehelix().rotations(3).scale().correctLightness().colors(64),
   'yellow-grey': chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6),
   'blue-pink': chroma.scale(['blue', 'pink']).mode('oklch').colors(8),
+  'poline-1': new Poline({
+    anchorColors: [
+      [20, 0.42, 0.18],
+      [162, 0.9, 0.86]
+    ],
+    numPoints: 10,
+    positionFunctionX: positionFunctions.smoothStepPosition,
+    positionFunctionY: positionFunctions.sinusoidalPosition,
+    positionFunctionZ: positionFunctions.quarticPosition,
+    invertedLightness: true
+  }).colors
+    .map(toHex),
+  'poline-2': new Poline({
+    anchorColors: [
+      [217, 0.75, 0.32],
+      [49, 0.49, 0.32]
+    ],
+    numPoints: 7,
+    positionFunctionX: positionFunctions.linearPosition,
+    positionFunctionY: positionFunctions.sinusoidalPosition,
+    positionFunctionZ: positionFunctions.exponentialPosition,
+    closedLoop: true,
+    invertedLightness: true
+  }).colors.slice(0, -1).map(toHex),
+  'poline-3': new Poline({
+    anchorColors: [
+      [289, 0.04, 0.28],
+      [-14, 0.87, 0.33]
+    ],
+    numPoints: 4,
+    positionFunctionX: positionFunctions.asinusoidalPosition,
+    positionFunctionY: positionFunctions.sinusoidalPosition,
+    positionFunctionZ: positionFunctions.asinusoidalPosition,
+    invertedLightness: true
+  }).colors.map(toHex),
+  'poline-4': new Poline({
+    anchorColors: [
+      [31, 0.79, 0.09],
+      [211, 0.95, 0.46]
+    ],
+    numPoints: 4,
+    positionFunctionX: positionFunctions.sinusoidalPosition,
+    positionFunctionY: positionFunctions.arcPosition,
+    positionFunctionZ: positionFunctions.smoothStepPosition,
+    invertedLightness: true
+  }).colors.map(toHex),
   primary: ['#00f', '#0ff', '#000', '#fff', '#f00', '#0f0', '#ff0', '#f0f'],
   'palette-a': ['#834200', '#323213', '#2b6c21', '#888d0d', '#ffc249', '#da6d00', '#a22800', '#640000', '#000000', '#1d1d67', '#264bab', '#409e9e', '#a6da97', '#ffffff', '#9191aa', '#555555'],
   'palette-b': ['#1c1718', '#45221b', '#891420', '#4e4e52', '#865f51', '#e43040', '#87878c', '#c78a55', '#ee7976', '#e4c4ad'],
@@ -554,5 +606,5 @@ Object.values(PALETTES).forEach((result) => {
 })
 
 export function isArtist(slug) {
-  return slug.startsWith('lo-') && (PALETTES_DATA[`${slug.replace(/^lo-/g, '')}`] !== undefined)
+  return slug.startsWith('lo-') && PALETTES_DATA[`${slug.replace(/^lo-/g, '')}`] !== undefined
 }
