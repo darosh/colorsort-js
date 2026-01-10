@@ -2,9 +2,11 @@ import { test } from 'vitest'
 
 import Color from 'colorjs.io'
 import chroma from 'chroma-js'
-import { oklab, rgb } from 'culori'
+import { formatHex, oklab, rgb } from 'culori'
 import { oklab2rgb, rgb2oklab, distanceOk2 } from '@/lib/color.ts'
 import { distance } from '@/lib/vector.ts'
+import { Poline, positionFunctions } from 'poline'
+import { PALETTES } from '@/palettes.js'
 
 export function timed (fn) {
   const start = performance.now()
@@ -27,11 +29,30 @@ test('oklab conversion', () => {
   console.log('cio', new Color('#abacad').to('oklab').to('srgb').coords.map(x => x * 255))
   console.log('chroma', chroma.oklab(chroma('#abacad').oklab()).gl().map(x => x * 255))
   console.log('culori', (() => {
-    const { r, g, b } =rgb(oklab('#abacad'))
-    
+    const { r, g, b } = rgb(oklab('#abacad'))
+
     return [r * 255, g * 255, b * 255]
   })())
   console.log('direct', oklab2rgb(rgb2oklab([0xab / 255, 0xac / 255, 0xad / 255])).map(x => x * 255))
+
+  const poline = new Poline({
+    anchorColors: [
+      [20, 0.42, 0.18],
+      [162, 0.90, 0.86]
+    ],
+    numPoints: 10,
+    positionFunctionX: positionFunctions['smoothStepPosition'],
+    positionFunctionY: positionFunctions['sinusoidalPosition'],
+    positionFunctionZ: positionFunctions['quarticPosition'],
+    invertedLightness: true,
+  })
+
+  const hexColors = poline.colors.map(([h, s, l]) => formatHex({ mode: 'okhsl', h, s, l }))
+
+  console.log('poline', hexColors)
+  console.log('poline-1', PALETTES['poline-1'])
+  console.log('poline-2', PALETTES['poline-2'])
+  console.log('poline-3', PALETTES['poline-3'])
 })
 
 test('oklab performance', () => {
