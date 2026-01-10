@@ -112,6 +112,10 @@
               <td>palettes from lospec.com</td>
             </tr>
             <tr>
+              <td><b>poline-</b></td>
+              <td>palettes generated with poline</td>
+            </tr>
+            <tr>
               <td colspan="2">search is case sensitive</td>
             </tr>
           </tbody>
