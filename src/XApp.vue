@@ -24,18 +24,30 @@
         <v-btn @click="showStats = true">Statistics</v-btn>
       </v-toolbar-items>
       <v-spacer />
-      <span class="ml-4 text-grey-lighten-1">{{ methodsCount }} {{ methodsCount === 1 ? 'method' : 'methods' }}</span>
-      <span class="mx-8 text-grey-lighten-1" v-show="filtered.length === types.length"
+      <span class="ml-4 text-grey-lighten-1">{{ number(methodsCount) }} {{ methodsCount === 1 ? 'method' : 'methods' }}</span>
+      <span class="ml-8 text-grey-lighten-1" v-show="filtered.length === types.length"
         >{{
-          types.length
+          number(types.length)
         }}
         {{ types.length === 1 ? 'palette' : 'palettes' }}</span
       >
-      <span class="mx-8 text-grey-lighten-3" v-show="filtered.length < types.length"
+      <span class="ml-8 text-grey-lighten-3" v-show="filtered.length < types.length"
         >{{
-          filtered.length
+          number(filtered.length)
         }}
-        of {{ types.length }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
+        of {{ number(types.length) }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
+      >
+      <span class="mx-8 text-grey-lighten-1" v-show="filteredGroups.length === totalGroups"
+        >{{
+          number(totalGroups)
+        }}
+        {{ types.length === 1 ? 'result' : 'results' }}</span
+      >
+      <span class="mx-8 text-grey-lighten-3" v-show="filteredGroups.length < totalGroups"
+        >{{
+          number(filteredGroups.length)
+        }}
+        of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
       >
       <v-text-field id="help" clearable prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
         <template v-slot:append-inner>
@@ -69,11 +81,11 @@
           <tbody>
             <tr>
               <td><b>&lt;12</b></td>
-              <td>less tdan 12 colors</td>
+              <td>less than 12 colors</td>
             </tr>
             <tr>
               <td><b>&gt;64</b></td>
-              <td>more tdan 64 colors</td>
+              <td>more than 64 colors</td>
             </tr>
             <tr>
               <td><b>100</b></td>
@@ -295,6 +307,8 @@ function scale (x) {
   return x === 0 ? '#fff' : scale_(x)
 }
 
+const number = new Intl.NumberFormat("en-US").format
+
 export default {
   components: { XPreview },
   data: () => ({
@@ -404,7 +418,8 @@ export default {
           Object.assign(this.isVisible, this.isVisiblePending)
         })
       }, 24)
-    }
+    },
+    number
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
@@ -416,6 +431,9 @@ export default {
     },
     tableHeight () {
       return this.$vuetify.display.height - 128 + 32
+    },
+    totalGroups () {
+      return this.types.reduce((acc, {groups}) => acc + groups.length, 0)
     },
     filteredGroups () {
       return this.filtered.reduce((acc, { groups, key }) => {
