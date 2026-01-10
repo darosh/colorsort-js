@@ -28,37 +28,44 @@
         <v-btn @click="showStats = true">Statistics</v-btn>
       </v-toolbar-items>
       <v-spacer />
-      <span class="ml-4 text-grey-lighten-1">{{ number(methodsCount) }} {{ methodsCount === 1 ? 'method' : 'methods' }}</span>
-      <span class="ml-8 text-grey-lighten-1" v-show="filtered.length === types.length"
-        >{{
+      <div v-show="routeLoaded">
+        <span class="ml-4 text-grey-lighten-1"
+          >{{ number(methodsCount) }}
+          {{
+          methodsCount === 1 ? 'method' : 'methods'
+          }}</span
+        >
+        <span class="ml-8 text-grey-lighten-1" v-show="filtered.length === types.length"
+          >{{
           number(types.length)
-        }}
-        {{ types.length === 1 ? 'palette' : 'palettes' }}</span
-      >
-      <span class="ml-8 text-grey-lighten-3" v-show="filtered.length < types.length"
-        >{{
+          }}
+          {{ types.length === 1 ? 'palette' : 'palettes' }}</span
+        >
+        <span class="ml-8 text-grey-lighten-3" v-show="filtered.length < types.length"
+          >{{
           number(filtered.length)
-        }}
-        of {{ number(types.length) }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
-      >
-      <span class="mx-8 text-grey-lighten-1" v-show="filteredGroups.length === totalGroups"
-        >{{
+          }}
+          of {{ number(types.length) }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
+        >
+        <span class="mx-8 text-grey-lighten-1" v-show="filteredGroups.length === totalGroups"
+          >{{
           number(totalGroups)
-        }}
-        {{ types.length === 1 ? 'result' : 'results' }}</span
-      >
-      <span class="mx-8 text-grey-lighten-3" v-show="filteredGroups.length < totalGroups"
-        >{{
+          }}
+          {{ types.length === 1 ? 'result' : 'results' }}</span
+        >
+        <span class="mx-8 text-grey-lighten-3" v-show="filteredGroups.length < totalGroups"
+          >{{
           number(filteredGroups.length)
-        }}
-        of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
-      >
-      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+          }}
+          of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
+        >
+      </div>
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
         <template v-slot:append-inner>
           <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
         </template>
       </v-text-field>
-      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
       <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
 
       <template v-slot:extension>
@@ -126,20 +133,20 @@
     <v-main style="--v-layout-top: 96px;">
       <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div class="trow" :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, `${key}-${rowIndex}`)">
+          <template v-slot:default="{ itemRef, item: { __key, groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
+            <div class="trow" :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8 trowh">
                 {{ `${palette.index + 1}: ${palette.key}` }}
               </div>
 
-              <div class="text-pre flex-grow-0" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
+              <div class="text-pre flex-grow-0" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
                 {{
-                  (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
+                  (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
               </div>
-              <div class="text-pre text-right flex-grow-0" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(`${key}:${rowIndex}`)">
+              <div class="text-pre text-right flex-grow-0" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(__key)">
                 {{
-                  (methods.length === 1 || isExpanded(`${key}:${rowIndex}`)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
+                  (methods.length === 1 || isExpanded(__key)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
                 }}
               </div>
 
@@ -206,7 +213,7 @@
               <div style="width: 100px; line-height: 14px; font-size: 12px;" class="text-center text-no-wrap flex-grow-0 py-2">
                 <template v-if="metrics">
                   <span :style="{color: scale(quality?.lchAvgChange.L)}">{{
-                          metrics.lchAvgChange.L.toFixed(0)
+                      metrics.lchAvgChange.L.toFixed(0)
                   }}</span
                   >,
                   <span :style="{color: scale(quality?.lchAvgChange.C)}">{{
@@ -246,8 +253,8 @@
               </div>
 
               <div class="pl-0 flex-grow-1">
-                <div style="display: flex; min-width: 80px;" v-intersect="v => onIntersect(v, `${key}-${rowIndex}`, palette)">
-                  <div v-if="!rowIndex || isVisible[`${key}-${rowIndex}`]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                <div style="display: flex; min-width: 80px;" v-intersect="v => onIntersect(v, __key, palette)">
+                  <div v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                 </div>
               </div>
             </div>
@@ -315,7 +322,7 @@ function scale (x) {
   return x === 0 ? '#fff' : scale_(x)
 }
 
-const number = new Intl.NumberFormat("en-US").format
+const number = new Intl.NumberFormat('en-US').format
 
 export default {
   components: { XPreview },
@@ -332,8 +339,8 @@ export default {
     debouncedPreview: null,
     expandedAll: false,
     expanded: {},
-    filterPalette: null,
-    filterMethod: null,
+    // filterPalette: null,
+    // filterMethod: null,
     showStats: false,
     isVisible: {},
     isVisiblePending: {},
@@ -341,7 +348,8 @@ export default {
     menu: false,
     palette: null,
     lastMouseEnter: -Infinity,
-    focusPending: false
+    focusPending: false,
+    routeLoaded: false
   }),
   methods: {
     async sort () {
@@ -421,7 +429,8 @@ export default {
         this.palette = palette
       }
 
-      this.isVisiblePending[key] = visible
+      // this.isVisiblePending[key] = visible
+      this.isVisiblePending[key] = true
       this.scheduleVisibleUpdate()
     },
     scheduleVisibleUpdate () {
@@ -436,14 +445,39 @@ export default {
       }, 0)
     },
     number,
-    onFocusIn() { this.focusPending = true },
-    onFocusOut() { this.focusPending = false }
+    onFocusIn () { this.focusPending = true },
+    onFocusOut () { this.focusPending = false },
+    updateQuery (newParams) {
+      this.$router.replace({
+        query: {
+          ...this.$route.query,
+          ...newParams
+        }
+      })
+    }
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
     this.sort()
   },
   computed: {
+    filterMethod: {
+      get () {
+        return this.$route.query.m || ''
+      },
+      set (value) {
+        this.updateQuery({ m: value })
+      }
+    },
+
+    filterPalette: {
+      get () {
+        return this.$route.query.p || ''
+      },
+      set (value) {
+        this.updateQuery({ p: value })
+      }
+    },
     methodsCount () {
       return SORTING_METHODS.length
     },
@@ -451,14 +485,23 @@ export default {
       return this.$vuetify.display.height - 128 + 32
     },
     totalGroups () {
-      return this.types.reduce((acc, {groups}) => acc + groups.length, 0)
+      return this.types.reduce((acc, { groups }) => acc + groups.length, 0)
     },
     filteredGroups () {
       return this.filtered.reduce((acc, { groups, key }) => {
-        return [...acc, ...groups.map((group, index) => ({ groupIndex: index, group, key, __key: `${key}_${group.methods[0].method.mid}` }))]
+        return [...acc, ...groups.map((group, index) => ({
+          groupIndex: index,
+          group,
+          key,
+          __key: `${key}_${group.methods[0].method.mid}`
+        }))]
       }, [])
     },
     filtered () {
+      if (!this.routeLoaded) {
+        return []
+      }
+
       if (!this.filterPalette && !this.filterMethod) {
         return this.types
       }
@@ -505,5 +548,31 @@ export default {
           .filter(t => t.groups.length)
     }
   },
+  watch: {
+    '$route.matched.length' (newValue) {
+      this.routeLoaded = this.routeLoaded || (newValue > 0)
+    },
+    filteredGroups (newValue) {
+      if (newValue?.length && !this.palette) {
+        this.palette = newValue[0].group.record.palette
+      }
+
+      if (!newValue?.length && this.palette) {
+        this.palette = null
+      }
+
+      if (newValue.length) {
+        const count = Math.min(newValue.length, Math.ceil(this.$vuetify.display.height / 48))
+
+        for (let i = 0; i < count; i++) {
+          const { __key } = newValue[i]
+
+          this.isVisiblePending[__key] = true
+        }
+
+        this.scheduleVisibleUpdate()
+      }
+    }
+  }
 }
 </script>
