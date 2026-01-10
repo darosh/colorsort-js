@@ -10,13 +10,17 @@
 .fade {
   background: linear-gradient(to right, transparent, rgba(18, 18, 18, 0) 8px, rgba(18, 18, 18, 1) 24px, rgba(18, 18, 18, 1) calc(100% - 24px), rgba(18, 18, 18, 0) calc(100% - 8px), transparent);
 }
+
+.trow:hover {
+  background: rgb(28, 28, 28);
+}
 </style>
 
 <template>
   <v-app theme="dark" class="">
     <!--    <v-navigation-drawer v-model="showNav" width="423"></v-navigation-drawer>-->
 
-    <v-app-bar flat id="app-bar" scroll-behavior="hide" :scroll-threshold="72" color="transparent">
+    <v-app-bar flat id="app-bar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72" color="transparent">
       <!--      <v-app-bar-nav-icon @click="showNav = !showNav" />-->
       <v-app-bar-title class="flex-0-0 mr-4" style="width: 194px;">Color Sorting R&D</v-app-bar-title>
       <v-toolbar-items class="mr-4">
@@ -49,12 +53,12 @@
         }}
         of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
       >
-      <v-text-field id="help" clearable prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
         <template v-slot:append-inner>
           <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
         </template>
       </v-text-field>
-      <v-text-field clearable v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
       <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
 
       <template v-slot:extension>
@@ -119,8 +123,8 @@
       <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette)">
-              <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8">
+            <div class="trow" :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, `${key}-${rowIndex}`)">
+              <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8 trowh">
                 {{ `${palette.index + 1}: ${palette.key}` }}
               </div>
 
@@ -331,7 +335,9 @@ export default {
     isVisiblePending: {},
     isVisibleTimer: null,
     menu: false,
-    palette: null
+    palette: null,
+    lastMouseEnter: -Infinity,
+    focusPending: false
   }),
   methods: {
     async sort () {
@@ -370,9 +376,13 @@ export default {
     setPreview (colors) {
       this.selectedColors = colors
     },
-    onmouseenter (colors, palette) {
+    onmouseenter (colors, palette, key) {
       this.palette = palette
       this.debouncedPreview(colors)
+      this.lastMouseEnter = Date.now()
+      // this.isVisible[key] = true
+      this.isVisiblePending[key] = true
+      this.scheduleVisibleUpdate()
     },
     scale (v) {
       return v === undefined ? null : scale(v)
@@ -403,12 +413,14 @@ export default {
       }, 400)
     },
     onIntersect (visible, key, palette) {
-      if (visible) {
+      if (visible && palette && ((this.lastMouseEnter + 400) < Date.now())) {
         this.palette = palette
       }
 
       this.isVisiblePending[key] = visible
-
+      this.scheduleVisibleUpdate()
+    },
+    scheduleVisibleUpdate () {
       if (this.isVisibleTimer) {
         clearTimeout(this.isVisibleTimer)
       }
@@ -417,9 +429,11 @@ export default {
         requestAnimationFrame(() => {
           Object.assign(this.isVisible, this.isVisiblePending)
         })
-      }, 24)
+      }, 0)
     },
-    number
+    number,
+    onFocusIn() { this.focusPending = true },
+    onFocusOut() { this.focusPending = false }
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
