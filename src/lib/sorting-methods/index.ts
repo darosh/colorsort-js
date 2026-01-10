@@ -9,6 +9,9 @@ import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOkla
 
 import BENCH from '../../../bench.json' with { type: 'json' }
 import { UniColor } from '../method-runner.ts'
+// import debug from 'debug'
+
+// const log = debug('cs:method')
 
 const METHODS = {
   PCA: ['PCA', 'Principal component analysis', 'https://en.wikipedia.org/wiki/Principal_component_analysis'],
@@ -252,6 +255,13 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
       const combinations = getCombinationsAsArrays(item.fn.params)
 
       for (const combination of combinations) {
+        // const fn = (c: UniColor) => {
+        //   log(`starting '${(<any>fn).name_}'`)
+        //   item.fn.call(null, c, ...combination)
+        // }
+
+        // fn.name_ = item.fn.name
+
         acc.push({
           ...item,
           name: `${item.name} [${combination.join(',')}]`,
@@ -261,6 +271,17 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
         })
       }
     } else {
+      // const fn = (c: UniColor) => {
+      //   log(`starting '${(<any>fn).name_}'`)
+      //   item.fn.call(null, c)
+      // }
+
+      // fn.name_ = item.fn.name
+      
+      // acc.push({
+      //   ...item,
+      //   fn
+      // })
       acc.push(item)
     }
 

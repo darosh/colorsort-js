@@ -35,7 +35,8 @@
     "lint": "tsc && oxlint ./src --fix && oxfmt ./src",
     "preview": "vite preview",
     "test:all": "deno run -A npm:vitest run",
-    "test:bench": "cross-env DEBUG=cs:* deno run -A npm:vitest run ./tests/bench.test.js",
+    "test:bench": "deno run -A npm:vitest run ./tests/bench.test.js",
+    "test:bench:log": "cross-env DEBUG=cs:* deno run -A npm:vitest run ./tests/bench.test.js",
     "test:compute": "deno run -A npm:vitest run ./tests/compute.test.js",
     "test:fast": "deno run -A npm:vitest --exclude ./tests/compute.test.js --exclude ./tests/palettes.test.js --exclude ./tests/bench.test.js",
     "test:palettes": "cross-env DEBUG=cs:* deno run -A npm:vitest run ./tests/palettes.test.js"

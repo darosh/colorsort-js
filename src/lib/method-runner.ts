@@ -1,6 +1,9 @@
 import chroma from 'chroma-js'
 import { distanceOk2, okhsl, okhsv, oklab, oklch } from './color.ts'
 import { distance, distance4, distanceRadial0, distanceRadial2, Vector3, Vector4 } from './vector.ts'
+// import debug from 'debug'
+
+// const log = debug('cs:runner')
 
 export type UniColor = Vector3 | Vector4 | any
 
@@ -53,6 +56,8 @@ function modelDistance(model: string) {
 }
 
 export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColor[]) => UniColor[], model: string = 'gl', deltaMethod_?: Distance<any> | DistanceOptions, distanceMethod_?: Distance<any> | DistanceOptions): string[] {
+  // log(`starting '${fn.name || (<any>fn).name_}'`)
+
   const vectorMap = new Map()
 
   let distanceMethodObj = distanceMethod_ ?? modelDistance(model)

@@ -2,6 +2,9 @@ import { test } from 'vitest'
 import { PALETTES } from '@/palettes.js'
 import { SORTING_METHODS } from '@/lib/index.ts'
 import { writeFile } from 'node:fs/promises'
+import debug from 'debug'
+
+const log = debug('cs:test:bench')
 
 test('bench', async () => {
   const entries = Object.entries(PALETTES).slice(0, 8)
@@ -10,7 +13,7 @@ test('bench', async () => {
   for (const [key, palette] of entries) {
     const methods = [...SORTING_METHODS].sort((a, b) => a.speed - b.speed)
 
-    for (const { name, fn, speed, mid } of methods.filter(x => x. mid.includes('GEN'))) {
+    for (const { name, fn, speed, mid } of methods) {
       const start = performance.now()
       fn(palette)
       const elapsed = performance.now() - start
@@ -21,7 +24,7 @@ test('bench', async () => {
       data[id].count++
       data[id].elapsed += elapsed
 
-      // console.log(speed, name, elapsed)
+      log(mid, elapsed)
     }
   }
 
@@ -32,7 +35,7 @@ test('bench', async () => {
 
   const b = Object.fromEntries(t)
 
-  console.log(b)
+  log(b)
 
   await writeFile('./bench.json', JSON.stringify(b, null, 2))
 })
