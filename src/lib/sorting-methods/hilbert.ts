@@ -26,10 +26,26 @@ function hilbertPointToIndex(x: number, y: number, z: number): number {
 }
 
 export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
+  const cache = new Map<Vector3, number>()
+  
   return [...colors].sort((a, b) => {
-    const indexA = hilbertIndex(a[0], a[1], a[2], order)
-    const indexB = hilbertIndex(b[0], b[1], b[2], order)
+    let indexA
+    let indexB
 
+    if (cache.has(a)) {
+      indexA = <number>cache.get(a)
+    } else {
+      indexA =hilbertIndex(a[0], a[1], a[2], order)
+      cache.set(a, indexA)
+    }
+
+    if (cache.has(b)) {
+      indexB = <number>cache.get(b)
+    } else {
+      indexB = hilbertIndex(b[0], b[1], b[2], order)
+      cache.set(b, indexB)
+    }
+    
     return indexA - indexB
   })
 }

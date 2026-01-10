@@ -3,6 +3,7 @@
   "SPI": 1,
   "CYL": 1,
   "KM": 1,
+  "HIL-RGB": 1,
   "HARM": 2,
   "HARMED": 2,
   "NNA(DE) Lab": 2,
@@ -10,7 +11,6 @@
   "NNA(DE+1) Lab": 2,
   "NNA(DE+2) Lab": 2,
   "MOM(Closest)-Oklab": 2,
-  "HIL-RGB": 2,
   "PCA": 2,
   "CL": 2,
   "DBSCAN": 2,
@@ -22,5 +22,5 @@
   "MOM(Closest+,DE)-Oklab": 4,
   "GEN-Oklab": 4,
   "GEN3-Oklab": 4,
-  "_TOTAL": 53
+  "_TOTAL": 52
 }
