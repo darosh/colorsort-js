@@ -126,23 +126,33 @@ export class GeneticAlgorithm<T, F> {
     const start = Math.floor(this.random() * size)
     const end = start + Math.floor(this.random() * (size - start))
 
-    const child: (T | null)[] = Array(size).fill(null)
+    const child: (T | undefined)[] = Array(size)
 
     // Copy segment from parent1
     for (let i = start; i <= end; i++) {
       child[i] = parent1[i]
     }
 
-    // Fill remaining with parent2's order
-    let currentPos = (end + 1) % size
-    let parent2Pos = (end + 1) % size
+    // Create a set of items already in child for O(1) lookup
+    const usedItems = new Set(child.slice(start, end + 1))
 
-    while (child.includes(null)) {
-      if (!child.includes(parent2[parent2Pos])) {
-        child[currentPos] = parent2[parent2Pos]
-        currentPos = (currentPos + 1) % size
+    // Collect remaining items from parent2 in order
+    const remainingItems: T[] = []
+    for (let i = 0; i < size; i++) {
+      const item = parent2[i]
+
+      if (!usedItems.has(item)) {
+        remainingItems.push(item)
       }
-      parent2Pos = (parent2Pos + 1) % size
+    }
+
+    // Fill the empty positions with remaining items
+    let remainingIndex = 0
+    for (let i = 0; i < size; i++) {
+      if (child[i] === undefined) {
+        child[i] = remainingItems[remainingIndex]
+        remainingIndex++
+      }
     }
 
     return child as T[]
