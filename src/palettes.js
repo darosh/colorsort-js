@@ -48,8 +48,7 @@ export const PALETTES = {
     positionFunctionY: positionFunctions.sinusoidalPosition,
     positionFunctionZ: positionFunctions.quarticPosition,
     invertedLightness: true
-  }).colors
-    .map(toHex),
+  }).colors.map(toHex),
   'poline-2': new Poline({
     anchorColors: [
       [217, 0.75, 0.32],
@@ -61,7 +60,9 @@ export const PALETTES = {
     positionFunctionZ: positionFunctions.exponentialPosition,
     closedLoop: true,
     invertedLightness: true
-  }).colors.slice(0, -1).map(toHex),
+  }).colors
+    .slice(0, -1)
+    .map(toHex),
   'poline-3': new Poline({
     anchorColors: [
       [289, 0.04, 0.28],
