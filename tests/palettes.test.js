@@ -1,8 +1,7 @@
 import { test } from 'vitest'
-import { writeFile, readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import stringify from 'json-stringify-pretty-compact'
-import { SORTING_METHODS_RAW } from '@/lib/sorting-methods/index.ts'
-import { SORTING_METHODS } from '@/lib/index.ts'
+import { PALETTES } from '@/palettes.js'
 
 test('palettes', async () => {
   const txt = await readFile('./tests/palettes.txt', 'utf8')
@@ -20,25 +19,15 @@ test('palettes', async () => {
   const obj = Object.fromEntries(ents)
   const serialized = stringify(obj, { maxLength: 3200 })
 
-  console.log(obj)
+  // console.log(obj)
 
   // await writeFile('./palettes.json', serialized)
 })
 
-test('check', () => {
-  function check (arr, set) {
-    const ns = new Set(arr.map((a) => a.name))
-    const is = new Set(arr.map((a) => a.mid))
-
-    if (ns.size !== arr.length) {
-      throw new Error(`Duplicated ${set} name`)
+for (const [key, colors] of Object.entries(PALETTES)) {
+  test(`unique ${key}`, () => {
+    if (colors.length !== new Set(colors).size) {
+      throw `${key} is not unique`
     }
-
-    if (is.size !== arr.length) {
-      throw new Error(`Duplicated ${set} mid`)
-    }
-  }
-
-  check(SORTING_METHODS_RAW, 'raw')
-  check(SORTING_METHODS, 'sorting')
-})
+  })
+}
