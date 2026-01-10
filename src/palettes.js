@@ -85,6 +85,52 @@ export const PALETTES = {
     positionFunctionZ: positionFunctions.smoothStepPosition,
     invertedLightness: true
   }).colors.map(toHex),
+  'poline-5': new Poline({
+    anchorColors: [
+      [21, 0.71, 0.8],
+      [267, 0.04, 0.74]
+    ],
+    numPoints: 15,
+    positionFunctionX: positionFunctions.sinusoidalPosition,
+    positionFunctionY: positionFunctions.quadraticPosition,
+    positionFunctionZ: positionFunctions.linearPosition
+  }).colors.map(toHex),
+  'poline-6': new Poline({
+    anchorColors: [
+      [80, 0.71, 0.68],
+      [199, 0.04, 0.75]
+    ],
+    numPoints: 15,
+    positionFunctionX: positionFunctions.sinusoidalPosition,
+    positionFunctionY: positionFunctions.quadraticPosition,
+    positionFunctionZ: positionFunctions.linearPosition
+  }).colors.map(toHex),
+  'poline-7': new Poline({
+    anchorColors: [
+      [57, 0.71, 0.78],
+      [244, 0.04, 0.8]
+    ],
+    numPoints: 15,
+    positionFunctionX: positionFunctions.linearPosition,
+    positionFunctionY: positionFunctions.linearPosition,
+    positionFunctionZ: positionFunctions.arcPosition,
+    closedLoop: true
+  }).colors
+    .slice(0, -1)
+    .map(toHex),
+  'poline-8': new Poline({
+    anchorColors: [
+      [57, 0.71, 0.78],
+      [244, 0.04, 0.8]
+    ],
+    numPoints: 15,
+    positionFunctionX: positionFunctions.smoothStepPosition,
+    positionFunctionY: positionFunctions.asinusoidalPosition,
+    positionFunctionZ: positionFunctions.quarticPosition,
+    closedLoop: true
+  }).colors
+    .slice(0, -1)
+    .map(toHex),
   primary: ['#00f', '#0ff', '#000', '#fff', '#f00', '#0f0', '#ff0', '#f0f'],
   'palette-a': ['#834200', '#323213', '#2b6c21', '#888d0d', '#ffc249', '#da6d00', '#a22800', '#640000', '#000000', '#1d1d67', '#264bab', '#409e9e', '#a6da97', '#ffffff', '#9191aa', '#555555'],
   'palette-b': ['#1c1718', '#45221b', '#891420', '#4e4e52', '#865f51', '#e43040', '#87878c', '#c78a55', '#ee7976', '#e4c4ad'],
