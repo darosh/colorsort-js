@@ -277,7 +277,7 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
       // }
 
       // fn.name_ = item.fn.name
-      
+
       // acc.push({
       //   ...item,
       //   fn
