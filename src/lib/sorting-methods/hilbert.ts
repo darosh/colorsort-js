@@ -2,32 +2,32 @@ import { Vector3 } from '../vector.ts'
 import { methodRunner } from '../method-runner.ts'
 
 /**
- * Convert 3D coordinates to Hilbert curve index
+ * Convert 3D (0 to 255) coordinates to Hilbert curve index
  * This ensures spatially close points stay close in the sorted order
  */
-function hilbertIndex(x: number, y: number, z: number, order: number = 8): number {
+export function hilbertIndex([x, y, z]: [number, number, number]): number {
   let index = 0
 
-  for (let i = order - 1; i >= 0; i--) {
+  for (let i = 8 - 1; i >= 0; i--) {
     const mask = 1 << i
     const px = x & mask ? 1 : 0
     const py = y & mask ? 1 : 0
     const pz = z & mask ? 1 : 0
 
-    index = (index << 3) | hilbertPointToIndex(px, py, pz)
+    index = (index << 3) | hilbertPointToIndex([px, py, pz])
   }
 
   return index
 }
 
-function hilbertPointToIndex(x: number, y: number, z: number): number {
+function hilbertPointToIndex([x, y, z]: [number, number, number]): number {
   // Simplified 3D Hilbert curve mapping (one octant)
   return (x << 2) | (y << 1) | z
 }
 
-export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
+export function sortByHilbertCurve(colors: Vector3[]): Vector3[] {
   const cache = new Map<Vector3, number>()
-  
+
   return [...colors].sort((a, b) => {
     let indexA
     let indexB
@@ -35,23 +35,23 @@ export function sortByHilbertCurve(colors: Vector3[], order = 8): Vector3[] {
     if (cache.has(a)) {
       indexA = <number>cache.get(a)
     } else {
-      indexA =hilbertIndex(a[0], a[1], a[2], order)
+      indexA = hilbertIndex(a)
       cache.set(a, indexA)
     }
 
     if (cache.has(b)) {
       indexB = <number>cache.get(b)
     } else {
-      indexB = hilbertIndex(b[0], b[1], b[2], order)
+      indexB = hilbertIndex(b)
       cache.set(b, indexB)
     }
-    
+
     return indexA - indexB
   })
 }
 
-export function hilbert(colors: string[], model: 'gl' | 'oklab' | 'lab-norm' = 'gl') {
+export function hilbert(colors: string[], model: 'rgb' | 'lab-int' = 'rgb') {
   return methodRunner(colors, sortByHilbertCurve, model)
 }
 
-hilbert.params = [{ name: 'model', values: ['gl', 'oklab', 'lab-norm'] }]
+hilbert.params = [{ name: 'model', values: ['rgb', 'lab-int'] }]

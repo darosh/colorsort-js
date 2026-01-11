@@ -1,6 +1,8 @@
 import { test } from 'vitest'
 import { SORTING_METHODS_RAW } from '@/lib/sorting-methods/index.ts'
 import { SORTING_METHODS } from '@/lib/index.ts'
+import { metricsHilbert } from '@/lib/metrics-hilbert.ts'
+import { PALETTES } from '@/palettes.js'
 
 test('check methods', () => {
   function check (arr, set) {
@@ -18,4 +20,11 @@ test('check methods', () => {
 
   check(SORTING_METHODS_RAW, 'raw')
   check(SORTING_METHODS, 'sorting')
+})
+
+test('metricsHilbert', () => {
+  const x= metricsHilbert(PALETTES['palette-55'])
+  console.log(x)
+  const y= metricsHilbert(PALETTES.spectral)
+  console.log(y)
 })

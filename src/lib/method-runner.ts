@@ -11,6 +11,10 @@ function normalizeLab(a: Vector3) {
   return [(a[0] + 128) / 255, (a[1] + 128) / 255, (a[2] + 128) / 255]
 }
 
+function intLab(a: Vector3) {
+  return [(a[0] + 128), (a[1] + 128), (a[2] + 128)]
+}
+
 export type ColorHelper = {
   toColors(vectors: UniColor[]): string[]
   toColor(vector: UniColor): string
@@ -55,7 +59,7 @@ function modelDistance(model: string) {
   return model.at(-1) === 'h' ? distanceRadial2 : model.at(-3) === 'h' ? distanceRadial0 : model === 'oklab' ? distanceOk2 : model === 'cmyk' ? distance4 : distance
 }
 
-export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColor[]) => UniColor[], model: string = 'gl', deltaMethod_?: Distance<any> | DistanceOptions, distanceMethod_?: Distance<any> | DistanceOptions): string[] {
+export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColor[]) => UniColor[] | void, model: string = 'gl', deltaMethod_?: Distance<any> | DistanceOptions, distanceMethod_?: Distance<any> | DistanceOptions): string[] {
   // log(`starting '${fn.name || (<any>fn).name_}'`)
 
   const vectorMap = new Map()
@@ -90,6 +94,8 @@ export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColo
     vs = colors.map((c) => [oklab(c), c])
   } else if (model === 'lab-norm') {
     vs = colors.map((c) => <[Vector3, string]>[normalizeLab(chroma(c).lab()), c])
+  } else if (model === 'lab-int') {
+    vs = colors.map((c) => <[Vector3, string]>[intLab(chroma(c).lab()), c])
   } else if (model === 'oklch') {
     vs = colors.map((c) => [oklch(c), c])
   } else if (model === 'okhsl') {
@@ -124,5 +130,5 @@ export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColo
   const vectors = [...vectorMap.keys()]
   const sorted = fn.call(<T>helper, vectors)
 
-  return sorted.map((c: Vector3) => vectorMap.get(c))
+  return (<any[]>sorted)?.map((c: Vector3) => vectorMap.get(c))
 }
