@@ -491,14 +491,17 @@ export default {
       })
     },
     enterMethods (event, methods, index) {
+      if (methods.length === 1) {
+        this.showMethods = false
+        return
+      }
+
       this.showMethodsList = methods
-      // this.showMethods = !this.isExpanded(index)
-      this.updateShowMethods(!this.isExpanded(index))
+      this.updateShowMethods(methods.length === 1 ? false : !this.isExpanded(index))
       this.showMethodsTarget = [event.clientX + 16, event.clientY + 16]
     },
     leaveMethods () {
       this.updateShowMethods(false)
-      // this.showMethods = false
     }
   },
   mounted () {
