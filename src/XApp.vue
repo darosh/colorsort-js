@@ -14,6 +14,24 @@
 .trow:hover {
   background: rgb(28, 28, 28);
 }
+
+.no-events, .no-events * {
+  pointer-events: none;
+}
+
+.trow.trow-dark {
+  border-top: solid #303030 1px;
+}
+
+.trow.trow-light {
+  border-top: solid #505050 1px;
+}
+
+.fill {
+  align-self: stretch; /* fills row height */
+  display: flex;
+  align-items: center; /* centers content vertically */
+}
 </style>
 
 <template>
@@ -134,12 +152,12 @@
       <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div class="trow" :style="{borderTop: rowIndex ? `solid ${groupIndex ? '#303030' : '#505050'} 1px`: null}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
+            <div class="trow" :class="rowIndex ? (groupIndex ? 'trow-dark' : 'trow-light') : null" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8 trowh">
                 {{ `${palette.index + 1}: ${palette.key}` }}
               </div>
 
-              <div class="text-pre flex-grow-0" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
+              <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
@@ -292,6 +310,11 @@
       <x-preview :points="selectedColors" />
     </div>
   </v-app>
+  <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
+    <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
+      {{ showMethodsList.map(m => m.method.mid).join('\n') }}
+    </v-card>
+  </v-menu>
   <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
 </template>
 
@@ -313,6 +336,15 @@ function debounce (func, timeout = 25) {
   return (...args) => {
     clearTimeout(timer)
     timer = setTimeout(() => { func.apply(this, args) }, timeout)
+  }
+}
+
+function debounceFalse (func, timeout = 25) {
+  let timer
+
+  return (...args) => {
+    clearTimeout(timer)
+    timer = setTimeout(() => { func.apply(this, args) }, args[0] ? 0 : timeout)
   }
 }
 
@@ -349,7 +381,10 @@ export default {
     palette: null,
     lastMouseEnter: -Infinity,
     focusPending: false,
-    routeLoaded: false
+    routeLoaded: false,
+    showMethods: false,
+    showMethodsTarget: null,
+    showMethodsList: null
   }),
   methods: {
     async sort () {
@@ -454,10 +489,25 @@ export default {
           ...newParams
         }
       })
+    },
+    enterMethods (event, methods, index) {
+      this.showMethodsList = methods
+      // this.showMethods = !this.isExpanded(index)
+      this.updateShowMethods(!this.isExpanded(index))
+      this.showMethodsTarget = [event.clientX + 16, event.clientY + 16]
+    },
+    leaveMethods () {
+      this.updateShowMethods(false)
+      // this.showMethods = false
     }
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
+
+    this.updateShowMethods = debounceFalse((v) => {
+      this.showMethods = v
+    }, 300)
+
     this.sort()
   },
   computed: {
