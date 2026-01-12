@@ -3,12 +3,13 @@ import { test } from 'vitest'
 import Color from 'colorjs.io'
 import chroma from 'chroma-js'
 import { formatHex, oklab, rgb } from 'culori'
-import { COLOR_TYPES, convertColors, nonH } from '@/lib/color.ts'
+import { COLOR_TYPES, convertColors, lch, nonH, oklch } from '@/lib/color.ts'
 import { distance } from '@/lib/vector.ts'
 import { Poline, positionFunctions } from 'poline'
 import { PALETTES } from '@/palettes.js'
 import { distanceOk2, oklab2rgb, rgb2oklab } from '@/lib/color-oklab.ts'
-import { calculateHueSpread } from '@/lib/metrics-extended.ts'
+import { calculateHueSpread } from '@/lib/type-detect.ts'
+import { writeFile } from 'node:fs/promises'
 
 export function timed (fn) {
   const start = performance.now()
@@ -110,7 +111,20 @@ test('distance', () => {
   console.log('cio rgb', Color.distance(new Color(A), new Color(B), 'srgb'))
 })
 
-test('range', () => {
+test('range', async () => {
+  const table = [
+    ['model', 'x', 'y', 'z'],
+    ['---', '---', '---', '---']
+  ]
+  
+  function f (n) {
+    if (Math.round(n) !== n) {
+      return n.toFixed(2)
+    }
+    
+    return n
+  }
+  
   for(const t of Object.values(COLOR_TYPES)) {
     const x = convertColors(PALETTES['extreme-2'], t)
     
@@ -119,16 +133,28 @@ test('range', () => {
     }
     
     const mm = x[0][0].map((_,i) => [
-      Math.min(...x.map(a => a[0][i]).filter(x => !nonH(x))).toFixed(2),
-      Math.max(...x.map(a => a[0][i]).filter(x => !nonH(x))).toFixed(2),
+      f(Math.min(...x.map(a => a[0][i]).filter(x => !nonH(x)))),
+      f(Math.max(...x.map(a => a[0][i]).filter(x => !nonH(x)))),
       x.map(a => a[0][i]).some(x => nonH(x))
-    ]).map(x => !x[2] ? x.slice(0,2) : x)
+    ])
+      .map(x => !x[2] ? x.slice(0,2) : x)
+      .map(x => x.map(y => y === true ? 'NaN' : y))
+      .map(x => x.join('..'))
     
-    console.log(t, mm)
+    table.push([t, ...mm])
   }
+  
+  const str = table.map(r => `|${r.join('|')}|`).join('\n')
+  
+  await writeFile('./RANGE.md', str)
 })
 
 test('spread', () => {
   console.log([3,1,0,4], calculateHueSpread([3,1,0,4]))
   console.log([3,1,0,4,359], calculateHueSpread([3,1,0,4,359]))
+})
+
+test('lch', () => {
+  console.log(lch('#ff0000'))
+  console.log(oklch('#ff0000'))
 })
