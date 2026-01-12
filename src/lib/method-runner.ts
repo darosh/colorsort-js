@@ -1,6 +1,5 @@
-import { ColorType, convertColors } from './color.ts'
+import { ColorType, convertColors, distanceOk2 } from './color.ts'
 import { distance, distance4, distanceRadial0, distanceRadial2, Vector3, Vector4 } from './vector.ts'
-import { distanceOk2 } from './color-oklab.ts'
 // import debug from 'debug'
 
 // const log = debug('cs:runner')

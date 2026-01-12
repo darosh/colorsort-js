@@ -1,18 +1,33 @@
 import { Vector3 } from './vector.ts'
 import { UniColor } from './method-runner.ts'
-
-import { OKLab_to_OKLCH, rgb2okhsl, rgb2okhsv, rgb2oklab } from './color-oklab.ts'
 import chroma from 'chroma-js'
 
-import type { Lab, Lch, Hsl, Hsv } from 'culori/fn'
-import { useMode, modeLab65, modeRgb, modeLch65, modeHsl, modeHsv } from 'culori/fn'
+import type { Lab, Lch, Hsl, Hsv, Okhsl, Okhsv, Oklab, Oklch } from 'culori/fn'
+import {
+  useMode,
+  // modeLab65, modeLch65,
+  modeLab,
+  modeLch,
+  modeRgb,
+  modeHsl,
+  modeHsv,
+  modeOkhsl,
+  modeOklab,
+  modeOkhsv,
+  modeOklch
+} from 'culori/fn'
 
 useMode(modeRgb)
 
-const lab65 = useMode(modeLab65)
-const lch65 = useMode(modeLch65)
+const cuLab = useMode(modeLab)
+const cuLch = useMode(modeLch)
 const cuHsl = useMode(modeHsl)
 const cuHsv = useMode(modeHsv)
+
+const cuOkhsl = useMode(modeOkhsl)
+const cuOklab = useMode(modeOklab)
+const cuOkhsv = useMode(modeOkhsv)
+const cuOklch = useMode(modeOklch)
 
 function gl2luminance([r_, g_, b_]: [number, number, number]) {
   // relative luminance
@@ -53,18 +68,34 @@ export const gl = memoize((c) => {
 })
 
 export const cmyk = memoize((c) => gl2cmyk(gl(c)))
-export const oklab = memoize((c) => rgb2oklab(hexToRgb(c)))
-export const okhsl = memoize((c) => rgb2okhsl(c))
-export const okhsv = memoize((c) => rgb2okhsv(c))
-export const oklch = memoize((c) => OKLab_to_OKLCH(oklab(c)))
+
+export const oklab = memoize((c_) => {
+  const { l, a, b } = <Oklab>(<unknown>cuOklab(c_))
+  return [l, a, b]
+})
+
+export const okhsl = memoize((c_) => {
+  const { h, s, l } = <Okhsl>(<unknown>cuOkhsl(c_))
+  return [h, s, l]
+})
+
+export const okhsv = memoize((c_) => {
+  const { h, s, v } = <Okhsv>(<unknown>cuOkhsv(c_))
+  return [h, s, v]
+})
+
+export const oklch = memoize((c_) => {
+  const { l, c, h } = <Oklch>(<unknown>cuOklch(c_))
+  return [l, c, h]
+})
 
 export const lch = memoize((c_) => {
-  const { l, c, h } = <Lch>(<unknown>lch65(c_))
+  const { l, c, h } = <Lch>(<unknown>cuLch(c_))
   return [l, c, h]
 })
 
 export const lab = memoize((c) => {
-  const { l, a, b } = <Lab>(<unknown>lab65(c))
+  const { l, a, b } = <Lab>(<unknown>cuLab(c))
   return [l, a, b]
 })
 
@@ -110,6 +141,16 @@ function gl2cmyk([r, g, b]: number[]) {
   const y = (1 - b - k) * f
 
   return [c, m, y, k]
+}
+
+// https://github.com/w3c/csswg-drafts/issues/6642#issuecomment-945714988
+const OK2_SCALE = (2.016 + 2.045) / 2
+
+export function distanceOk2([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
+  let dL = L1 - L2
+  let da = OK2_SCALE * (a1 - a2)
+  let db = OK2_SCALE * (b1 - b2)
+  return Math.sqrt(dL ** 2 + da ** 2 + db ** 2)
 }
 
 export function convertColors(colors: string[], model: ColorType): [UniColor, string][] {
