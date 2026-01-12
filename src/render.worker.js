@@ -1,5 +1,5 @@
 import { detectPaletteType, SORTING_METHODS } from '@/lib/index.ts'
-import { oklab } from '@/lib/color.ts'
+import { lch, oklab } from '@/lib/color.ts'
 import { metricsEx } from '@/lib/metrics-extended.ts'
 
 export async function timed(fn) {
@@ -30,6 +30,7 @@ self.onmessage = async (msg) => {
 
     self.postMessage({ result, metrics, elapsed })
   } else if (getPaletteType) {
-    self.postMessage(detectPaletteType(getPaletteType))
+    const lchColors = getPaletteType.map((c) => lch(c))
+    self.postMessage(detectPaletteType(lchColors))
   }
 }

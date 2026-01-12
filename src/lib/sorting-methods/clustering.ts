@@ -2,6 +2,7 @@ import { centroid, distance, Vector3 } from '../vector.ts'
 import { randomizer } from '../randomizer.ts'
 import { methodRunner } from '../method-runner.ts'
 import { closestList } from '../uni-neighbors.ts'
+import { ColorType } from '../color.ts'
 
 interface ClusterNode {
   colors: Vector3[]
@@ -359,7 +360,7 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
   return result
 }
 
-const m = { rgb: 'gl', lab: 'lab-norm' }
+const m = { rgb: <ColorType>'gl', lab: <ColorType>'lab_norm' }
 
 export function cluster(colors: string[], model: 'rgb' | 'lab' = 'rgb', linkage: 'single' | 'complete' | 'average' = 'average', traversal: 'depth-first' | 'breadth-first' | 'balanced' = 'balanced') {
   return methodRunner(colors, (vectors) => sortByHierarchicalClustering(vectors, linkage, traversal), m[model] || model)

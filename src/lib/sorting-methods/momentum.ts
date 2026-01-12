@@ -1,10 +1,10 @@
 import { dot, normalize, subtract, Vector3 } from '../vector.ts'
-import { detectPaletteType } from '../metrics-type.ts'
+import { detectPaletteType } from '../type-detect.ts'
 import { metrics } from '../metrics.ts'
 import { ColorHelper, ColorHelperDelta, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
 import { closest, closestList, inlinest } from '../uni-neighbors.ts'
-import { deltaE } from '../color.ts'
+import { deltaE, lch } from '../color.ts'
 
 function calculateScore(from: Vector3, to: Vector3, prevDirection: Vector3, distanceFn: Distance3, momentumWeight: number = 1e6) {
   const dist = distanceFn(from, to)
@@ -184,7 +184,8 @@ export function momentumInlinestDeltaEOklab(colors: string[]) {
 }
 
 export function momentumInlinestDeltaEPlusOklab(colors: string[]) {
-  const { Kl, Kc, Kh } = detectPaletteType(colors)
+  const lchColors = colors.map((c) => lch(c))
+  const { Kl, Kc, Kh } = detectPaletteType(lchColors)
   const weights = <[number, number, number]>[Kl, Kc, Kh]
 
   return methodRunner(

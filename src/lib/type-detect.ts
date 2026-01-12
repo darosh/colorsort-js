@@ -1,33 +1,27 @@
-import { calculateVariances, MetricsVariances } from './metrics-variances.ts'
-import { lch } from './color.ts'
+import { calculateVariances, TypeVariances } from './type-variances.ts'
+import { nonH } from './color.ts'
+import { Vector3 } from './vector.ts'
 
 export type PaletteType = {
   Kl: number
   Kc: number
   Kh: number
   type: string
-  data: MetricsVariances & {
+  data: TypeVariances & {
     lightnessRange: number
     chromaRange: number
     hueSpread: number
   }
 }
 
-export function detectPaletteType(colors: string[]): PaletteType {
-  const variances = calculateVariances(colors)
-
-  // Also get the actual ranges for context
-  // const labColors = colors.map((color) => chroma(color).lab())
-  // const lchColors = labColors.map((lab) => chroma.lab(lab).lch())
-  const lchColors = colors.map((c) => lch(c))
-
+export function detectPaletteType(lchColors: Vector3[]): PaletteType {
+  // const lchColors = colors.map((c) => lch(c))
+  const variances = calculateVariances(lchColors)
   const lightnesses = lchColors.map(([L]) => L)
   const chromas = lchColors.map(([, C]) => C)
-  const hues = lchColors.map(([, , H]) => H)
-
   const lightnessRange = Math.max(...lightnesses) - Math.min(...lightnesses)
   const chromaRange = Math.max(...chromas) - Math.min(...chromas)
-  const hueSpread = calculateHueSpread(hues.filter((h) => !Number.isNaN(h)))
+  const hueSpread = lchColorsHueSpread(lchColors)
 
   // High variance/range = palette explores this dimension
   // Low variance/range = palette is uniform in this dimension
@@ -69,7 +63,7 @@ export function detectPaletteType(colors: string[]): PaletteType {
 }
 
 // Helper: Calculate hue spread (accounting for circularity)
-function calculateHueSpread(hues: number[]) {
+export function calculateHueSpread(hues: number[]) {
   if (hues.length === 0) {
     return 0
   }
@@ -90,4 +84,8 @@ function calculateHueSpread(hues: number[]) {
 
   // Spread is 360 minus the largest gap
   return 360 - maxGap
+}
+
+export function lchColorsHueSpread(lchColors: Vector3[]) {
+  return calculateHueSpread(lchColors.map(([, , H]) => H).filter((h) => !nonH(h)))
 }

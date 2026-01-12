@@ -32,30 +32,30 @@
         <span class="ml-4 text-grey-lighten-1"
           >{{ number(methodsCount) }}
           {{
-          methodsCount === 1 ? 'method' : 'methods'
+            methodsCount === 1 ? 'method' : 'methods'
           }}</span
         >
         <span class="ml-8 text-grey-lighten-1" v-show="filtered.length === types.length"
           >{{
-          number(types.length)
+            number(types.length)
           }}
           {{ types.length === 1 ? 'palette' : 'palettes' }}</span
         >
         <span class="ml-8 text-grey-lighten-3" v-show="filtered.length < types.length"
           >{{
-          number(filtered.length)
+            number(filtered.length)
           }}
           of {{ number(types.length) }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
         >
         <span class="mx-8 text-grey-lighten-1" v-show="filteredGroups.length === totalGroups"
           >{{
-          number(totalGroups)
+            number(totalGroups)
           }}
           {{ types.length === 1 ? 'result' : 'results' }}</span
         >
         <span class="mx-8 text-grey-lighten-3" v-show="filteredGroups.length < totalGroups"
           >{{
-          number(filteredGroups.length)
+            number(filteredGroups.length)
           }}
           of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
         >
@@ -262,7 +262,7 @@
         </v-virtual-scroll>
       </v-container>
 
-      <div class="fade" style="position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="palette">
+      <div class="fade" style="position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="palette?.type?.data">
         <div style="height: 29px;">{{ palette.index + 1 }}: {{ palette.key }}</div>
 
         <div class="d-flex mt-8">

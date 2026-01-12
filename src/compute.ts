@@ -1,4 +1,4 @@
-import { PaletteType } from './lib/metrics-type.ts'
+import { PaletteType } from './lib/type-detect.ts'
 import { getMetricsExRange, MetricsEx, metricsExQuality, metricsExQualitySum } from './lib/metrics-extended.ts'
 import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'

@@ -1,3 +1,5 @@
+import { nonH } from './color.ts'
+
 export type Vector3 = [number, number, number]
 export type Vector4 = [number, number, number, number]
 
@@ -19,7 +21,7 @@ export function distance4(a: Vector4, b: Vector4): number {
 }
 
 export function distanceRadial0(a: Vector3, b: Vector3) {
-  let dx = Number.isNaN(a[0]) && Number.isNaN(b[0]) ? 0 : a[0] - b[0] || 0
+  let dx = nonH(a[0]) && nonH(b[0]) ? 0 : a[0] - b[0] || 0
 
   const dy = a[1] - b[1]
   const dz = a[2] - b[2]
@@ -34,7 +36,7 @@ export function distanceRadial2(a: Vector3, b: Vector3) {
   const dx = a[0] - b[0]
   const dy = a[1] - b[1]
 
-  let dz = Number.isNaN(a[2]) && Number.isNaN(b[2]) ? 0 : a[2] - b[2] || 0
+  let dz = nonH(a[2]) && nonH(b[2]) ? 0 : a[2] - b[2] || 0
 
   dz += dz > 180 ? -360 : dz < -180 ? 360 : 0
   dz /= 180

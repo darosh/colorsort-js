@@ -1,10 +1,10 @@
 import { Vector3 } from '../vector.ts'
-import { relativeDifference } from '../metrics-relative.ts'
-import { detectPaletteType } from '../metrics-type.ts'
-import { calculateAdaptiveWeights, calculateVariances } from '../metrics-variances.ts'
+import { relativeDifference } from '../type-relative.ts'
+import { detectPaletteType } from '../type-detect.ts'
+import { calculateAdaptiveWeights, calculateVariances } from '../type-variances.ts'
 import { ColorHelperDelta, Distance3, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
-import { deltaE } from '../color.ts'
+import { deltaE, lch } from '../color.ts'
 
 export function graphDeltaE(colors: Vector3[], delta: Distance3): Vector3[] {
   const graph = new Map()
@@ -77,7 +77,8 @@ export function graphWeighted(colors: string[]) {
 }
 
 export function graphWeightedPlusPlus(colors: string[]) {
-  const { Kl, Kc, Kh } = detectPaletteType(colors)
+  const lchColors = colors.map((c) => lch(c))
+  const { Kl, Kc, Kh } = detectPaletteType(lchColors)
   const weights = [Kl, Kc, Kh]
 
   return methodRunner(
@@ -91,7 +92,8 @@ export function graphWeightedPlusPlus(colors: string[]) {
 }
 
 export function graphWeightedAdaptive1(colors: string[]) {
-  const variances = calculateVariances(colors)
+  const lchColors = colors.map((c) => lch(c))
+  const variances = calculateVariances(lchColors)
   const { Kc, Kh, Kl } = calculateAdaptiveWeights(variances)
   const weights = [Kl, Kc, Kh]
 
@@ -106,7 +108,8 @@ export function graphWeightedAdaptive1(colors: string[]) {
 }
 
 export function graphWeightedAdaptive2(colors: string[]) {
-  const variances = calculateVariances(colors)
+  const lchColors = colors.map((c) => lch(c))
+  const variances = calculateVariances(lchColors)
   const { Kc, Kh, Kl } = calculateAdaptiveWeights(variances)
   const weights = [Kl, Kc, Kh + 0.5]
 

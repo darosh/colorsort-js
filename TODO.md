@@ -1,6 +1,5 @@
 # TODO
 
-- [ ] culori 
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
 - [ ] analyze best picks (sorter vs type, ...?) 
@@ -25,6 +24,9 @@
 
 ## Done
 
+- [x] ref colors in runner
+- [x] test ranges
+- [x] culori
 - [x] set sticky info on mouseover
 - [x] N+ sort as "pagination"
 - [x] filter: palette, method

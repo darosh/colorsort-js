@@ -1,5 +1,7 @@
-import { distance, dot, subtract, normalize, Vector3 } from './vector.ts'
+import { distance, Vector3 } from './vector.ts'
 import { lch, oklab } from './color.ts'
+import { lchColorsHueSpread } from './type-detect.ts'
+import { metrics } from './metrics.ts'
 
 export type MetricsLch<T> = { L: T; C: T; H: T }
 
@@ -18,18 +20,15 @@ export type MetricsEx<T> = {
   curveRatio: T
   perceptualUniformity: T
   curveUniformity: T
-  hueSpread: T
-  chromaRange: T
-  lightnessRange: T
+  // hueSpread: T
+  // chromaRange: T
+  // lightnessRange: T
   harmonicScore: T
   harmonicCurveScore: T
 }
 
 export function metricsEx(colors: string[]): MetricsEx<number> {
-  const vectors = colors.map((c) => oklab(c))
-  const lchColors = colors.map((c) => lch(c))
-
-  if (vectors.length < 2) {
+  if (colors.length < 2) {
     return {
       totalDistance: 0,
       avgAngleChange: 0,
@@ -45,19 +44,25 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
       curveRatio: 0,
       perceptualUniformity: 0,
       curveUniformity: 0,
-      hueSpread: 0,
-      chromaRange: 0,
-      lightnessRange: 0,
+      // hueSpread: 0,
+      // chromaRange: 0,
+      // lightnessRange: 0,
       harmonicScore: 0,
       harmonicCurveScore: 0
     }
   }
 
-  let totalDistance = 0
+  const vectors = colors.map((c) => oklab(c))
+  const lchColors = colors.map((c) => lch(c))
+
+  const { totalDistance, avgAngleChange, devDistance, maxAngleChange, meanDistance } = metrics(vectors)
+
+  const hueSpread = lchColorsHueSpread(lchColors)
+
   let totalCurveDistance = 0
-  let angleChanges = []
-  let prevDirection = null
-  const distances = []
+  // let angleChanges = []
+  // let prevDirection = null
+  // const distances = []
   const curveDistances = []
 
   // Extend endpoints for Catmull-Rom (duplicate first/last points)
@@ -69,23 +74,23 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
   const hChanges = []
 
   for (let i = 1; i < vectors.length; i++) {
-    const dist = distance(vectors[i - 1], vectors[i])
-    totalDistance += dist
-    distances.push(dist)
+    // const dist = distance(vectors[i - 1], vectors[i])
+    // totalDistance += dist
+    // distances.push(dist)
 
     const curveDist = curveLengthBetween(extendedVectors[i - 1], extendedVectors[i], extendedVectors[i + 1], extendedVectors[i + 2])
     totalCurveDistance += curveDist
     curveDistances.push(curveDist)
 
-    const direction = normalize(subtract(vectors[i], vectors[i - 1]))
+    // const direction = normalize(subtract(vectors[i], vectors[i - 1]))
 
-    if (prevDirection && dist > 0) {
-      const dotProd = Math.max(-1, Math.min(1, dot(prevDirection, direction)))
-      const angle = Math.acos(dotProd) * (180 / Math.PI)
-      angleChanges.push(angle)
-    }
+    // if (prevDirection && dist > 0) {
+    //   const dotProd = Math.max(-1, Math.min(1, dot(prevDirection, direction)))
+    //   const angle = Math.acos(dotProd) * (180 / Math.PI)
+    //   angleChanges.push(angle)
+    // }
 
-    prevDirection = direction
+    // prevDirection = direction
 
     // LCH changes
     const [L1, C1, H1] = lchColors[i - 1]
@@ -113,16 +118,16 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
     }
   }
 
-  const meanDistance = totalDistance / (vectors.length - 1)
-  const devDistance = Math.sqrt(distances.reduce((acc, d) => acc + Math.pow(d - meanDistance, 2), 0) / (vectors.length - 1))
+  // const meanDistance = totalDistance / (vectors.length - 1)
+  // const devDistance = Math.sqrt(distances.reduce((acc, d) => acc + Math.pow(d - meanDistance, 2), 0) / (vectors.length - 1))
 
   const meanCurveDistance = totalCurveDistance / (vectors.length - 1)
 
   const devCurveDistance = Math.sqrt(curveDistances.reduce((acc, d) => acc + Math.pow(d - meanCurveDistance, 2), 0) / (vectors.length - 1))
 
-  const avgAngleChange = angleChanges.length > 0 ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length : 0
+  // const avgAngleChange = angleChanges.length > 0 ? angleChanges.reduce((a, b) => a + b, 0) / angleChanges.length : 0
 
-  const maxAngleChange = angleChanges.length > 0 ? Math.max(...angleChanges) : 0
+  // const maxAngleChange = angleChanges.length > 0 ? Math.max(...angleChanges) : 0
 
   // LCH metrics
   const lchAvgChange = {
@@ -154,15 +159,15 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
   const curveRatio = totalCurveDistance / totalDistance - 1
 
   // Hue spread: how well distributed are hues across the color wheel
-  const hues = lchColors.map(([, , h]) => h).filter((h) => !isNaN(h))
-  const hueSpread = hues.length > 1 ? calculateHueSpread(hues) : 0
+  // const hues = lchColors.map(([, , h]) => h).filter((h) => !nonH(h))
+  // const hueSpread = hues.length > 1 ? calculateHueSpread(hues) : 0
 
   // Chroma and lightness range
-  const chromas = lchColors.map(([, c]) => c)
-  const lightnesses = lchColors.map(([l]) => l)
+  // const chromas = lchColors.map(([, c]) => c)
+  // const lightnesses = lchColors.map(([l]) => l)
 
-  const chromaRange = Math.max(...chromas) - Math.min(...chromas)
-  const lightnessRange = Math.max(...lightnesses) - Math.min(...lightnesses)
+  // const chromaRange = Math.max(...chromas) - Math.min(...chromas)
+  // const lightnessRange = Math.max(...lightnesses) - Math.min(...lightnesses)
 
   // Harmonic score: combines uniform spacing with good hue distribution
   const harmonicScore = perceptualUniformity * 0.4 + Math.min(hueSpread / 180, 1) * 0.3 + (1 / (1 + lchDeviation.H / 45)) * 0.3
@@ -183,31 +188,12 @@ export function metricsEx(colors: string[]): MetricsEx<number> {
     curveRatio,
     perceptualUniformity,
     curveUniformity,
-    hueSpread,
-    chromaRange,
-    lightnessRange,
+    // hueSpread,
+    // chromaRange,
+    // lightnessRange,
     harmonicScore,
     harmonicCurveScore
   }
-}
-
-function calculateHueSpread(hues: number[]): number {
-  if (hues.length < 2) {
-    return 0
-  }
-
-  // Sort hues and calculate gaps
-  const sorted = [...hues] //.sort((a, b) => a - b)
-  const gaps = []
-
-  for (let i = 1; i < sorted.length; i++) {
-    gaps.push(sorted[i] - sorted[i - 1])
-  }
-  // Add wraparound gap
-  gaps.push(360 - sorted[sorted.length - 1] + sorted[0])
-
-  // Return the average gap (ideal spread = 360 / n colors)
-  return gaps.reduce((a, b) => a + b, 0) / gaps.length
 }
 
 function catmullRom(p0: Vector3, p1: Vector3, p2: Vector3, p3: Vector3, t: number): Vector3 {
@@ -255,9 +241,9 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     curveRatio: [],
     perceptualUniformity: [],
     curveUniformity: [],
-    hueSpread: [],
-    chromaRange: [],
-    lightnessRange: [],
+    // hueSpread: [],
+    // chromaRange: [],
+    // lightnessRange: [],
     harmonicScore: [],
     harmonicCurveScore: []
   }
@@ -283,9 +269,9 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     range.curveRatio.push(i.curveRatio)
     range.perceptualUniformity.push(i.perceptualUniformity)
     range.curveUniformity.push(i.curveUniformity)
-    range.hueSpread.push(i.hueSpread)
-    range.chromaRange.push(i.chromaRange)
-    range.lightnessRange.push(i.lightnessRange)
+    // range.hueSpread.push(i.hueSpread)
+    // range.chromaRange.push(i.chromaRange)
+    // range.lightnessRange.push(i.lightnessRange)
     range.harmonicScore.push(i.harmonicScore)
     range.harmonicCurveScore.push(i.harmonicCurveScore)
   }
@@ -310,9 +296,9 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
   range.curveRatio.sort(asc)
   range.perceptualUniformity.sort(dsc)
   range.curveUniformity.sort(dsc)
-  range.hueSpread.sort(asc)
-  range.chromaRange.sort(asc)
-  range.lightnessRange.sort(asc)
+  // range.hueSpread.sort(asc)
+  // range.chromaRange.sort(asc)
+  // range.lightnessRange.sort(asc)
   range.harmonicScore.sort(dsc)
   range.harmonicCurveScore.sort(dsc)
 
@@ -343,9 +329,9 @@ export function getMetricsExRange(list: MetricsEx<number>[]): MetricsEx<[number,
     curveRatio: [range.curveRatio[0], <number>range.curveRatio.at(-1)],
     perceptualUniformity: [range.perceptualUniformity[0], <number>range.perceptualUniformity.at(-1)],
     curveUniformity: [range.curveUniformity[0], <number>range.curveUniformity.at(-1)],
-    hueSpread: [range.hueSpread[0], <number>range.hueSpread.at(-1)],
-    chromaRange: [range.chromaRange[0], <number>range.chromaRange.at(-1)],
-    lightnessRange: [range.lightnessRange[0], <number>range.lightnessRange.at(-1)],
+    // hueSpread: [range.hueSpread[0], <number>range.hueSpread.at(-1)],
+    // chromaRange: [range.chromaRange[0], <number>range.chromaRange.at(-1)],
+    // lightnessRange: [range.lightnessRange[0], <number>range.lightnessRange.at(-1)],
     harmonicScore: [range.harmonicScore[0], <number>range.harmonicScore.at(-1)],
     harmonicCurveScore: [range.harmonicCurveScore[0], <number>range.harmonicCurveScore.at(-1)]
   }
@@ -382,9 +368,9 @@ export function metricsExQuality(value: MetricsEx<number>, range: MetricsEx<[num
     curveRatio: interpolate(value.curveRatio, range.curveRatio),
     perceptualUniformity: interpolate(value.perceptualUniformity, range.perceptualUniformity),
     curveUniformity: interpolate(value.curveUniformity, range.curveUniformity),
-    hueSpread: interpolate(value.hueSpread, range.hueSpread),
-    chromaRange: interpolate(value.chromaRange, range.chromaRange),
-    lightnessRange: interpolate(value.lightnessRange, range.lightnessRange),
+    // hueSpread: interpolate(value.hueSpread, range.hueSpread),
+    // chromaRange: interpolate(value.chromaRange, range.chromaRange),
+    // lightnessRange: interpolate(value.lightnessRange, range.lightnessRange),
     harmonicScore: interpolate(value.harmonicScore, range.harmonicScore),
     harmonicCurveScore: interpolate(value.harmonicCurveScore, range.harmonicCurveScore)
   }
@@ -406,14 +392,12 @@ export function metricsExQualitySum(value: MetricsEx<number>): number {
     curveRatio,
     perceptualUniformity,
     curveUniformity,
-    hueSpread,
-    chromaRange,
-    lightnessRange,
+    // hueSpread,
+    // chromaRange,
+    // lightnessRange,
     harmonicScore,
     harmonicCurveScore
   } = value
 
-  return (
-    totalDistance + avgAngleChange + maxAngleChange + meanDistance + devDistance + totalCurveDistance + meanCurveDistance + devCurveDistance + LA + CA + HA + LM + CM + HM + LD + CD + HD + curveRatio + perceptualUniformity + curveUniformity + hueSpread + chromaRange + lightnessRange + harmonicScore + harmonicCurveScore
-  )
+  return totalDistance + avgAngleChange + maxAngleChange + meanDistance + devDistance + totalCurveDistance + meanCurveDistance + devCurveDistance + LA + CA + HA + LM + CM + HM + LD + CD + HD + curveRatio + perceptualUniformity + curveUniformity + harmonicScore + harmonicCurveScore
 }

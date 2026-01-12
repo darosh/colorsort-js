@@ -1,9 +1,7 @@
-import { distance, dot, normalize, subtract } from './vector.ts'
-import { oklab } from './color.ts'
+import { distance, dot, normalize, subtract, Vector3 } from './vector.ts'
 
-export function metrics(colors: string[]) {
-  const vectors = colors.map((c) => oklab(c))
-
+// lab vectors
+export function metrics(vectors: Vector3[]) {
   if (vectors.length < 2) {
     return { totalDistance: 0, avgAngleChange: 0, maxAngleChange: 0, meanDistance: 0, devDistance: 0 }
   }
@@ -38,5 +36,11 @@ export function metrics(colors: string[]) {
 
   const maxAngleChange = angleChanges.length > 0 ? Math.max(...angleChanges) : 0
 
-  return { totalDistance, avgAngleChange, maxAngleChange, meanDistance, devDistance }
+  return {
+    totalDistance,
+    avgAngleChange,
+    maxAngleChange,
+    meanDistance,
+    devDistance
+  }
 }

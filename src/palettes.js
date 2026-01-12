@@ -3,16 +3,28 @@ import { oklab } from '@/lib/color.ts'
 import PALETTES_DATA from '../palettes.json' with { type: 'json' }
 import { Poline, positionFunctions } from 'poline'
 import { formatHex } from 'culori'
+import { randomizer } from '@/lib/randomizer.ts'
 
-let previous = 1
-const next = () => {
-  previous = (previous * 16807) % 2147483647
-  return previous / 2147483647
-}
+const next = randomizer()
 
 function toHex([h, s, l]) {
   return formatHex({ mode: 'okhsl', h, s, l })
 }
+
+// const r = randomizer()
+// const rp = () => {
+//   return new Set(new Poline({
+//     anchorColors: [
+//       [r() * 180, r() * .5 + .5, r() * .5 + .5],
+//       [r() * 180 + 180, r() * .5 + .5, r() * .5 + .5]
+//     ],
+//     numPoints: r() * 4 + 3,
+//     positionFunctionX: Object.values(positionFunctions)[Math.floor(r() * 8)],
+//     positionFunctionY: Object.values(positionFunctions)[Math.floor(r() * 8)],
+//     positionFunctionZ: Object.values(positionFunctions)[Math.floor(r() * 8)],
+//     invertedLightness: r() > .5
+//   }).colors.map(toHex)).values().toArray().filter(x => x !== '#000000').filter(x => x !== '#ffffff').slice(1,-1)
+// }
 
 export const PALETTES = {
   grayscale: Array(16)
@@ -38,6 +50,74 @@ export const PALETTES = {
   'helix-4': chroma.cubehelix().rotations(3).scale().correctLightness().colors(64),
   'yellow-grey': chroma.scale(['#fafa6e', '#2A4858']).mode('lch').colors(6),
   'blue-pink': chroma.scale(['blue', 'pink']).mode('oklch').colors(8),
+  'extreme-1': [
+    // Absolute extremes
+    '#000000', // black: L=0, V=0, undefined hue
+    '#FFFFFF', // white: L=100, zero chroma
+
+    // Primary extremes (RGB corners)
+    '#FF0000', // red
+    '#00FF00', // green
+    '#0000FF', // blue
+
+    // Secondary extremes
+    '#FFFF00', // yellow (max Lab b+)
+    '#00FFFF', // cyan (negative a*)
+    '#FF00FF', // magenta (extreme chroma)
+
+    // Near-black chromatic (hue instability tests)
+    '#010000',
+    '#000100',
+    '#000001',
+
+    // Near-white chromatic
+    '#FFFEFF',
+    '#FFFFFE',
+    '#FEFFFF',
+
+    // Max saturation, medium lightness
+    '#800000',
+    '#008000',
+    '#000080',
+
+    // High chroma past perceptual balance
+    '#FF7F00', // orange (Lab a+ b+)
+    '#7FFF00', // yellow-green
+    '#00FF7F', // spring green
+    '#007FFF', // azure
+    '#7F00FF', // violet
+    '#FF007F', // rose
+
+    // Grayscale ramp (zero chroma across L)
+    '#202020',
+    '#404040',
+    '#808080',
+    '#BFBFBF',
+
+    // Opponent-axis stress tests (Lab & OKLab)
+    // '#00FF00', // +a / -b boundary
+    // '#FF00FF', // +a / +b extreme
+    // '#00FFFF', // -a / -b extreme
+
+    // Clipping-prone values
+    '#FF0001',
+    '#00FF01',
+    '#0100FF',
+
+    // HDR-like illusion (bright but low chroma)
+    '#F8F8F8',
+    '#101010',
+
+    // Hue wrap & discontinuity
+    // '#FF0000',
+    '#FF0100',
+    '#FE0000',
+
+    // Brown / low-light chroma edge
+    '#4B2E1E',
+    '#7A5230'
+  ],
+  'extreme-2': ((extremes) => extremes.flatMap((r) => extremes.flatMap((g) => extremes.map((b) => `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`))))([0x00, 0x01, 0x7f, 0x80, 0xfe, 0xff]),
   'poline-1': new Poline({
     anchorColors: [
       [20, 0.42, 0.18],
@@ -640,6 +720,8 @@ export const PALETTES = {
     '#fffbeb'
   ]
 }
+
+// Object.assign(PALETTES, Object.fromEntries(Array(28).fill().map((_,i) => [`poline-random-${i+1}`, rp()])))
 
 Object.assign(PALETTES, Object.fromEntries(Object.entries(PALETTES_DATA).map(([key, value]) => [`lo-${key}`, value])))
 

@@ -1,19 +1,11 @@
-import chroma from 'chroma-js'
-import { distanceOk2, okhsl, okhsv, oklab, oklch } from './color.ts'
+import { ColorType, convertColors } from './color.ts'
 import { distance, distance4, distanceRadial0, distanceRadial2, Vector3, Vector4 } from './vector.ts'
+import { distanceOk2 } from './color-oklab.ts'
 // import debug from 'debug'
 
 // const log = debug('cs:runner')
 
 export type UniColor = Vector3 | Vector4 | any
-
-function normalizeLab(a: Vector3) {
-  return [(a[0] + 128) / 255, (a[1] + 128) / 255, (a[2] + 128) / 255]
-}
-
-function intLab(a: Vector3) {
-  return [(a[0] + 128), (a[1] + 128), (a[2] + 128)]
-}
 
 export type ColorHelper = {
   toColors(vectors: UniColor[]): string[]
@@ -59,7 +51,7 @@ function modelDistance(model: string) {
   return model.at(-1) === 'h' ? distanceRadial2 : model.at(-3) === 'h' ? distanceRadial0 : model === 'oklab' ? distanceOk2 : model === 'cmyk' ? distance4 : distance
 }
 
-export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColor[]) => UniColor[] | void, model: string = 'gl', deltaMethod_?: Distance<any> | DistanceOptions, distanceMethod_?: Distance<any> | DistanceOptions): string[] {
+export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColor[]) => UniColor[] | void, model: ColorType = 'gl', deltaMethod_?: Distance<any> | DistanceOptions, distanceMethod_?: Distance<any> | DistanceOptions): string[] {
   // log(`starting '${fn.name || (<any>fn).name_}'`)
 
   const vectorMap = new Map()
@@ -88,25 +80,7 @@ export function methodRunner<T>(colors: string[], fn: (this: T, vectors: UniColo
     }
   }
 
-  let vs: [UniColor, string][]
-
-  if (model === 'oklab') {
-    vs = colors.map((c) => [oklab(c), c])
-  } else if (model === 'lab-norm') {
-    vs = colors.map((c) => <[Vector3, string]>[normalizeLab(chroma(c).lab()), c])
-  } else if (model === 'lab-int') {
-    vs = colors.map((c) => <[Vector3, string]>[intLab(chroma(c).lab()), c])
-  } else if (model === 'oklch') {
-    vs = colors.map((c) => [oklch(c), c])
-  } else if (model === 'okhsl') {
-    vs = colors.map((c) => [okhsl(c), c])
-  } else if (model === 'okhsv') {
-    vs = colors.map((c) => [okhsv(c), c])
-  } else if (model === 'hex') {
-    vs = <[Vector3, string][]>(<unknown>colors.map((c) => [c, c]))
-  } else {
-    vs = colors.map((c) => <[Vector3, string]>(<unknown>[chroma(c).get(model), c]))
-  }
+  const vs: [UniColor, string][] = convertColors(colors, model)
 
   for (const [key, value] of vs) {
     vectorMap.set(key, value)

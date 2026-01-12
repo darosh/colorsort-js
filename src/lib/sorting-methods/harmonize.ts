@@ -60,7 +60,7 @@ export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3
   return result
 }
 
-export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 'oklch' | 'oklab' | 'okhsl' | 'okhsv' | 'lch' | 'lab' | 'rgb' | 'cmyk' = 'rgb', start: 'bright' | 'dark' = 'bright', distance: 'euclidean' | 'delta' = 'euclidean') {
+export function harmonizeModel(colors: string[], model: 'hsl' | 'hsv' | 'oklch' | 'oklab' | 'okhsl' | 'okhsv' | 'lch' | 'lab' | 'rgb' | 'cmyk' = 'rgb', start: 'bright' | 'dark' = 'bright', distance: 'euclidean' | 'delta' = 'euclidean') {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
@@ -97,7 +97,7 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hcl' | 'hsv' | 
 }
 
 harmonizeModel.params = [
-  { name: 'model', values: ['hsl', 'hcl', 'hsv', 'oklch', 'oklab', 'okhsl', 'okhsv', 'lch', 'lab', 'rgb', 'cmyk'] },
+  { name: 'model', values: ['hsl', 'hsv', 'oklch', 'oklab', 'okhsl', 'okhsv', 'lch', 'lab', 'rgb', 'cmyk'] },
   { name: 'start', values: ['bright', 'dark'] }
 ]
 

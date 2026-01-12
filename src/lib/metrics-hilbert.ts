@@ -2,7 +2,7 @@ import { hilbertIndex } from './sorting-methods/hilbert.ts'
 import { Vector3 } from './vector.ts'
 import { methodRunner } from './method-runner.ts'
 
-export function metricsHilbert (colors: string[], model: 'rgb' | 'lab-norm' = 'rgb') {
+export function metricsHilbert(colors: string[], model: 'rgb' | 'lab_int' = 'rgb') {
   let indices
 
   methodRunner(

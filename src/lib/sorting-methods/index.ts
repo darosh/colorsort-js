@@ -28,7 +28,7 @@ const MODELS = {
   LAB: ['CIELAB', 'https://en.wikipedia.org/wiki/CIELAB_color_space'],
   OKLAB: ['Oklab', 'https://en.wikipedia.org/wiki/Oklab_color_space'],
   HSL: ['HSL', 'https://en.wikipedia.org/wiki/HSL_and_HSV'],
-  HCL: ['HCL', 'https://en.wikipedia.org/wiki/HCL_color_space'],
+  LCH: ['LCH', 'https://en.wikipedia.org/wiki/HCL_color_space'],
   OKLCH: ['Oklch', 'https://en.wikipedia.org/wiki/Oklab_color_space'],
   CMYK: ['CMYK', 'https://en.wikipedia.org/wiki/CMYK_color_model']
 }
@@ -197,9 +197,9 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'Hilbert RGB',
+    name: 'Hilbert',
     fn: hilbert,
-    mid: 'HIL-RGB',
+    mid: 'HIL',
     description: {
       method: METHODS.HIL,
       model: MODELS.RGB

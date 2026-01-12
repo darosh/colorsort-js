@@ -55,7 +55,8 @@ export function evolveT<T>(colors: string[], fitness: (colors: string[]) => T, c
 }
 
 function fitness3D(palette: string[]) {
-  const { avgAngleChange, maxAngleChange, totalDistance } = metrics(palette)
+  const oklabColors = palette.map((c) => oklab(c))
+  const { avgAngleChange, maxAngleChange, totalDistance } = metrics(oklabColors)
   return [-totalDistance, -avgAngleChange, -maxAngleChange] // Minimize distance
 }
 

@@ -50,8 +50,8 @@ export function sortByHilbertCurve(colors: Vector3[]): Vector3[] {
   })
 }
 
-export function hilbert(colors: string[], model: 'rgb' | 'lab-int' = 'rgb') {
+export function hilbert(colors: string[], model: 'rgb' | 'lab_int' = 'rgb') {
   return methodRunner(colors, sortByHilbertCurve, model)
 }
 
-hilbert.params = [{ name: 'model', values: ['rgb', 'lab-int'] }]
+hilbert.params = [{ name: 'model', values: ['rgb', 'lab_int'] }]

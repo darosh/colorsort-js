@@ -27,7 +27,9 @@ test('palettes', async () => {
 for (const [key, colors] of Object.entries(PALETTES)) {
   test(`unique ${key}`, () => {
     if (colors.length !== new Set(colors).size) {
-      throw `${key} is not unique`
+      const duplicated = colors.filter(c => colors.filter(d => d === c).length > 1)
+      
+      throw `${key} is not unique, duplicated colors: ${duplicated.join(', ')}`
     }
   })
 }
