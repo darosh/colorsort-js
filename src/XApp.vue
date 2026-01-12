@@ -509,7 +509,7 @@ export default {
 
     this.updateShowMethods = debounceFalse((v) => {
       this.showMethods = v
-    }, 300)
+    }, 100)
 
     this.sort()
   },
