@@ -1,0 +1,23 @@
+{
+  "name": "colorsort-data-palettes",
+  "version": "0.0.0",
+  "devDependencies": {
+    "chroma-js": "^3.2.0",
+    "colorsort": "workspace:*",
+    "colorsort-data-palettes-lospec": "workspace:*",
+    "culori": "^4.0.2",
+    "poline": "^0.13.0"
+  },
+  "exports": {
+    "import": "./dist/colorsort-data-palettes.js",
+    "require": "./dist/colorsort-data-palettes.umd.cjs"
+  },
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "oxlint ./src --fix && oxfmt ./src",
+    "test": "deno run -A npm:vitest run"
+  },
+  "type": "module"
+}

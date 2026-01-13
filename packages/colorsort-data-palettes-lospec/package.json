@@ -1,0 +1,17 @@
+{
+  "name": "colorsort-data-palettes-lospec",
+  "version": "0.0.0",
+  "devDependencies": {
+    "json-stringify-pretty-compact": "^4.0.0"
+  },
+  "exports": {
+    "./palettes.json": "./dist/palettes.json"
+  },
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite build --watch",
+    "lint": "oxlint ./src --fix && oxfmt ./src"
+  },
+  "type": "module"
+}

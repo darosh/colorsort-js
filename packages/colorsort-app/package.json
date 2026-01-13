@@ -1,0 +1,26 @@
+{
+  "name": "colorsort-app",
+  "version": "0.0.0",
+  "dependencies": {
+    "colorsort": "workspace:*",
+    "colorsort-compute": "workspace:*",
+    "colorsort-data-palettes": "workspace:*",
+    "colorsort-data-sorted": "workspace:*"
+  },
+  "devDependencies": {
+    "chroma-js": "^3.2.0",
+    "debug": "^4.4.3",
+    "three": "^0.182.0",
+    "vue": "^3.5.26",
+    "vue-router": "^4.6.4",
+    "vuetify": "^3.11.6"
+  },
+  "private": true,
+  "scripts": {
+    "build": "tsc && vite build --outDir ../../docs",
+    "dev": "vite",
+    "lint": "oxlint ./src --fix && oxfmt ./src",
+    "preview": "vite preview"
+  },
+  "type": "module"
+}
