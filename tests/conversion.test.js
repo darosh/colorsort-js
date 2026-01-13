@@ -7,7 +7,6 @@ import { COLOR_TYPES, convertColors, lch, nonH, oklch } from '@/lib/color.ts'
 import { distance } from '@/lib/vector.ts'
 import { Poline, positionFunctions } from 'poline'
 import { PALETTES } from '@/palettes.js'
-import { distanceOk2, oklab2rgb, rgb2oklab } from '@/lib/color-oklab.ts'
 import { calculateHueSpread } from '@/lib/type-detect.ts'
 import { writeFile } from 'node:fs/promises'
 
@@ -135,10 +134,24 @@ test('range', async () => {
     const mm = x[0][0].map((_,i) => [
       f(Math.min(...x.map(a => a[0][i]).filter(x => !nonH(x)))),
       f(Math.max(...x.map(a => a[0][i]).filter(x => !nonH(x)))),
-      x.map(a => a[0][i]).some(x => nonH(x))
+      x.map(a => a[0][i]).filter(x => nonH(x)).map(z => {
+        if (z === undefined) {
+          return 'undefined'
+        } else if (z === null) {
+          return  'null'
+        } else if (z === Number.NaN) {
+          return  'NaN'
+        }
+      }).reduce((acc, item) => {
+        if (!acc.includes(item)) {
+          acc.push(item)
+        }
+        
+        return acc
+      }, [])
     ])
-      .map(x => !x[2] ? x.slice(0,2) : x)
-      .map(x => x.map(y => y === true ? 'NaN' : y))
+      .map(x => !x[2]?.length ? x.slice(0,2) : x)
+      // .map(x => x.map(y => y === true ? 'NaN' : y))
       .map(x => x.join('..'))
     
     table.push([t, ...mm])

@@ -110,7 +110,7 @@ export const hsv = memoize((c) => {
 })
 
 export function nonH(H: number) {
-  return H === undefined || isNaN(H) || H === null
+  return H === undefined //|| isNaN(H) || H === null
 }
 
 // export const lab2lch = memoize((c: [number, number, number]) => chroma.lab(...c).lch())
