@@ -355,7 +355,7 @@
           <tr @click="() => { filterMethod = alSt.mid; showStats = false}" v-for="alSt in algorithmStats">
             <td>{{ alSt.mid }}</td>
             <td class="text-right">{{ alSt.bestCount }}</td>
-            <td class="text-right">{{ alSt.onlyBestCount }}</td>
+            <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
             <td class="text-right">{{ alSt.winRate.toFixed(1) }}%</td>
           </tr>
           </tbody>
