@@ -384,7 +384,7 @@ export function kMeans(colors: string[], model: 'rgb' | 'lab' = 'rgb', k: number
 
 kMeans.params = [
   { name: 'modes', values: ['rgb', 'lab', 'oklab'] },
-  { name: 'k', values: [0.1, 0.3, 0.5, 0.7] },
+  { name: 'k', values: [0.3, 0.5, 0.7] }, // 0.1 never good
   { name: 'iterations', values: [10, 50, 100, 250] }
 ]
 

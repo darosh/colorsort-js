@@ -11,6 +11,7 @@ export type AlgoStat = {
   name: string
   scores: number[]
   bestCount: number
+  onlyBestCount: number
   totalCount: number
   avgScore: number
   medianScore: number
@@ -42,6 +43,7 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
             name: methodInfo.method.name,
             scores: [],
             bestCount: 0,
+            onlyBestCount: 0,
             totalCount: 0,
             avgScore: 0,
             medianScore: 0,
@@ -55,8 +57,14 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
         stat.scores.push(group.record.score)
         stat.totalCount++
 
-        if (methodInfo.best || group.methods.some((m) => m.best)) {
+        const isBest = methodInfo.best || group.methods.some((m) => m.best)
+        
+        if (isBest) {
           stat.bestCount++
+        }
+        
+        if (isBest && (group.methods.length === 1)) {
+          stat.onlyBestCount++
         }
 
         // Track performance by palette type
@@ -70,7 +78,7 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
 
         pt.scores.push(group.record.score)
 
-        if (methodInfo.best) {
+        if (isBest) {
           pt.bestCount++
         }
       }

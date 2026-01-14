@@ -38,7 +38,8 @@
   <v-app theme="dark" class="">
     <!--    <v-navigation-drawer v-model="showNav" width="423"></v-navigation-drawer>-->
 
-    <v-app-bar flat id="app-bar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72" color="transparent">
+    <v-app-bar flat id="app-bar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72"
+               color="transparent">
       <!--      <v-app-bar-nav-icon @click="showNav = !showNav" />-->
       <v-app-bar-title class="flex-0-0 mr-4" style="width: 194px;">Color Sorting R&D</v-app-bar-title>
       <v-toolbar-items class="mr-4">
@@ -48,51 +49,60 @@
       <v-spacer />
       <div v-show="routeLoaded">
         <span class="ml-4 text-grey-lighten-1"
-          >{{ number(methodsCount) }}
+        >{{ number(methodsCount) }}
           {{
             methodsCount === 1 ? 'method' : 'methods'
           }}</span
         >
         <span class="ml-8 text-grey-lighten-1" v-show="filtered.length === types.length"
-          >{{
+        >{{
             number(types.length)
           }}
           {{ types.length === 1 ? 'palette' : 'palettes' }}</span
         >
         <span class="ml-8 text-grey-lighten-3" v-show="filtered.length < types.length"
-          >{{
+        >{{
             number(filtered.length)
           }}
           of {{ number(types.length) }} {{ types.length === 1 ? 'palette' : 'palettes' }}</span
         >
         <span class="mx-8 text-grey-lighten-1" v-show="filteredGroups.length === totalGroups"
-          >{{
+        >{{
             number(totalGroups)
           }}
           {{ types.length === 1 ? 'result' : 'results' }}</span
         >
         <span class="mx-8 text-grey-lighten-3" v-show="filteredGroups.length < totalGroups"
-          >{{
+        >{{
             number(filteredGroups.length)
           }}
           of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
         >
       </div>
-      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify"
+                    autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1"
+                    placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
         <template v-slot:append-inner>
-          <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
+          <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }">
+            mdi-help-circle
+          </v-icon>
         </template>
       </v-text-field>
-      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
-      <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
+      <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details
+                    autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact"
+                    variant="solo-filled" max-width="180" />
+      <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`"
+             @click="onExpandAll"></v-btn>
 
       <template v-slot:extension>
-        <div class="d-flex" style="width: 100%;">
+        <div v-if="!showStats" class="d-flex" style="width: 100%;">
           <div style="width: 226px;" class="flex-grow-0 px-8"></div>
           <div class="d-flex ext flex-grow-1" style="flex-direction: row; height: 48px; padding-top: 12px;">
             <div style="width: 214px;" class="flex-grow-0"></div>
             <div style="width: 92px;" class="text-grey flex-grow-0 text-right">Time</div>
-            <div style="width: 428px;" class="text-grey flex-grow-0 text-center">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</div>
+            <div style="width: 428px;" class="text-grey flex-grow-0 text-center">Length, Avg, Dev / Curv., Avg, Dev /
+              Curv.%
+            </div>
             <div style="width: 120px;" class="text-grey flex-grow-0 text-center">Avg&deg;, Max&deg;</div>
             <div style="width: 120px;" class="text-grey flex-grow-0 text-center">P, H</div>
             <div style="width: 74px;" class="text-grey flex-grow-0 text-center">LCH</div>
@@ -108,93 +118,108 @@
       <v-card min-width="200" class="bg-surface-light">
         <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
           <tbody>
-            <tr>
-              <td><b>&lt;12</b></td>
-              <td>less than 12 colors</td>
-            </tr>
-            <tr>
-              <td><b>&gt;64</b></td>
-              <td>more than 64 colors</td>
-            </tr>
-            <tr>
-              <td><b>100</b></td>
-              <td>search number</td>
-            </tr>
-            <tr>
-              <td><b>nintendo</b></td>
-              <td>search name</td>
-            </tr>
-            <tr>
-              <td><b>random+</b></td>
-              <td>show all after name</td>
-            </tr>
-            <tr>
-              <td><b>42+</b></td>
-              <td>show all after number</td>
-            </tr>
-            <tr>
-              <td><b>lo-</b></td>
-              <td>palettes from lospec.com</td>
-            </tr>
-            <tr>
-              <td><b>poline-</b></td>
-              <td>palettes generated with poline</td>
-            </tr>
-            <tr>
-              <td colspan="2">search is case sensitive</td>
-            </tr>
+          <tr>
+            <td><b>&lt;12</b></td>
+            <td>less than 12 colors</td>
+          </tr>
+          <tr>
+            <td><b>&gt;64</b></td>
+            <td>more than 64 colors</td>
+          </tr>
+          <tr>
+            <td><b>100</b></td>
+            <td>search number</td>
+          </tr>
+          <tr>
+            <td><b>nintendo</b></td>
+            <td>search name</td>
+          </tr>
+          <tr>
+            <td><b>random+</b></td>
+            <td>show all after name</td>
+          </tr>
+          <tr>
+            <td><b>42+</b></td>
+            <td>show all after number</td>
+          </tr>
+          <tr>
+            <td><b>lo-</b></td>
+            <td>palettes from lospec.com</td>
+          </tr>
+          <tr>
+            <td><b>poline-</b></td>
+            <td>palettes generated with poline</td>
+          </tr>
+          <tr>
+            <td colspan="2">search is case sensitive</td>
+          </tr>
           </tbody>
         </v-table>
       </v-card>
     </v-menu>
 
     <v-main style="--v-layout-top: 96px;">
-      <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
+      <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex"
+                   style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { __key, groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div class="trow" :class="rowIndex ? (groupIndex ? 'trow-dark' : 'trow-light') : null" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
-              <div v-if="!groupIndex && rowIndex" style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;" class="pl-8 trowh">
+          <template
+              v-slot:default="{ itemRef, item: { __key, groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
+            <div class="trow" :class="rowIndex ? (groupIndex ? 'trow-dark' : 'trow-light') : null"
+                 style="position: relative; display: flex; align-items: center;" :ref="itemRef"
+                 @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
+              <div v-if="!groupIndex && rowIndex"
+                   style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;"
+                   class="pl-8 trowh">
                 {{ `${palette.index + 1}: ${palette.key}` }}
               </div>
 
-              <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
+              <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods"
+                   class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;"
+                   @click.stop="expandIndex(__key)">
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
               </div>
-              <div class="text-pre text-right flex-grow-0" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(__key)">
+              <div class="text-pre text-right flex-grow-0" style="width: 90px; cursor: pointer;"
+                   @click.stop="expandIndex(__key)">
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
                 }}
               </div>
 
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.totalDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.totalDistance)}">
                 <template v-if="quality?.totalDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.totalDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.meanDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.meanDistance)}">
                 <template v-if="quality?.meanDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.meanDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.devDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.devDistance)}">
                 <template v-if="quality?.devDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.devDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
 
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.totalCurveDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.totalCurveDistance)}">
                 <template v-if="quality?.totalCurveDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.totalCurveDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.meanCurveDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.meanCurveDistance)}">
                 <template v-if="quality?.meanCurveDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.meanCurveDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.devCurveDistance)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.devCurveDistance)}">
                 <template v-if="quality?.devCurveDistance === 0">*</template>
                 <template v-if="metrics">{{ metrics.devCurveDistance.toFixed(2) }}</template>
                 <template v-else>...</template>
@@ -205,74 +230,81 @@
                 <template v-if="metrics">{{ (100 * metrics.curveRatio).toFixed(1) }}%</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.avgAngleChange)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.avgAngleChange)}">
                 <template v-if="quality?.avgAngleChange === 0">*</template>
                 <template v-if="metrics">{{ metrics.avgAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </div>
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.maxAngleChange)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.maxAngleChange)}">
                 <template v-if="quality?.maxAngleChange === 0">*</template>
                 <template v-if="metrics">{{ metrics.maxAngleChange.toFixed() }}&deg;</template>
                 <template v-else>...</template>
               </div>
 
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.perceptualUniformity)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.perceptualUniformity)}">
                 <template v-if="quality?.perceptualUniformity === 0">*</template>
                 <template v-if="metrics">{{ metrics.perceptualUniformity.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
 
-              <div style="width: 60px" class="text-right px-1 flex-grow-0" :style="{color: scale(quality?.harmonicScore)}">
+              <div style="width: 60px" class="text-right px-1 flex-grow-0"
+                   :style="{color: scale(quality?.harmonicScore)}">
                 <template v-if="quality?.harmonicScore === 0">*</template>
                 <template v-if="metrics">{{ metrics.harmonicScore.toFixed(2) }}</template>
                 <template v-else>...</template>
               </div>
 
-              <div style="width: 100px; line-height: 14px; font-size: 12px;" class="text-center text-no-wrap flex-grow-0 py-2">
+              <div style="width: 100px; line-height: 14px; font-size: 12px;"
+                   class="text-center text-no-wrap flex-grow-0 py-2">
                 <template v-if="metrics">
                   <span :style="{color: scale(quality?.lchAvgChange.L)}">{{
                       metrics.lchAvgChange.L.toFixed(0)
-                  }}</span
+                    }}</span
                   >,
                   <span :style="{color: scale(quality?.lchAvgChange.C)}">{{
                       metrics.lchAvgChange.C.toFixed(0)
-                  }}</span
+                    }}</span
                   >,
                   <span :style="{color: scale(quality?.lchAvgChange.H)}">{{
                       metrics.lchAvgChange.H.toFixed(0)
-                  }}</span
+                    }}</span
                   ><br />
                   <span :style="{color: scale(quality?.lchMaxChange.L)}">{{ metrics.lchMaxChange.L.toFixed(0) }}</span
                   >,
                   <span :style="{color: scale(quality?.lchMaxChange.C)}">{{
                       metrics.lchMaxChange.C.toFixed(0)
-                  }}</span
+                    }}</span
                   >,
                   <span :style="{color: scale(quality?.lchMaxChange.H)}">{{
                       metrics.lchMaxChange.H.toFixed(0)
-                  }}</span
+                    }}</span
                   ><br />
                   <span :style="{color: scale(quality?.lchDeviation.L)}">{{ metrics.lchDeviation.L.toFixed(0) }}</span
                   >,
                   <span :style="{color: scale(quality?.lchDeviation.C)}">{{
                       metrics.lchDeviation.C.toFixed(0)
-                  }}</span
+                    }}</span
                   >,
                   <span :style="{color: scale(quality?.lchDeviation.H)}">{{
                       metrics.lchDeviation.H.toFixed(0)
-                  }}</span>
+                    }}</span>
                 </template>
               </div>
               <div style="width: 32px" class="text-right px-1 flex-grow-0" :style="{color: scale(bestDistanceQuality)}">
                 {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
               </div>
               <div style="width: 64px" class="text-center pr-0 pl-5 flex-grow-0">
-                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, typeIndex, rowIndex, methods.some(m => m.best))" />
+                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)"
+                                @click.stop="e => bestChange(e, typeIndex, rowIndex, methods.some(m => m.best))" />
               </div>
 
               <div class="pl-0 flex-grow-1">
                 <div style="display: flex; min-width: 80px;" v-intersect="v => onIntersect(v, __key, palette)">
-                  <div v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                  <div v-if="!rowIndex || isVisible[__key]" v-for="c in colors"
+                       style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                 </div>
               </div>
             </div>
@@ -280,42 +312,72 @@
         </v-virtual-scroll>
       </v-container>
 
-      <div class="fade" style="position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="palette?.type?.data">
+      <div class="fade"
+           style="position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;"
+           v-if="!showStats && palette?.type?.data">
         <div style="height: 29px;">{{ palette.index + 1 }}: {{ palette.key }}</div>
 
         <div class="d-flex mt-8">
-          <div v-for="c in  palette.colors" style="flex: 1 1; min-width: .1px; min-height: 10px" :style="{ background: c }" />
+          <div v-for="c in  palette.colors" style="flex: 1 1; min-width: .1px; min-height: 10px"
+               :style="{ background: c }" />
         </div>
 
         <v-table density="compact" class="mt-8 bg-transparent">
           <tbody>
-            <tr v-for="(value, key) in formatTypes(palette.type.data)">
-              <td class="pl-0 px-0">{{ key }}</td>
-              <td class="text-right px-0">{{ value }}</td>
-            </tr>
-            <tr>
-              <td colspan="2" class="font-italic text-right px-0">{{ palette.type.type }}</td>
-            </tr>
+          <tr v-for="(value, key) in formatTypes(palette.type.data)">
+            <td class="pl-0 px-0">{{ key }}</td>
+            <td class="text-right px-0">{{ value }}</td>
+          </tr>
+          <tr>
+            <td colspan="2" class="font-italic text-right px-0">{{ palette.type.type }}</td>
+          </tr>
           </tbody>
         </v-table>
 
         <div style="display: flex; align-items: center" class="mt-6">
-          <div style="height: 10px;" :style="{width: `${v * 100}%`, background: `rgb(${r},${g},${b})`}" v-for="[r,g,b,v] in palette.gram"></div>
+          <div style="height: 10px;" :style="{width: `${v * 100}%`, background: `rgb(${r},${g},${b})`}"
+               v-for="[r,g,b,v] in palette.gram"></div>
           <div class="text-no-wrap pl-2">{{ palette.gram.length }} / {{ palette.colors.length }}</div>
         </div>
       </div>
+
+      <v-container v-if="showStats">
+        <v-table class="mb-8 mx-auto" hover style="max-width: 600px;" striped="odd">
+          <thead>
+          <tr>
+            <th>Method</th>
+            <th class="text-right">Best count</th>
+            <th class="text-right">Only best count</th>
+            <th class="text-right">Win rate</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr @click="() => { filterMethod = alSt.mid; showStats = false}" v-for="alSt in algorithmStats">
+            <td>{{ alSt.mid }}</td>
+            <td class="text-right">{{ alSt.bestCount }}</td>
+            <td class="text-right">{{ alSt.onlyBestCount }}</td>
+            <td class="text-right">{{ alSt.winRate.toFixed(1) }}%</td>
+          </tr>
+          </tbody>
+        </v-table>
+      </v-container>
     </v-main>
 
-    <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
+    <div v-if="!showStats && showPreview"
+         style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
       <x-preview :points="selectedColors" />
     </div>
   </v-app>
-  <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
-    <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
+  <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;"
+          :model-value="showMethods" :target="showMethodsTarget">
+    <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}"
+            v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
       {{ showMethodsList.map(m => m.method.mid).join('\n') }}
     </v-card>
   </v-menu>
-  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
+  <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8"
+                     color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active
+                     :model-value="100 * rendered / renderingTotal" />
 </template>
 
 <script>
@@ -326,11 +388,14 @@ import { computePlan, computeRender, updateBest, updateDistance } from 'colorsor
 import chroma from 'chroma-js'
 import { render } from 'colorsort-compute/src/render.js'
 
+import { algorithmStats } from 'colorsort-analysis'
+
 import { deserialize } from 'colorsort-compute'
 
-import SORTED  from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
+import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 
 const COMPUTED = deserialize(SORTED)
+
 // const COMPUTED = null
 
 function debounce (func, timeout = 25) {
@@ -603,6 +668,9 @@ export default {
             }
           })
           .filter(t => t.groups.length)
+    },
+    algorithmStats () {
+      return algorithmStats(this.types).sort((a, b) => b.bestCount - a.bestCount)
     }
   },
   watch: {
