@@ -1,6 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { defineConfig } from 'vite'
+// import dts from 'vite-plugin-dts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -14,6 +15,9 @@ export default defineConfig({
       fileName: 'colorsort',
     },
   },
+  plugins: [
+    // dts({ outDir: 'dist/types' })
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

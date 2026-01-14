@@ -18,7 +18,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "vite build",
+    "build": "tsc && vite build",
     "dev": "vite build --watch",
     "lint": "tsc && oxlint ./src --fix && oxfmt ./src",
     "test": "deno run -A npm:vitest run"
