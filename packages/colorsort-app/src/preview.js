@@ -67,18 +67,26 @@ export function init(P) {
   scene = new THREE.Scene()
 
   camera = new THREE.PerspectiveCamera(20, innerWidth / innerHeight, 1, 1000)
-  camera.position.set(-S * 2, 0, 60)
+  camera.position.set(-S * 4, 0, 20)
 
   controls = new OrbitControls(camera, renderer.domElement)
   controls.enableDamping = true
   controls.minDistance = 10
   controls.maxDistance = 500
+  controls._rotateLeft(-85 * Math.PI / 180)
 
   matLine = new LineMaterial({
     color: 0xffffff,
     linewidth: 5, // in world units with size attenuation, pixels otherwise
     vertexColors: true,
-
+    dashed: false,
+    alphaToCoverage: true
+  })
+  
+  const matAxis = new LineMaterial({
+    color: 0xffffff,
+    linewidth: 2, // in world units with size attenuation, pixels otherwise
+    vertexColors: false,
     dashed: false,
     alphaToCoverage: true
   })
@@ -86,6 +94,20 @@ export function init(P) {
   initPoints(P)
 
   //
+
+  const A = 20
+  const axiGeometry = new LineGeometry()
+  axiGeometry.setPositions([
+    -A,-A,-A,-A,-A,A,
+    -A,-A,-A,-A,A,-A,
+    -A,-A,-A,A,-A,-A
+  ])
+  
+  const axis = new Line2(axiGeometry, matAxis)
+  axis.computeLineDistances()
+  axis.scale.set(1, 1, 1)
+
+  scene.add(axis)
 
   window.addEventListener('resize', onWindowResize)
   onWindowResize()
