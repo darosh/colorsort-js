@@ -19,9 +19,11 @@ export type Method = {
   }
 }
 
+export type MethodInfo = { index: number; best: boolean; method: Method; time: number; render: Function }
+
 export type PaletteGroup = {
   record: SortRecordGrouped
-  methods: { index: number; best: boolean; method: Method; time: number; render: Function }[]
+  methods: MethodInfo[]
 }
 
 export type PaletteRecord = {
