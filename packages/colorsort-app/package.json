@@ -4,6 +4,7 @@
   "dependencies": {
     "colorsort": "workspace:*",
     "colorsort-compute": "workspace:*",
+    "colorsort-analysis": "workspace:*",
     "colorsort-data-palettes": "workspace:*",
     "colorsort-data-sorted": "workspace:*"
   },

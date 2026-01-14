@@ -102,6 +102,9 @@ importers:
       colorsort:
         specifier: workspace:*
         version: link:../colorsort
+      colorsort-analysis:
+        specifier: workspace:*
+        version: link:../colorsort-analysis
       colorsort-compute:
         specifier: workspace:*
         version: link:../colorsort-compute

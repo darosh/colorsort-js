@@ -21,6 +21,10 @@ function computePlugin() {
     async buildStart() {
       const palettes = await getSorted()
 
+      if (!palettes) {
+        return
+      }
+      
       this.emitFile({
         type: 'asset',
         fileName: 'sorted.json',

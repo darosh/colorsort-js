@@ -7,8 +7,10 @@ import stringify from 'json-stringify-pretty-compact'
 export async function getSorted() {
   let palettes = Object.entries(PALETTES)
 
-  if (process.env.FAST) {
+  if (process.env.FAST === '1') {
     palettes = palettes.slice(0, 10)
+  } else if (process.env.FAST === '2') {
+    return  null
   }
 
   let lastLog = Date.now()
