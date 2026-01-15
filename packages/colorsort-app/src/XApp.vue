@@ -32,6 +32,15 @@
   display: flex;
   align-items: center; /* centers content vertically */
 }
+
+a.link {
+  color: #3090ff;
+  text-decoration: none;
+}
+
+a.link:hover {
+  text-decoration: underline;
+}
 </style>
 
 <template>
@@ -43,8 +52,8 @@
       <!--      <v-app-bar-nav-icon @click="showNav = !showNav" />-->
       <v-app-bar-title class="flex-0-0 mr-4" style="width: 194px;">Color Sorting R&D</v-app-bar-title>
       <v-toolbar-items class="mr-4">
-        <v-btn @click="showStats = false">Palettes</v-btn>
-        <v-btn @click="showStats = true">Statistics</v-btn>
+        <v-btn href="./#/">Palettes</v-btn>
+        <v-btn href="./#/stats">Statistics</v-btn>
       </v-toolbar-items>
       <v-spacer />
       <div v-show="routeLoaded">
@@ -159,7 +168,7 @@
     </v-menu>
 
     <v-main style="--v-layout-top: 96px;">
-      <v-container v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex"
+      <v-container @mousemove="listMouse" v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex"
                    style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template
@@ -170,7 +179,7 @@
               <div v-if="!groupIndex && rowIndex"
                    style="align-self: start; border-top: #505050 solid 1px; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; padding-top: 17px; margin-top: -0.5px;"
                    class="pl-8 trowh">
-                {{ `${palette.index + 1}: ${palette.key}` }}
+                <a class="link" :href="`./#/?p=${palette.index + 1}:${palette.key}`">{{ `${palette.index + 1}: ${palette.key}` }}</a>
               </div>
 
               <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods"
@@ -313,8 +322,8 @@
       </v-container>
 
       <div class="fade"
-           style="position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;"
-           v-if="!showStats && palette?.type?.data">
+           style="pointer-events: none; position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;"
+           v-if="showFade && !showStats && palette?.type?.data">
         <div style="height: 29px;">{{ palette.index + 1 }}: {{ palette.key }}</div>
 
         <div class="d-flex mt-8">
@@ -352,8 +361,8 @@
           </tr>
           </thead>
           <tbody>
-          <tr @click="() => { filterMethod = alSt.mid; showStats = false}" v-for="alSt in algorithmStats">
-            <td>{{ alSt.mid }}</td>
+          <tr v-for="alSt in algorithmStats">
+            <td><a class="link" :href="`./#/?m=${alSt.mid}`">{{ alSt.mid }}</a></td>
             <td class="text-right">{{ alSt.bestCount }}</td>
             <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
             <td class="text-right">{{ alSt.winRate.toFixed(1) }}%</td>
@@ -439,9 +448,6 @@ export default {
     debouncedPreview: null,
     expandedAll: false,
     expanded: {},
-    // filterPalette: null,
-    // filterMethod: null,
-    showStats: false,
     isVisible: {},
     isVisiblePending: {},
     isVisibleTimer: null,
@@ -452,7 +458,8 @@ export default {
     routeLoaded: false,
     showMethods: false,
     showMethodsTarget: null,
-    showMethodsList: null
+    showMethodsList: null,
+    showFade: true
   }),
   methods: {
     async sort () {
@@ -553,6 +560,7 @@ export default {
     onFocusOut () { this.focusPending = false },
     updateQuery (newParams) {
       this.$router.replace({
+        path: '/',
         query: {
           ...this.$route.query,
           ...newParams
@@ -571,6 +579,9 @@ export default {
     },
     leaveMethods () {
       this.updateShowMethods(false)
+    },
+    listMouse (event) {
+      this.showFade = event.screenX > 220
     }
   },
   mounted () {
@@ -583,6 +594,11 @@ export default {
     this.sort()
   },
   computed: {
+    showStats: {
+      get () {
+        return this.$route.path === '/stats'
+      },
+    },
     filterMethod: {
       get () {
         return this.$route.query.m || ''
@@ -648,8 +664,8 @@ export default {
         } else if (this.filterPalette[0] === '>') {
           return t.colors.length > number
         }
-
-        const match = afterMore || `${t.key}:${t.index + 1}`.includes(text)
+        
+        const match = afterMore || `${t.index + 1}:${t.key}`.includes(text)
 
         afterMore = more && match
 

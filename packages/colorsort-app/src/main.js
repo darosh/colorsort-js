@@ -14,7 +14,10 @@ const vuetify = createVuetify({
   directives
 })
 
-const routes = [{ path: '/', component: XHome }]
+const routes = [
+  { path: '/', component: XHome },
+  { path: '/stats', component: XHome }
+]
 
 const router = createRouter({
   history: createWebHashHistory(),
