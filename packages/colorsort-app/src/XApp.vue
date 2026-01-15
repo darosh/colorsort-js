@@ -130,7 +130,7 @@ a.link-grey {
           <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-4"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
           <v-slider density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8"></v-slider>
-          <div class="mr-8 ml-4 text-right" style="min-width: 210px;">Target coverage {{targetCoverage}} palettes</div>
+          <div class="mr-8 ml-4 text-right" style="min-width: 210px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target coverage</a> {{targetCoverage}} palettes</div>
         </div>
       </template>
     </v-app-bar>
@@ -487,7 +487,7 @@ export default {
               k.replace(/([a-z])([A-Z])/g, '$1 $2')
                   .split(' ')
                   .map((x, i) => i && x.length > 1 ? x.toLowerCase() : x)
-                  .join(' '), 
+                  .join(' '),
             v.toFixed(2)]),
       )
     },
@@ -681,7 +681,7 @@ export default {
       return filtered
           .map(t => {
             let groups
-            
+
             if (this.filterMethod[0] === '#') {
               groups = t.groups.filter(g => g.methods.some(m => names.includes(m.method.mid)))
             } else {
