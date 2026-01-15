@@ -168,7 +168,9 @@ a.link:hover {
     </v-menu>
 
     <v-main style="--v-layout-top: 96px;">
-      <v-container @mousemove="listMouse" v-if="!showStats" fluid :height="tableHeight" class="px-4 d-flex"
+      <v-container @mousemove="listMouse" v-if="!showStats" 
+                   fluid 
+                   class="px-4 d-flex"
                    style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template
@@ -581,7 +583,8 @@ export default {
       this.updateShowMethods(false)
     },
     listMouse (event) {
-      this.showFade = event.screenX > 220
+      console.log(event.clientX)
+      this.showFade = event.clientX > 220
     }
   },
   mounted () {
