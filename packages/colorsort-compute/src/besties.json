@@ -5,27 +5,7 @@
   },
   {
     "key": "grayscale-red",
-    "mid": "TSP(DE)-Lab"
-  },
-  {
-    "key": "random-8",
-    "mid": "Oklab"
-  },
-  {
-    "key": "random-16",
-    "mid": "GEN3-Oklab"
-  },
-  {
-    "key": "random-32",
-    "mid": "GEN3-Oklab"
-  },
-  {
-    "key": "random-48",
-    "mid": "Oklab"
-  },
-  {
-    "key": "random-128",
-    "mid": "TSP(MOM(Closest+))-Oklab"
+    "mid": "HARM:[hsl,dark]"
   },
   {
     "key": "yellow-green-1",
@@ -44,10 +24,6 @@
     "mid": "Original"
   },
   {
-    "key": "chroma-2",
-    "mid": "Oklab"
-  },
-  {
     "key": "helix-1",
     "mid": "Original"
   },
@@ -57,7 +33,7 @@
   },
   {
     "key": "helix-3",
-    "mid": "MOM(Inlinest,DE)-Oklab"
+    "mid": "HARM:[okhsl,dark]"
   },
   {
     "key": "helix-4",
@@ -72,48 +48,84 @@
     "mid": "Original"
   },
   {
+    "key": "extreme-1",
+    "mid": "HARM:[oklab,dark]"
+  },
+  {
+    "key": "extreme-2",
+    "mid": "PCA:[gl,tsp-adapt]"
+  },
+  {
+    "key": "poline-1",
+    "mid": "Original"
+  },
+  {
+    "key": "poline-2",
+    "mid": "HARM:[okhsl,bright]"
+  },
+  {
+    "key": "poline-3",
+    "mid": "Original"
+  },
+  {
+    "key": "poline-4",
+    "mid": "Original"
+  },
+  {
+    "key": "poline-5",
+    "mid": "HARM:[hsv,dark]"
+  },
+  {
+    "key": "poline-6",
+    "mid": "Original"
+  },
+  {
+    "key": "poline-7",
+    "mid": "HARM:[hsv,dark]"
+  },
+  {
+    "key": "poline-8",
+    "mid": "HARM:[hsv,dark]"
+  },
+  {
     "key": "primary",
     "mid": "GEN3-Oklab"
   },
   {
     "key": "palette-a",
-    "mid": "HIL-Lab"
+    "mid": "HARM:[lab,bright]"
   },
   {
     "key": "palette-b",
-    "mid": "MOM(Closest)-Oklab"
+    "mid": "HARM:[hsl,dark]"
   },
   {
     "key": "palette-c",
-    "mid": "MOM(Closest+)-Oklab"
+    "mid": "PCA:[oklab,tsp]"
   },
   {
     "key": "palette-d",
-    "mid": "TSP(MOM(Closest+))-Oklab"
+    "mid": "PCA:[oklab,tsp]"
   },
   {
     "key": "palette-e",
     "mid": "Original"
   },
   {
-    "key": "palette-f",
-    "mid": "Original"
-  },
-  {
     "key": "palette-g",
-    "mid": "TSP(DE)-Lab"
+    "mid": "HARM:[oklch,dark]"
   },
   {
     "key": "palette-h",
-    "mid": "MOM(Closest+)-Oklab"
+    "mid": "HARM:[lab,dark]"
   },
   {
     "key": "palette-i",
-    "mid": "Original"
+    "mid": "MOM(Inlinest)-Oklab"
   },
   {
     "key": "palette-j",
-    "mid": "NNA(DE) Lab"
+    "mid": "HARM:[hsl,dark]"
   },
   {
     "key": "palette-k",
@@ -121,19 +133,19 @@
   },
   {
     "key": "palette-l",
-    "mid": "TSP(DE)-Lab"
+    "mid": "HARM:[rgb,bright]"
   },
   {
     "key": "palette-m",
-    "mid": "MOM(Closest+)-Oklab"
+    "mid": "PCA:[gl,tsp]"
   },
   {
     "key": "palette-32",
-    "mid": "GEN-Oklab"
+    "mid": "HARM:[okhsv,bright]"
   },
   {
     "key": "palette-39",
-    "mid": "RGB"
+    "mid": "GEN-Oklab"
   },
   {
     "key": "palette-55",
@@ -141,7 +153,7 @@
   },
   {
     "key": "palette-64a",
-    "mid": "TSP(MOM(Closest+))-Oklab"
+    "mid": "HARM:[okhsl,bright]"
   },
   {
     "key": "palette-64b",
@@ -149,10 +161,430 @@
   },
   {
     "key": "palette-64c",
-    "mid": "HIL-Lab"
+    "mid": "Original"
   },
   {
     "key": "palette-110",
-    "mid": "TSP(MOM(Closest+))-Oklab"
+    "mid": "HARM:[rgb,dark]"
+  },
+  {
+    "key": "random-8",
+    "mid": "HARMED:[bright]"
+  },
+  {
+    "key": "random-16",
+    "mid": "GEN3-Oklab"
+  },
+  {
+    "key": "random-32",
+    "mid": "HARM:[oklab,dark]"
+  },
+  {
+    "key": "random-48",
+    "mid": "PCA:[oklab,tsp-adapt]"
+  },
+  {
+    "key": "random-128",
+    "mid": "PCA:[oklab,tsp-adapt]"
+  },
+  {
+    "key": "lo-1bit-monitor-glow",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-ice-cream-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-kirokaze-gameboy",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-2bit-demichrome",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-lava-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-hollow",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-mist-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-moonlight-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-rustic-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-ayy4",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-nintendo-gameboy-bgb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-2-bit-grayscale",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-wish-gb",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-twilight-5",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-blessing",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-ink",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-oil-6",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-inkpink",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-curiosities",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-cryptic-ocean",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-midnight-ablaze",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-eulbink",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-slso8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-nyx8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-rust-gold-8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-ammo-8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-borkfest",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-chocomilk-8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-pollen8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-justparchment8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-berry-nebula",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-dreamscape8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-funkyfuture-8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-citrink",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-gothic-bit",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-cl8uds",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-ink-crimson",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-japanese-woodblock",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-mushroom",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-sweetie-16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-pico-8",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-lost-century",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-na16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-steam-lords",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-island-joy-16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-endesga-16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-vanilla-milkshake",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-bubblegum-16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-commodore64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-fading-16",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-indecision",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-chasm",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-vinik24",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-fantasy-24",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-cc-29",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-mattt:31",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-wplace-palette-free-colours",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-endesga-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-zughy-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-mulfok32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-dawnbringer-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-resurrect-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-nanner-pancakes",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-pico-8-secret-palette",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-sheltzy32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-nanner-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-aerugo",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-downgraded-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-pineapple-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-afr-32",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-fleja-master-palette",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-pear36",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-lux2k",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-matt36",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-endesga-36",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-vines-flexible-linear-ramps",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-lux3k",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-waldgeist",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-lospec500",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-rosy-42",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-comfort44s",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-apollo",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-blk-neo",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-comfy52",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-nintendo-entertainment-system",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-wplace-colors",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-resurrect-64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-endesga-64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-aap-64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-journey",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-famicube",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-blk-nx64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-jehkoba64",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-the-perfect-palette-20",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-twilioquest-76",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-aap-splendor128",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-duel",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-aurora",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-windows-95-256-colours",
+    "mid": "Original"
+  },
+  {
+    "key": "lo-srb2",
+    "mid": "Original"
   }
 ]
