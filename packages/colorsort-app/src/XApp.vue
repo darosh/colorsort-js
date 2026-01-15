@@ -288,7 +288,7 @@ a.link-grey {
                 {{ bestDistance !== null ? (!bestDistance ? 0 : bestDistance.toFixed(2)) : '...' }}
               </div>
               <div style="width: 64px" class="text-center pr-0 pl-5 flex-grow-0">
-                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, typeIndex, rowIndex, methods.some(m => m.best))" />
+                <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, key, methods[0].index, methods.some(m => m.best))" />
               </div>
 
               <div class="pl-0 flex-grow-1">
@@ -485,10 +485,10 @@ export default {
     scale (v) {
       return v === undefined ? null : scale(v)
     },
-    bestChange (e, typeIndex, rowIndex, value) {
-      const set = this.types[typeIndex]
+    bestChange (e, key, methodsIndex, value) {
+      const set = this.types.find(d => d.key === key)
 
-      updateBest(set, rowIndex, !value)
+      updateBest(set, methodsIndex, !value)
       updateDistance(set)
 
       const besties = this.sorted.filter(d => d.best).map((s) => ({ key: s.palette.key, mid: s.method.mid }))
@@ -681,10 +681,7 @@ export default {
       return palettesData(this.sorted)
     },
     topCoverageAlgorithms () {
-      console.log(this.palettesData)
-      const tc = topCoverageAlgorithms(this.algorithmStats.slice(1), this.targetCoverage)
-      console.log(tc)
-      return tc
+      return topCoverageAlgorithms(this.algorithmStats.slice(1), this.targetCoverage)
     }
   },
   watch: {

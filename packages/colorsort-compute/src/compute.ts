@@ -141,9 +141,9 @@ function updateRangeAndQuality(palette: PaletteRecordGrouped) {
   }
 }
 
-export function updateBest(palette: PaletteRecordGrouped, groupIndex: number, value: boolean) {
-  const group = palette.groups[groupIndex]
-  const method = group.methods[0]
+export function updateBest(palette: PaletteRecordGrouped, methodsIndex: number, value: boolean) {
+  const group = <PaletteGroup>palette.groups.find(g => g.methods.some(m => m.index === methodsIndex))
+  const method = group.methods.find(m => m.index === methodsIndex)
 
   for (const g of palette.groups) {
     for (const m of g.methods) {
