@@ -1,4 +1,4 @@
-import { dot, normalize, subtract, Vector3 } from '../vector.ts'
+import { compareColors, dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { detectPaletteType } from '../type-detect.ts'
 import { metrics } from '../metrics.ts'
 import { ColorHelper, ColorHelperDelta, Distance3, methodRunner } from '../method-runner.ts'
@@ -98,8 +98,10 @@ export function momentumClosestOklab(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
+      const preSorted = [...data].sort(compareColors)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
-      return momentumBidiSort(data, closest(data), scoring)
+
+      return momentumBidiSort(preSorted, closest(preSorted, compareColors), scoring)
     },
     'oklab'
   )
@@ -109,11 +111,12 @@ export function momentumClosestBestOklab(colors: string[], post: 'raw' | 'tsp' =
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
-      const list = closestList(data).slice(0, 128)
+      const preSorted = [...data].sort(compareColors)
+      const list = closestList(preSorted, compareColors).slice(0, 128)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
 
       const result = list.map((start) => {
-        const vectors = momentumBidiSort(data, start, scoring)
+        const vectors = momentumBidiSort(preSorted, start, scoring)
 
         return {
           vectors,
@@ -136,12 +139,13 @@ export function momentumClosestBestDeltaEOklab(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      const list = closestList(data).slice(0, 128)
+      const preSorted = [...data].sort(compareColors)
+      const list = closestList(preSorted, compareColors).slice(0, 128)
       const de = (a: Vector3, b: Vector3) => this.delta(a, b)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
 
       const result = list.map((start) => {
-        const vectors = momentumBidiSort(data, start, scoring)
+        const vectors = momentumBidiSort(preSorted, start, scoring)
 
         return {
           vectors,
@@ -163,8 +167,9 @@ export function momentumInlinestOklab(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
+      const preSorted = [...data].sort(compareColors)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScore(a, b, c, this.distance)
-      return momentumBidiSort(data, inlinest(data, this), scoring)
+      return momentumBidiSort(preSorted, inlinest(preSorted, this), scoring)
     },
     'oklab'
   )
@@ -174,9 +179,10 @@ export function momentumInlinestDeltaEOklab(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
+      const preSorted = [...data].sort(compareColors)
       const de = (a: Vector3, b: Vector3) => this.delta(a, b)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
-      return momentumBidiSort(data, inlinest(data, this), scoring)
+      return momentumBidiSort(preSorted, inlinest(preSorted, this), scoring)
     },
     'oklab',
     { fn: deltaE, color: true }
@@ -191,9 +197,10 @@ export function momentumInlinestDeltaEPlusOklab(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
+      const preSorted = [...data].sort(compareColors)
       const de = (a: Vector3, b: Vector3) => this.delta(a, b, ...weights)
       const scoring: ScoringFn = (a: Vector3, b: Vector3, c: Vector3) => calculateScoreDeltaE(a, b, c, this.distance, de)
-      return momentumBidiSort(data, inlinest(data, this), scoring)
+      return momentumBidiSort(preSorted, inlinest(preSorted, this), scoring)
     },
     'oklab',
     { fn: deltaE, color: true }

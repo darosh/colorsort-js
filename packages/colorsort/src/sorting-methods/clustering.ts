@@ -1,4 +1,4 @@
-import { centroid, distance, Vector3 } from '../vector.ts'
+import { centroid, compareColors, compareColorsH, distance, Vector3 } from '../vector.ts'
 import { randomizer } from '../randomizer.ts'
 import { methodRunner } from '../method-runner.ts'
 import { closestList } from '../uni-neighbors.ts'
@@ -363,7 +363,14 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
 const m = { rgb: <ColorType>'gl', lab: <ColorType>'lab_norm' }
 
 export function cluster(colors: string[], model: 'rgb' | 'lab' = 'rgb', linkage: 'single' | 'complete' | 'average' = 'average', traversal: 'depth-first' | 'breadth-first' | 'balanced' = 'balanced') {
-  return methodRunner(colors, (vectors) => sortByHierarchicalClustering(vectors, linkage, traversal), m[model] || model)
+  return methodRunner(
+    colors,
+    (vectors) => {
+      const preSorted = [...vectors].sort(compareColors)
+      return sortByHierarchicalClustering(preSorted, linkage, traversal)
+    },
+    m[model] || model
+  )
 }
 
 cluster.params = [
@@ -376,7 +383,8 @@ export function kMeans(colors: string[], model: 'rgb' | 'lab' = 'rgb', k: number
   return methodRunner(
     colors,
     (vectors) => {
-      return sortByKMeans(vectors, Math.ceil(k * vectors.length), iterations)
+      const preSorted = [...vectors].sort(compareColors)
+      return sortByKMeans(preSorted, Math.ceil(k * vectors.length), iterations)
     },
     m[model] || model
   )
@@ -389,13 +397,16 @@ kMeans.params = [
 ]
 
 export function dbScan(colors: string[], model: 'rgb' | 'lab' = 'rgb', eps: number = 0.3, pts: number = 3) {
+  const compare = model.at(-3) === 'h' ? compareColorsH : compareColors
+
   return methodRunner(
     colors,
     (vectors) => {
-      const [a, b] = <[Vector3, Vector3]>closestList(vectors).at(-1)
+      const preSorted = [...vectors].sort(compareColors)
+      const [a, b] = <[Vector3, Vector3]>closestList(preSorted, compare).at(-1)
       const d = distance(a, b) * eps
 
-      return sortByDBSCAN(vectors, d, pts)
+      return sortByDBSCAN(preSorted, d, pts)
     },
     m[model] || model
   )

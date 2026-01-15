@@ -28,7 +28,7 @@
     "dev": "vite build --watch",
     "lint": "tsc && oxlint ./src --fix && oxfmt ./src",
     "range": "deno --allow-write scripts/range.js",
-    "test": "deno run -A npm:vitest run"
+    "test": "deno run -A npm:vitest run --bail=1"
   },
   "type": "module"
 }

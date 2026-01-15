@@ -27,6 +27,8 @@ export function evolve(colors: string[]) {
 export function evolveT<T>(colors: string[], fitness: (colors: string[]) => T, compare: (a: T, b: T) => number) {
   let previous = 1
 
+  const preSorted = [...colors].sort()
+
   const random = () => {
     previous = (previous * 16807) % 2147483647
     return previous / 2147483647
@@ -45,7 +47,7 @@ export function evolveT<T>(colors: string[], fitness: (colors: string[]) => T, c
     random,
     fitness,
     compare,
-    seed: () => [...colors].sort(() => random() - 0.5)
+    seed: () => [...preSorted].sort(() => random() - 0.5)
     // onGeneration: (stats) => {
     //   console.log(`Gen ${stats.generation}: Fitness = ${stats.bestFitness.toFixed(2)}`)
     // }

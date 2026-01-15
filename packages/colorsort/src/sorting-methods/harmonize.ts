@@ -1,4 +1,4 @@
-import { Vector3 } from '../vector.ts'
+import { compareColors, compareColorsH, Vector3 } from '../vector.ts'
 import { compareLumLCH, deltaE } from '../color.ts'
 import { ColorHelperDelta, methodRunner } from '../method-runner.ts'
 
@@ -6,30 +6,6 @@ interface HarmonizeOptions {
   selectStart: (colors: Vector3[]) => Vector3
   distance: (a: Vector3, b: Vector3) => number
   compareColors: (a: Vector3, b: Vector3) => number
-}
-
-function compareColors(a: Vector3, b: Vector3): number {
-  if (a[0] !== b[0]) {
-    return a[0] - b[0]
-  }
-
-  if (a[1] !== b[1]) {
-    return a[1] - b[1]
-  }
-
-  return a[2] - b[2]
-}
-
-function compareColorsH(a: Vector3, b: Vector3): number {
-  if (a[1] !== b[1]) {
-    return a[1] - b[1]
-  }
-
-  if (a[2] !== b[2]) {
-    return a[2] - b[2]
-  }
-
-  return a[0] - b[0]
 }
 
 export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3[] {

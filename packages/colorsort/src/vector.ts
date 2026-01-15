@@ -65,3 +65,27 @@ export function centroid(colors: Vector3[]): Vector3 {
 
   return [sum[0] / colors.length, sum[1] / colors.length, sum[2] / colors.length]
 }
+
+export function compareColors(a: Vector3, b: Vector3): number {
+  if (a[0] !== b[0]) {
+    return a[0] - b[0]
+  }
+
+  if (a[1] !== b[1]) {
+    return a[1] - b[1]
+  }
+
+  return a[2] - b[2]
+}
+
+export function compareColorsH(a: Vector3, b: Vector3): number {
+  if (a[1] !== b[1]) {
+    return a[1] - b[1]
+  }
+
+  if (a[2] !== b[2]) {
+    return a[2] - b[2]
+  }
+
+  return a[0] - b[0]
+}

@@ -1,4 +1,4 @@
-import { dot, normalize, subtract, Vector3 } from '../vector.ts'
+import { compareColors, compareColorsH, dot, normalize, subtract, Vector3 } from '../vector.ts'
 import { oklab } from '../color.ts'
 import { ColorHelper, methodRunner } from '../method-runner.ts'
 import { tspVectors } from '../uni-tsp.ts'
@@ -78,7 +78,8 @@ export function principal(colors: string[], model: 'gl' | 'lab' | 'oklab', post:
   return methodRunner(
     colors,
     function (this: ColorHelper, data: Vector3[]) {
-      const vec = sortByPrincipalComponent(data)
+      const preSort = [...data].sort(model.at(-3) ? compareColorsH : compareColors)
+      const vec = sortByPrincipalComponent(preSort)
 
       if (post === 'raw') {
         return vec
@@ -89,7 +90,7 @@ export function principal(colors: string[], model: 'gl' | 'lab' | 'oklab', post:
 
       if (post === 'tsp-adapt') {
         if (model === 'oklab') {
-          distance = adaptiveOklabDistanceFactory(data)
+          distance = adaptiveOklabDistanceFactory(preSort)
         } else {
           const oklabs = colors.map((c) => oklab(c))
           const okdist = adaptiveOklabDistanceFactory(oklabs)

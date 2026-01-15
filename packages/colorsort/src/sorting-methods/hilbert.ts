@@ -51,7 +51,15 @@ export function sortByHilbertCurve(colors: Vector3[]): Vector3[] {
 }
 
 export function hilbert(colors: string[], model: 'rgb' | 'lab_int' = 'rgb') {
-  return methodRunner(colors, sortByHilbertCurve, model)
+  const preSorted = [...colors].sort()
+
+  return methodRunner(
+    preSorted,
+    (vectors: Vector3[]) => {
+      return sortByHilbertCurve(vectors)
+    },
+    model
+  )
 }
 
 hilbert.params = [{ name: 'model', values: ['rgb', 'lab_int'] }]

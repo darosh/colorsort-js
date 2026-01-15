@@ -1,4 +1,4 @@
-import { Vector3 } from '../vector.ts'
+import { compareColors, Vector3 } from '../vector.ts'
 import { relativeDifference } from '../type-relative.ts'
 import { detectPaletteType } from '../type-detect.ts'
 import { calculateAdaptiveWeights, calculateVariances } from '../type-variances.ts'
@@ -49,7 +49,8 @@ export function graph(colors: string[], post: 'tsp' | 'raw' = 'raw') {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      const vectors = graphDeltaE(data, this.delta)
+      const preSorted = [...data].sort()
+      const vectors = graphDeltaE(preSorted, this.delta)
 
       if (post === 'raw') {
         return vectors
@@ -68,8 +69,9 @@ export function graphWeighted(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      const weights = relativeDifference(data)
-      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
+      const preSorted = [...data].sort(compareColors)
+      const weights = relativeDifference(preSorted)
+      return graphDeltaE(preSorted, (a, b) => this.delta(a, b, ...weights))
     },
     'lch',
     { fn: deltaE, color: true }
@@ -84,7 +86,8 @@ export function graphWeightedPlusPlus(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
+      const preSorted = [...data].sort()
+      return graphDeltaE(preSorted, (a, b) => this.delta(a, b, ...weights))
     },
     'hex',
     deltaE
@@ -100,7 +103,8 @@ export function graphWeightedAdaptive1(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      return graphDeltaE(data, (a, b) => this.delta(a, b, ...weights))
+      const preSorted = [...data].sort()
+      return graphDeltaE(preSorted, (a, b) => this.delta(a, b, ...weights))
     },
     'hex',
     deltaE
@@ -116,7 +120,8 @@ export function graphWeightedAdaptive2(colors: string[]) {
   return methodRunner(
     colors,
     function (this: ColorHelperDelta, data: Vector3[]) {
-      return graphDeltaE(data, (a: Vector3, b: Vector3) => this.delta(a, b, ...weights))
+      const preSorted = [...data].sort()
+      return graphDeltaE(preSorted, (a: Vector3, b: Vector3) => this.delta(a, b, ...weights))
     },
     'hex',
     deltaE

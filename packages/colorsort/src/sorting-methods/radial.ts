@@ -1,4 +1,4 @@
-import { Vector3 } from '../vector.ts'
+import { compareColors, compareColorsH, Vector3 } from '../vector.ts'
 import { ColorHelper, methodRunner } from '../method-runner.ts'
 
 export function sortByHslSpiral(this: any, colors: Vector3[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up'): Vector3[] {
@@ -78,8 +78,11 @@ export function sortByHslSpiral(this: any, colors: Vector3[], model: 'hsl' | 'hs
 export function spiral(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', mode: 'outward' | 'inward' | 'bottom-up' | 'top-down' = 'bottom-up') {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      return sortByHslSpiral(data, model, mode)
+    function (this: ColorHelper, vectors: Vector3[]) {
+      const compare = model.at(-3) ? compareColorsH : compareColors
+      const preSorted = [...vectors].sort(compare)
+
+      return sortByHslSpiral(preSorted, model, mode)
     },
     model
   )
@@ -98,6 +101,7 @@ export function sortByHslCylindrical(colors: Vector3[], model: 'hsl' | 'hsv' | '
     // Calculate spiral parameter: combine hue (angle) and lightness (height)
     // Saturation affects the radius
     const spiralParam = (hsl[2] || 0) * 360 + hsl[0] // Lightness * 360 + Hue
+
     return { vec, hsl, spiralParam }
   })
 
@@ -118,8 +122,10 @@ export function sortByHslCylindrical(colors: Vector3[], model: 'hsl' | 'hsv' | '
 export function cylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'okhsl' | 'okhsv' | 'oklch' = 'hsl', direction: 'ascending' | 'descending' = 'ascending') {
   return methodRunner(
     colors,
-    function (this: ColorHelper, data: Vector3[]) {
-      return sortByHslCylindrical(data, model, direction)
+    function (this: ColorHelper, vectors: Vector3[]) {
+      const compare = model.at(-3) ? compareColorsH : compareColors
+      const preSorted = [...vectors].sort(compare)
+      return sortByHslCylindrical(preSorted, model, direction)
     },
     model
   )

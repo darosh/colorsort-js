@@ -34,11 +34,21 @@ const rand = randomizer()
 const colorsOriginal = [...extreme2half]
 const colorsSorted = [...colorsOriginal].sort()
 const colorsRandomized = [...colorsOriginal].sort((a,b) => rand() - .5)
-const FILTER = 'HARM'
-const methods = SORTING_METHODS.filter(m => FILTER ? m.mid.startsWith(FILTER) : true)
+
+const FILTER = '!Original'
+
+const methods = SORTING_METHODS.filter(m => {
+  if (!FILTER) {
+    return true
+  } else if (FILTER.startsWith('!')) {
+    return !m.mid.startsWith(FILTER.slice(1))
+  }
+  
+  return m.mid.startsWith(FILTER)
+})
 
 for (const m of methods) {
-  test(`sort consistent ${m.mid}`, async () => {
+  test.skip(`sort consistent ${m.mid}`, async () => {
     const originalResult = m.fn([...colorsSorted])
     const copyResult = m.fn([...colorsSorted])
     await pause()

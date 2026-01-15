@@ -1,11 +1,13 @@
 import { ColorHelper } from './method-runner.ts'
 import { dot, normalize, subtract, Vector3 } from './vector.ts'
 
-export function closest(data: Vector3[]) {
-  return closestList(data)[0]
+export type ColorCompare = (a: Vector3, b: Vector3) => number
+
+export function closest(data: Vector3[], compareColors: ColorCompare) {
+  return closestList(data, compareColors)[0]
 }
 
-export function closestList(data: Vector3[]) {
+export function closestList(data: Vector3[], compareColors: ColorCompare) {
   const list = []
 
   for (let i = 0; i < data.length; i++) {
@@ -20,7 +22,16 @@ export function closestList(data: Vector3[]) {
     }
   }
 
-  list.sort((a, b) => a.dist - b.dist)
+  list.sort((a, b) => {
+    if (a.dist !== b.dist) {
+      return a.dist - b.dist
+    }
+
+    const aa = [...a.data].sort(compareColors)
+    const bb = [...b.data].sort(compareColors)
+
+    return compareColors(aa[0], bb[0])
+  })
 
   return <[Vector3, Vector3][]>list.map((d) => d.data)
 }
