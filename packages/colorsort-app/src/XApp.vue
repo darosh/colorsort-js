@@ -583,7 +583,6 @@ export default {
       this.updateShowMethods(false)
     },
     listMouse (event) {
-      console.log(event.clientX)
       this.showFade = event.clientX > 220
     }
   },
