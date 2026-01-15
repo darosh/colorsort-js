@@ -43,7 +43,7 @@ a.link:hover {
 }
 
 a.link-grey {
-  color: #444444;
+  color: #aaaaaa;
 }
 </style>
 
