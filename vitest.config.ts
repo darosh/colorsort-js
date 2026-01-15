@@ -9,5 +9,9 @@ export default defineConfig({
   },
   test: {
     testTimeout: 1000_000,
-  },
+    diff: {
+      expand: false,
+      truncateThreshold: 1
+    }
+  }
 })

@@ -117,6 +117,28 @@ export function nonH(H: number) {
 
 export const luminance = memoize((c: string) => gl2luminance(gl(c)))
 
+export function compareLumLCH(a: string, b: string) {
+  const lA = luminance(a)
+  const lB = luminance(b)
+
+  if (lA !== lB) {
+    return lA - lB
+  }
+
+  const lchA = lch(a)
+  const lchB = lch(b)
+
+  if (lchA[0] !== lchB[0]) {
+    return lchA[0] - lchB[0]
+  }
+
+  if (lchA[1] !== lchB[1]) {
+    return lchA[1] - lchB[1]
+  }
+
+  return lchA[2] - lchB[2]
+}
+
 export function flatRgb(hexes: string[]) {
   return hexes.map((c) => hexToRgb(c)).flat()
 }

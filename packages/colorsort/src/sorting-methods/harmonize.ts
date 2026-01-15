@@ -1,10 +1,35 @@
 import { Vector3 } from '../vector.ts'
-import { deltaE, luminance } from '../color.ts'
+import { compareLumLCH, deltaE } from '../color.ts'
 import { ColorHelperDelta, methodRunner } from '../method-runner.ts'
 
 interface HarmonizeOptions {
   selectStart: (colors: Vector3[]) => Vector3
   distance: (a: Vector3, b: Vector3) => number
+  compareColors: (a: Vector3, b: Vector3) => number
+}
+
+function compareColors(a: Vector3, b: Vector3): number {
+  if (a[0] !== b[0]) {
+    return a[0] - b[0]
+  }
+
+  if (a[1] !== b[1]) {
+    return a[1] - b[1]
+  }
+
+  return a[2] - b[2]
+}
+
+function compareColorsH(a: Vector3, b: Vector3): number {
+  if (a[1] !== b[1]) {
+    return a[1] - b[1]
+  }
+
+  if (a[2] !== b[2]) {
+    return a[2] - b[2]
+  }
+
+  return a[0] - b[0]
 }
 
 export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3[] {
@@ -16,7 +41,7 @@ export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3
     return colors
   }
 
-  const { selectStart, distance } = options
+  const { selectStart, distance, compareColors } = options
 
   // Build complete graph edges
   const edges = new Map<Vector3, Vector3[]>()
@@ -44,11 +69,13 @@ export function harmonize(colors: Vector3[], options: HarmonizeOptions): Vector3
     let minDistance = distance(current, nearest)
 
     for (let i = 1; i < unvisited.length; i++) {
-      const d = distance(current, unvisited[i])
+      const candidate = unvisited[i]
+      const d = distance(current, candidate)
 
-      if (d < minDistance) {
+      // Use lexicographic comparison as tie-breaker
+      if (d < minDistance || (d === minDistance && compareColors(candidate, nearest) < 0)) {
         minDistance = d
-        nearest = unvisited[i]
+        nearest = candidate
       }
     }
 
@@ -70,7 +97,7 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hsv' | 'oklch' 
         const hexes = toColors(colors)
 
         const hex = hexes.reduce((brightest, color) => {
-          return luminance(color) > luminance(brightest) ? color : brightest
+          return compareLumLCH(color, brightest) > 0 ? color : brightest
         })
 
         return colors[hexes.indexOf(hex)]
@@ -80,7 +107,7 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hsv' | 'oklch' 
         const hexes = toColors(colors)
 
         const hex = hexes.reduce((darkest, color) => {
-          return luminance(color) < luminance(darkest) ? color : darkest
+          return compareLumLCH(color, darkest) < 0 ? color : darkest
         })
 
         return colors[hexes.indexOf(hex)]
@@ -88,7 +115,8 @@ export function harmonizeModel(colors: string[], model: 'hsl' | 'hsv' | 'oklch' 
 
       return harmonize(data, {
         selectStart: start === 'bright' ? selectBrightest : selectDarkest,
-        distance: distance === 'euclidean' ? this.distance : this.delta
+        distance: distance === 'euclidean' ? this.distance : this.delta,
+        compareColors: model.at(-3) === 'h' ? compareColorsH : compareColors
       })
     },
     model,
