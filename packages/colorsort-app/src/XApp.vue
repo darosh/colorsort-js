@@ -672,11 +672,25 @@ export default {
         return filtered
       }
 
+      let names
+      if (this.filterMethod[0] === '#') {
+        names = topCoverageAlgorithms(this.algorithmStats.slice(1), Number.parseInt(this.filterMethod.slice(1), 10))
+            .map(x => x.mid)
+      }
+
       return filtered
           .map(t => {
+            let groups
+            
+            if (this.filterMethod[0] === '#') {
+              groups = t.groups.filter(g => g.methods.some(m => names.includes(m.method.mid)))
+            } else {
+              groups = t.groups.filter(g => g.methods.some(m => m.method.mid.includes(this.filterMethod)))
+            }
+
             return {
               ...t,
-              groups: t.groups.filter(g => g.methods.some(m => m.method.mid.includes(this.filterMethod)))
+              groups
             }
           })
           .filter(t => t.groups.length)
@@ -701,8 +715,11 @@ export default {
     palettesData () {
       return palettesData(this.sorted)
     },
+    topCoverageAlgorithmsNoOriginal () {
+      return topCoverageAlgorithms(this.algorithmStats.slice(1), this.targetCoverage)
+    },
     topCoverageAlgorithms () {
-      return topCoverageAlgorithms(this.includeOriginal ? this.algorithmStats : this.algorithmStats.slice(1), this.targetCoverage)
+      return topCoverageAlgorithms(this.includeOriginal ? this.algorithmStats : this.topCoverageAlgorithmsNoOriginal, this.targetCoverage)
     }
   },
   watch: {
