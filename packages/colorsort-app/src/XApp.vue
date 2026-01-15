@@ -325,6 +325,10 @@ a.link-grey {
               <td class="text-right px-0">{{ value }}</td>
             </tr>
             <tr>
+              <td class="pl-0 px-0">groups</td>
+              <td class="text-right px-0">{{ palette.groups.length }} / {{ (100 * palette.groups.length / algorithmStats.length).toFixed(0) }}%</td>
+            </tr>
+            <tr>
               <td colspan="2" class="font-italic text-right px-0">{{ palette.type.type }}</td>
             </tr>
           </tbody>
@@ -479,7 +483,12 @@ export default {
     },
     formatTypes (obj) {
       return Object.fromEntries(
-          Object.entries(obj).map(([k, v]) => [k, v.toFixed(2)]),
+          Object.entries(obj).map(([k, v]) => [
+              k.replace(/([a-z])([A-Z])/g, '$1 $2')
+                  .split(' ')
+                  .map((x, i) => i && x.length > 1 ? x.toLowerCase() : x)
+                  .join(' '), 
+            v.toFixed(2)]),
       )
     },
     setPreview (colors) {
