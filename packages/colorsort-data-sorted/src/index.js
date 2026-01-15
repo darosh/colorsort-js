@@ -10,7 +10,7 @@ export async function getSorted() {
   if (process.env.FAST === '1') {
     palettes = palettes.slice(0, 10)
   } else if (process.env.FAST === '2') {
-    return  null
+    return null
   }
 
   let lastLog = Date.now()

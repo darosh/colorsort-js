@@ -1,5 +1,5 @@
 // Extract all unique algorithms and their performance
-import type { PaletteRecordGrouped } from 'colorsort-compute'
+import type { PaletteRecordGrouped, PaletteRecord, SortRecord } from 'colorsort-compute'
 
 export type PaletteType = {
   scores: number[]
@@ -18,6 +18,7 @@ export type AlgoStat = {
   stdDev: number
   winRate: number
   paletteTypes: Map<string, PaletteType>
+  palettes: string[]
 }
 
 export function algorithmStats(records: PaletteRecordGrouped[]) {
@@ -49,7 +50,8 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
             medianScore: 0,
             stdDev: 0,
             winRate: 0,
-            paletteTypes: new Map()
+            paletteTypes: new Map(),
+            palettes: []
           })
         }
 
@@ -58,12 +60,13 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
         stat.totalCount++
 
         const isBest = methodInfo.best || group.methods.some((m) => m.best)
-        
+
         if (isBest) {
           stat.bestCount++
+          stat.palettes.push(palette.key)
         }
-        
-        if (isBest && (group.methods.length === 1)) {
+
+        if (isBest && group.methods.length === 1) {
           stat.onlyBestCount++
         }
 
@@ -96,6 +99,48 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
   })
 
   return Array.from(algoMap.values()).sort((a, b) => a.avgScore - b.avgScore)
+}
+
+export function palettesData(sr: SortRecord[]) {
+  return sr.reduce(
+    (acc: PaletteRecord[], item) => {
+      if (!acc.find((p) => p.key === item.palette.key)) {
+        acc.push(item.palette)
+      }
+
+      return acc
+    },
+    <PaletteRecord[]>[]
+  )
+}
+
+export function topCoverageAlgorithms(algorithmStats: AlgoStat[], targetCoverage: number) {
+  const palettes = new Set()
+  const top = []
+
+  for (const alst of algorithmStats) {
+    if (!alst.bestCount) {
+      continue
+    }
+
+    const used = alst.palettes.some((p) => !palettes.has(p))
+
+    if (used) {
+      for (const pal of alst.palettes) {
+        if (!palettes.has(pal)) {
+          palettes.add(pal)
+        }
+      }
+
+      top.push(alst)
+
+      if (palettes.size >= targetCoverage) {
+        return top
+      }
+    }
+  }
+
+  return top
 }
 
 // Top performers

@@ -73,7 +73,7 @@ export function init(P) {
   controls.enableDamping = true
   controls.minDistance = 10
   controls.maxDistance = 500
-  controls._rotateLeft(-85 * Math.PI / 180)
+  controls._rotateLeft((-85 * Math.PI) / 180)
 
   matLine = new LineMaterial({
     color: 0xffffff,
@@ -82,7 +82,7 @@ export function init(P) {
     dashed: false,
     alphaToCoverage: true
   })
-  
+
   const matAxis = new LineMaterial({
     color: 0xffffff,
     linewidth: 2, // in world units with size attenuation, pixels otherwise
@@ -97,12 +97,8 @@ export function init(P) {
 
   const A = 20
   const axiGeometry = new LineGeometry()
-  axiGeometry.setPositions([
-    -A,-A,-A,-A,-A,A,
-    -A,-A,-A,-A,A,-A,
-    -A,-A,-A,A,-A,-A
-  ])
-  
+  axiGeometry.setPositions([-A, -A, -A, -A, -A, A, -A, -A, -A, -A, A, -A, -A, -A, -A, A, -A, -A])
+
   const axis = new Line2(axiGeometry, matAxis)
   axis.computeLineDistances()
   axis.scale.set(1, 1, 1)
