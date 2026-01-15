@@ -27,6 +27,15 @@
   border-top: solid #505050 1px;
 }
 
+.trow.trow-original {
+  border-top: solid #555 1px;
+  background: #222;
+}
+
+.trow.trow-original + .trow {
+  border-top: solid #555 1px ;
+}
+
 .fill {
   align-self: stretch; /* fills row height */
   display: flex;
@@ -118,6 +127,7 @@ a.link-grey {
         </div>
         <div v-else-if="showStats && routeLoaded" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
           <v-spacer />
+          <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-4"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
           <v-slider density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8"></v-slider>
           <div class="mr-8 ml-4 text-right" style="min-width: 210px;">Target coverage {{targetCoverage}} palettes</div>
@@ -172,8 +182,8 @@ a.link-grey {
     <v-main style="--v-layout-top: 96px;">
       <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { __key, groupIndex, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div class="trow" :class="rowIndex ? (groupIndex ? 'trow-dark' : 'trow-light') : null" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
+          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
+            <div class="trow" :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
                 <a class="link" :href="`./#/?p=${palette.index + 1}:${palette.key}`">{{ `${palette.index + 1}: ${palette.key}` }}</a>
               </div>
@@ -434,7 +444,8 @@ export default {
     showMethodsList: null,
     showFade: true,
     targetCoverage: 0,
-    showAll: false
+    showAll: false,
+    includeOriginal: false
   }),
   methods: {
     async sort () {
@@ -606,6 +617,7 @@ export default {
           groupIndex: index,
           group,
           key,
+          original: group.methods.some(m => m.method.mid === 'Original'),
           __key: `${key}_${group.methods[0].method.mid}`
         }))]
       }, [])
@@ -681,7 +693,7 @@ export default {
       return palettesData(this.sorted)
     },
     topCoverageAlgorithms () {
-      return topCoverageAlgorithms(this.algorithmStats.slice(1), this.targetCoverage)
+      return topCoverageAlgorithms(this.includeOriginal ? this.algorithmStats : this.algorithmStats.slice(1), this.targetCoverage)
     }
   },
   watch: {
