@@ -223,14 +223,14 @@ a.link-grey {
       <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
-            <div class="trow" :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
+            <div class="trow" :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}" style="position: relative; display: flex; align-items: center; cursor: default;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
                 <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{
                     `${palette.index + 1}: ${palette.key}`
                 }}</a>
               </div>
 
-              <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
+              <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px;" :style="{cursor: methods.length > 1 ? 'pointer' : null}" @click.stop="expandIndex(__key)">
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
