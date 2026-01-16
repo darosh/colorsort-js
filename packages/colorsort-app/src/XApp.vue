@@ -185,7 +185,7 @@ a.link-grey {
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
             <div class="trow" :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
-                <a class="link" :href="`./#/?p=${palette.index + 1}:${palette.key}`">{{ `${palette.index + 1}: ${palette.key}` }}</a>
+                <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{ `${palette.index + 1}: ${palette.key}` }}</a>
               </div>
 
               <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
@@ -353,7 +353,7 @@ a.link-grey {
           <tbody>
             <tr v-for="{alSt, incl} in algorithmStatsFiltered">
               <td>
-                <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${alSt.mid}`">{{ alSt.mid }}</a>
+                <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{ alSt.mid }}</a>
               </td>
               <td class="text-right">{{ alSt.bestCount }}</td>
               <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
@@ -725,6 +725,13 @@ export default {
   watch: {
     '$route.matched.length' (newValue) {
       this.routeLoaded = this.routeLoaded || (newValue > 0)
+    },
+    '$route.matched' (newValue) {
+      if (newValue.length) {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' })
+        }, 0)
+      }
     },
     showStats (newValue) {
       this.targetCoverage = this.targetCoverage || this.palettesData.length
