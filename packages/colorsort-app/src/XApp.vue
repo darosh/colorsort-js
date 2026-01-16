@@ -122,12 +122,12 @@ a.link-grey {
       <template v-if="!showStats">
         <v-text-field @focus="onFocusInA" @focusout="onFocusOutA" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
           <template v-slot:append-inner>
-            <v-icon id="help-p" style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
+            <v-icon id="help-p" style="cursor: help;" @mouseenter="(e) => { cursor = cxy(e); menu = true; }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
           </template>
         </v-text-field>
         <v-text-field @focus="onFocusInB" @focusout="onFocusOutB" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180">
           <template v-slot:append-inner>
-            <v-icon id="help-m" style="cursor: help;" @mouseenter="() => { menuMethodHint = true }" @mouseleave="() => { menuMethodHint = false }"> mdi-help-circle </v-icon>
+            <v-icon id="help-m" style="cursor: help;" @mouseenter="(e) => { cursor = cxy(e); menuMethodHint = true; }" @mouseleave="() => { menuMethodHint = false }"> mdi-help-circle </v-icon>
           </template>
         </v-text-field>
         <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
@@ -159,86 +159,6 @@ a.link-grey {
         </div>
       </template>
     </v-app-bar>
-
-    <v-menu :offset="[16,12]" :model-value="menu" z-index="100000" target="#help-p">
-      <v-card min-width="200" max-width="360" class="bg-surface-light">
-        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
-          <tbody>
-            <tr>
-              <td><b>&lt;12</b></td>
-              <td>less than 12 colors</td>
-            </tr>
-            <tr>
-              <td><b>&gt;64</b></td>
-              <td>more than 64 colors</td>
-            </tr>
-            <tr>
-              <td><b>100</b></td>
-              <td>search number</td>
-            </tr>
-            <tr>
-              <td><b>nintendo</b></td>
-              <td>search name</td>
-            </tr>
-            <tr>
-              <td><b>random+</b></td>
-              <td>show all after name</td>
-            </tr>
-            <tr>
-              <td><b>42+</b></td>
-              <td>show all after number</td>
-            </tr>
-            <tr>
-              <td><b>lo-</b></td>
-              <td>palettes from lospec.com</td>
-            </tr>
-            <tr>
-              <td><b>poline-</b></td>
-              <td>palettes generated with poline</td>
-            </tr>
-            <tr>
-              <td colspan="2">search is case sensitive</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-menu>
-
-    <v-menu :offset="[16,12]" :model-value="menuMethodHint" z-index="100000" target="#help-m">
-      <v-card min-width="200" max-width="360" class="bg-surface-light">
-        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
-          <tbody>
-            <tr>
-              <td><b>#50</b></td>
-              <td>methods best for 50 palettes</td>
-            </tr>
-            <tr>
-              <td><b>$</b></td>
-              <td>show best</td>
-            </tr>
-            <tr>
-              <td><b>$$</b></td>
-              <td>show best or original</td>
-            </tr>
-            <tr>
-              <td><b>$$$</b></td>
-              <td>show best and original</td>
-            </tr>
-            <tr>
-              <td><b>Original</b></td>
-              <td>show original</td>
-            </tr>
-            <tr>
-              <td><b>HARM:</b></td>
-              <td>search by method family</td>
-            </tr>
-            <tr>
-              <td colspan="2">search is case sensitive</td>
-            </tr>
-          </tbody>
-        </v-table>
-      </v-card>
-    </v-menu>
 
     <v-main style="--v-layout-top: 96px;">
       <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
@@ -444,6 +364,85 @@ a.link-grey {
       <x-preview :points="selectedColors" />
       <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; bottom: 13px; left: 12px;" />
     </div>
+
+    <v-menu :offset="[16,12]" :model-value="menu" z-index="100000" :target="cursor">
+      <v-card min-width="200" max-width="360" class="bg-surface-light">
+        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
+          <tbody>
+            <tr>
+              <td><b>&lt;12</b></td>
+              <td>less than 12 colors</td>
+            </tr>
+            <tr>
+              <td><b>&gt;64</b></td>
+              <td>more than 64 colors</td>
+            </tr>
+            <tr>
+              <td><b>100</b></td>
+              <td>search number</td>
+            </tr>
+            <tr>
+              <td><b>nintendo</b></td>
+              <td>search name</td>
+            </tr>
+            <tr>
+              <td><b>random+</b></td>
+              <td>show all after name</td>
+            </tr>
+            <tr>
+              <td><b>42+</b></td>
+              <td>show all after number</td>
+            </tr>
+            <tr>
+              <td><b>lo-</b></td>
+              <td>palettes from lospec.com</td>
+            </tr>
+            <tr>
+              <td><b>poline-</b></td>
+              <td>palettes generated with poline</td>
+            </tr>
+            <tr>
+              <td colspan="2">search is case sensitive</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-menu>
+    <v-menu :offset="[16,12]" :model-value="menuMethodHint" z-index="100000" :target="cursor">
+      <v-card min-width="200" max-width="360" class="bg-surface-light">
+        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
+          <tbody>
+            <tr>
+              <td><b>#50</b></td>
+              <td>methods best for 50 palettes</td>
+            </tr>
+            <tr>
+              <td><b>$</b></td>
+              <td>show best</td>
+            </tr>
+            <tr>
+              <td><b>$$</b></td>
+              <td>show best or original</td>
+            </tr>
+            <tr>
+              <td><b>$$$</b></td>
+              <td>show best and original</td>
+            </tr>
+            <tr>
+              <td><b>Original</b></td>
+              <td>show original</td>
+            </tr>
+            <tr>
+              <td><b>HARM:</b></td>
+              <td>search by method family</td>
+            </tr>
+            <tr>
+              <td colspan="2">search is case sensitive</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-menu>
   </v-app>
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
     <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
@@ -455,6 +454,7 @@ a.link-grey {
       {{ (showColors && showColors.slice(1)) || '' }}
     </v-card>
   </v-menu>
+
   <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
 </template>
 
@@ -530,6 +530,7 @@ export default {
     isVisible: {},
     isVisiblePending: {},
     isVisibleTimer: null,
+    cursor: [0, 0],
     menu: false,
     menuMethodHint: false,
     palette: null,
@@ -696,6 +697,11 @@ export default {
     },
     leaveColors () {
       this.showColors = false
+    },
+    cxy(e) {
+      const {x, y, width, height} = e.target.getClientRects().item(0)
+
+      return [x + width, y+height]
     }
   },
   mounted () {
