@@ -54,6 +54,25 @@ a.link:hover {
 a.link-grey {
   color: #aaaaaa;
 }
+
+.previewer {
+  background: rgba(0,0,0,.87);
+  border: 1px solid rgba(0,0,0,1);
+  border-radius: 24px;
+}
+
+.previewer:hover {
+  background: rgba(0,0,0,1);
+  border-color: rgba(127,127,127,.4);
+}
+
+.previewer .preview-closer {
+  opacity: 0;
+}
+
+.previewer:hover .preview-closer {
+  opacity: .3;
+}
 </style>
 
 <template>
@@ -419,8 +438,9 @@ a.link-grey {
       </v-container>
     </v-main>
 
-    <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px; background: rgba(0,0,0,.5);">
+    <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
       <x-preview :points="selectedColors" />
+      <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; bottom: 13px; left: 12px;" />
     </div>
   </v-app>
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">

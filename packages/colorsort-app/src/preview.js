@@ -74,6 +74,7 @@ export function init(P) {
   controls.minDistance = 10
   controls.maxDistance = 500
   controls._rotateLeft((-85 * Math.PI) / 180)
+  controls._pan(1, -20)
 
   matLine = new LineMaterial({
     color: 0xffffff,
