@@ -191,11 +191,11 @@ export function updateBestAndDistanceAll(palettes: PaletteRecordGrouped[], besti
         break
       }
     }
-    
-    if (hasBest || (methodIndex === null)) {
+
+    if (hasBest || methodIndex === null) {
       continue
     }
-    
+
     updateBest(palette, methodIndex, true)
     updateDistance(palette)
   }
