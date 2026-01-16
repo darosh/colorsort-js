@@ -120,14 +120,14 @@ a.link-grey {
         >
       </div>
       <template v-if="!showStats">
-        <v-text-field @focus="onFocusInA" @focusout="onFocusOutA" id="help" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+        <v-text-field @focus="onFocusInA" @focusout="onFocusOutA" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
           <template v-slot:append-inner>
-            <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
+            <v-icon id="help-p" style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
           </template>
         </v-text-field>
         <v-text-field @focus="onFocusInB" @focusout="onFocusOutB" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180">
           <template v-slot:append-inner>
-            <v-icon style="cursor: help;" @mouseenter="() => { menuMethodHint = true }" @mouseleave="() => { menuMethodHint = false }"> mdi-help-circle </v-icon>
+            <v-icon id="help-m" style="cursor: help;" @mouseenter="() => { menuMethodHint = true }" @mouseleave="() => { menuMethodHint = false }"> mdi-help-circle </v-icon>
           </template>
         </v-text-field>
         <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
@@ -160,8 +160,8 @@ a.link-grey {
       </template>
     </v-app-bar>
 
-    <v-menu :model-value="menu" z-index="100000" target="#help">
-      <v-card min-width="200" class="bg-surface-light">
+    <v-menu :offset="[16,12]" :model-value="menu" z-index="100000" target="#help-p">
+      <v-card min-width="200" max-width="360" class="bg-surface-light">
         <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
           <tbody>
             <tr>
@@ -204,13 +204,13 @@ a.link-grey {
       </v-card>
     </v-menu>
 
-    <v-menu :model-value="menuMethodHint" z-index="100000" target="#help">
-      <v-card min-width="200" class="bg-surface-light">
+    <v-menu :offset="[16,12]" :model-value="menuMethodHint" z-index="100000" target="#help-m">
+      <v-card min-width="200" max-width="360" class="bg-surface-light">
         <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
           <tbody>
             <tr>
               <td><b>#50</b></td>
-              <td>filter methods best for 50 and more palettes</td>
+              <td>methods best for 50 palettes</td>
             </tr>
             <tr>
               <td><b>$</b></td>
