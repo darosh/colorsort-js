@@ -453,16 +453,16 @@ a.link-grey {
     <v-card rounded="xl" style="letter-spacing: 1px; font-family: monospace; min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2 text-center d-flex align-center justify-center">
       <div class="mr-3" style="margin-top: -1px; width: 15px; height: 15px; border-radius: 50%; box-shadow: rgba(0,0,0,.5) 0px 0px 2px;" :style="{background: showColorsValue}"></div>
       <div>
-      <template v-if="showColorsValue?.length === 7">
-        <span>{{ showColorsValue.slice(1,3) }}</span>
-        <span class="mx-2">{{ showColorsValue.slice(3, 5) }}</span>
-        <span>{{ showColorsValue.slice(5, 7) }}</span>
-      </template>
-      <template v-else-if="showColorsValue?.length === 4">
-        <span>{{ showColorsValue.slice(1,2) }}</span>
-        <span class="mx-2">{{ showColorsValue.slice(2, 3) }}</span>
-        <span>{{ showColorsValue.slice(3, 4) }}</span>
-      </template>
+        <template v-if="showColorsValue?.length === 7">
+          <span>{{ showColorsValue.slice(1,3) }}</span>
+          <span class="mx-2">{{ showColorsValue.slice(3, 5) }}</span>
+          <span>{{ showColorsValue.slice(5, 7) }}</span>
+        </template>
+        <template v-else-if="showColorsValue?.length === 4">
+          <span>{{ showColorsValue.slice(1,2) }}</span>
+          <span class="mx-2">{{ showColorsValue.slice(2, 3) }}</span>
+          <span>{{ showColorsValue.slice(3, 4) }}</span>
+        </template>
       </div>
     </v-card>
   </v-menu>
