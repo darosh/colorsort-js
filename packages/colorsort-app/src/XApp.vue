@@ -302,8 +302,8 @@ a.link-grey {
               </div>
 
               <div class="pl-0 flex-grow-1">
-                <div style="display: flex; min-width: 80px;" v-intersect="v => onIntersect(v, __key, palette)">
-                  <div v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                <div style="display: flex; min-width: 80px; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
+                  <div @mouseleave="leaveColors" @mousemove="e => enterColors(e, c)" v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                 </div>
               </div>
             </div>
@@ -371,6 +371,11 @@ a.link-grey {
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
     <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
       {{ showMethodsList.map(m => m.method.mid).join('\n') }}
+    </v-card>
+  </v-menu>
+  <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="!!showColors" :target="showColorsTarget">
+    <v-card style="letter-spacing: 2px; font-family: monospace; min-width: 100px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2 text-center">
+      {{(showColors && showColors.slice(1)) || ''}}
     </v-card>
   </v-menu>
   <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
@@ -449,7 +454,9 @@ export default {
     showFade: true,
     targetCoverage: 0,
     showAll: false,
-    includeOriginal: false
+    includeOriginal: false,
+    showColorsTarget: null,
+    showColors: false
   }),
   methods: {
     async sort () {
@@ -577,6 +584,13 @@ export default {
     },
     listMouse (event) {
       this.showFade = event.clientX > 220
+    },
+    enterColors (event, color) {
+      this.showColorsTarget = [event.clientX + 16, event.clientY + 16]
+      this.showColors = color
+    },
+    leaveColors () {
+      this.showColors = false
     }
   },
   mounted () {
