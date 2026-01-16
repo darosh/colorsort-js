@@ -183,19 +183,19 @@ export function updateBestAndDistanceAll(palettes: PaletteRecordGrouped[], besti
     let methodIndex: number | null = null
 
     for (const g of palette.groups) {
-      const m = g.methods.find((m) => m.best)
+      const m = g.methods.find((m) => m.method.mid === bestie.mid)
 
-      if (m?.method.mid === bestie.mid) {
+      if (m) {
         hasBest = m.best
         methodIndex = m.index
         break
       }
     }
-
-    if (hasBest || methodIndex === null) {
+    
+    if (hasBest || (methodIndex === null)) {
       continue
     }
-
+    
     updateBest(palette, methodIndex, true)
     updateDistance(palette)
   }

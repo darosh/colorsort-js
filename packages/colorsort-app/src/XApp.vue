@@ -440,7 +440,15 @@ a.link-grey {
 import { PALETTES } from 'colorsort-data-palettes'
 import { SORTING_METHODS } from 'colorsort'
 import XPreview from '@/XPreview.vue'
-import { computedSerialize, computePlan, computeRender, updateBest, updateDistance } from 'colorsort-compute'
+import {
+  BESTIES,
+  computedSerialize,
+  computePlan,
+  computeRender,
+  updateBest,
+  updateBestAndDistanceAll,
+  updateDistance
+} from 'colorsort-compute'
 import chroma from 'chroma-js'
 import { render } from 'colorsort-compute/src/render.js'
 import { analyze } from './analyse.js'
@@ -535,11 +543,13 @@ export default {
         this.rendered = 0
 
         await Promise.all(computeRender(sorted))
+        updateBestAndDistanceAll(types, BESTIES)
 
         this.types = types
         this.sorted = sorted
       } else {
         const { sorted, types } = COMPUTED
+        updateBestAndDistanceAll(types, BESTIES)
         this.types = types //.slice(0, 10)
         this.sorted = sorted
         this.rendered = 1

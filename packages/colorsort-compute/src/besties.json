@@ -24,6 +24,10 @@
     "mid": "Original"
   },
   {
+    "key": "chroma-2",
+    "mid": "HARM:[hsl,bright]"
+  },
+  {
     "key": "helix-1",
     "mid": "Original"
   },
@@ -186,6 +190,18 @@
   {
     "key": "random-128",
     "mid": "PCA:[oklab,tsp-adapt]"
+  },
+  {
+    "key": "material-deep-purple",
+    "mid": "Original"
+  },
+  {
+    "key": "material-teal",
+    "mid": "Original"
+  },
+  {
+    "key": "tailwind3-red-orange-amber",
+    "mid": "Original"
   },
   {
     "key": "lo-1bit-monitor-glow",
