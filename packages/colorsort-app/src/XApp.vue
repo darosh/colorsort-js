@@ -135,9 +135,9 @@ a.link-grey {
 
       <template v-slot:extension>
         <div v-if="!showStats && routeLoaded" class="d-flex" style="width: 100%;">
-          <div style="width: 226px;" class="flex-grow-0 px-8"></div>
+          <div style="width: 230px;" class="flex-grow-0 px-8"></div>
           <div class="d-flex ext flex-grow-1" style="flex-direction: row; height: 48px; padding-top: 12px;">
-            <div style="width: 214px;" class="flex-grow-0"></div>
+            <div style="width: 210px;" class="flex-grow-0"></div>
             <div style="width: 92px;" class="text-grey flex-grow-0 text-right">Time</div>
             <div style="width: 428px;" class="text-grey flex-grow-0 text-center">Length, Avg, Dev / Curv., Avg, Dev / Curv.%</div>
             <div style="width: 120px;" class="text-grey flex-grow-0 text-center">Avg&deg;, Max&deg;</div>
@@ -149,11 +149,13 @@ a.link-grey {
           </div>
         </div>
         <div v-else-if="showStats && routeLoaded" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
+          <div class="mr-8 ml-4">
+            <a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{ targetCoverage }} {{ targetCoverage === 1 ? 'palette' : 'palettes' }} with {{ algorithmStatsFilteredIncl?.length }} {{ algorithmStatsFilteredIncl?.length === 1 ? 'method' : 'methods'}}
+          </div>
           <v-spacer />
           <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-8"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
-          <v-slider density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8"></v-slider>
-          <div class="mr-8 ml-4 text-right" style="min-width: 288px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{ targetCoverage }} palettes</div>
+          <v-slider thumb-label thumb-size="20" density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8 mr-8"></v-slider>
         </div>
       </template>
     </v-app-bar>
@@ -823,18 +825,22 @@ export default {
     //   return algorithmStats(this.types)
     //       .sort((a, b) => b.bestCount - a.bestCount)
     // },
-    algorithmStatsFiltered () {
-      const all = this.algorithmStats
+    algorithmStatsFilteredIncl () {
+      return this.algorithmStatsFilteredAll.filter(x => x.incl)
+    },
+    algorithmStatsFilteredAll () {
+      return this.algorithmStats
           .map(alSt => ({
             alSt,
             incl: this.topCoverageAlgorithms.some(x => alSt.mid === x.mid)
           }))
-
+    },
+    algorithmStatsFiltered () {
       if (this.showAll) {
-        return all
+        return this.algorithmStatsFilteredAll
       }
 
-      return all.filter(x => x.incl)
+      return this.algorithmStatsFilteredIncl
     },
     palettesData () {
       return palettesData(this.sorted)
