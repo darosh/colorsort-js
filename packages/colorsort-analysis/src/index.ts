@@ -102,16 +102,16 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
 }
 
 export function palettesData(sr: SortRecord[]) {
-  return sr.reduce(
-    (acc: PaletteRecord[], item) => {
-      if (!acc.find((p) => p.key === item.palette.key)) {
-        acc.push(item.palette)
-      }
+  const obj = sr.reduce(
+    (acc: { [k: string]: PaletteRecord }, item) => {
+      acc[item.palette.key] = acc[item.palette.key] || item.palette
 
       return acc
     },
-    <PaletteRecord[]>[]
+    <{ [k: string]: PaletteRecord }>{}
   )
+
+  return Object.values(obj)
 }
 
 export function topCoverageAlgorithms(algorithmStats: AlgoStat[], targetCoverage: number) {

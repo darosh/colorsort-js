@@ -33,7 +33,7 @@
 }
 
 .trow.trow-original + .trow {
-  border-top: solid #555 1px ;
+  border-top: solid #555 1px;
 }
 
 .fill {
@@ -60,7 +60,7 @@ a.link-grey {
   <v-app theme="dark" class="">
     <!--    <v-navigation-drawer v-model="showNav" width="423"></v-navigation-drawer>-->
 
-    <v-app-bar flat id="app-bar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72" color="transparent">
+    <v-app-bar flat id="app-bar" v-model="appBar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72" color="transparent">
       <!--      <v-app-bar-nav-icon @click="showNav = !showNav" />-->
       <v-app-bar-title class="flex-0-0 mr-4" style="width: 194px;">Color Sorting R&D</v-app-bar-title>
       <v-toolbar-items class="mr-4">
@@ -101,12 +101,16 @@ a.link-grey {
         >
       </div>
       <template v-if="!showStats">
-        <v-text-field @focus="onFocusIn" @focusout="onFocusOut" id="help" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
+        <v-text-field @focus="onFocusInA" @focusout="onFocusOutA" id="help" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
           <template v-slot:append-inner>
             <v-icon style="cursor: help;" @mouseenter="() => { menu = true }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
           </template>
         </v-text-field>
-        <v-text-field @focus="onFocusIn" @focusout="onFocusOut" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180" />
+        <v-text-field @focus="onFocusInB" @focusout="onFocusOutB" clearable v-model.lazy="filterMethod" hide-details autocomplete="off" class="align-self-center mr-4 mt-1" placeholder="Method" density="compact" variant="solo-filled" max-width="180">
+          <template v-slot:append-inner>
+            <v-icon style="cursor: help;" @mouseenter="() => { menuMethodHint = true }" @mouseleave="() => { menuMethodHint = false }"> mdi-help-circle </v-icon>
+          </template>
+        </v-text-field>
         <v-btn :icon="expandedAll ? `mdi-unfold-less-horizontal` : `mdi-unfold-more-horizontal`" @click="onExpandAll"></v-btn>
       </template>
 
@@ -130,7 +134,7 @@ a.link-grey {
           <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-8"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
           <v-slider density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8"></v-slider>
-          <div class="mr-8 ml-4 text-right" style="min-width: 288px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{targetCoverage}} palettes</div>
+          <div class="mr-8 ml-4 text-right" style="min-width: 288px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{ targetCoverage }} palettes</div>
         </div>
       </template>
     </v-app-bar>
@@ -179,13 +183,51 @@ a.link-grey {
       </v-card>
     </v-menu>
 
+    <v-menu :model-value="menuMethodHint" z-index="100000" target="#help">
+      <v-card min-width="200" class="bg-surface-light">
+        <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
+          <tbody>
+            <tr>
+              <td><b>#50</b></td>
+              <td>filter methods best for 50 and more palettes</td>
+            </tr>
+            <tr>
+              <td><b>$</b></td>
+              <td>show best</td>
+            </tr>
+            <tr>
+              <td><b>$$</b></td>
+              <td>show best or original</td>
+            </tr>
+            <tr>
+              <td><b>$$$</b></td>
+              <td>show best and original</td>
+            </tr>
+            <tr>
+              <td><b>Original</b></td>
+              <td>show original</td>
+            </tr>
+            <tr>
+              <td><b>HARM:</b></td>
+              <td>search by method family</td>
+            </tr>
+            <tr>
+              <td colspan="2">search is case sensitive</td>
+            </tr>
+          </tbody>
+        </v-table>
+      </v-card>
+    </v-menu>
+
     <v-main style="--v-layout-top: 96px;">
       <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
             <div class="trow" :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}" style="position: relative; display: flex; align-items: center;" :ref="itemRef" @click="showPreview = !showPreview" @mouseenter="onmouseenter(colors, palette, __key)">
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
-                <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{ `${palette.index + 1}: ${palette.key}` }}</a>
+                <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{
+                    `${palette.index + 1}: ${palette.key}`
+                }}</a>
               </div>
 
               <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px; cursor: pointer;" @click.stop="expandIndex(__key)">
@@ -341,7 +383,11 @@ a.link-grey {
       </div>
 
       <v-container v-if="showStats">
-        <v-table class="mt-8 mb-8 mx-auto" hover style="max-width: 600px;" striped="odd">
+        <div class="mx-auto text-center py-8" v-if="!algorithmStats.length">
+          <v-progress-circular size="48" indeterminate />
+        </div>
+
+        <v-table v-else class="mt-8 mb-8 mx-auto" hover style="max-width: 600px;" striped="odd">
           <thead>
             <tr>
               <th>Method</th>
@@ -353,7 +399,9 @@ a.link-grey {
           <tbody>
             <tr v-for="{alSt, incl} in algorithmStatsFiltered">
               <td>
-                <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{ alSt.mid }}</a>
+                <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{
+                  alSt.mid
+                }}</a>
               </td>
               <td class="text-right">{{ alSt.bestCount }}</td>
               <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
@@ -375,7 +423,7 @@ a.link-grey {
   </v-menu>
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="!!showColors" :target="showColorsTarget">
     <v-card style="letter-spacing: 2px; font-family: monospace; min-width: 100px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2 text-center">
-      {{(showColors && showColors.slice(1)) || ''}}
+      {{ (showColors && showColors.slice(1)) || '' }}
     </v-card>
   </v-menu>
   <v-progress-linear v-if="rendered !== renderingTotal" style="z-index: 10000; position: fixed; top: 0;" height="8" color="rgb(255,0,0)" bg-color="rgb(255,127,127)" :bg-opacity="0.6" active :model-value="100 * rendered / renderingTotal" />
@@ -385,15 +433,17 @@ a.link-grey {
 import { PALETTES } from 'colorsort-data-palettes'
 import { SORTING_METHODS } from 'colorsort'
 import XPreview from '@/XPreview.vue'
-import { computePlan, computeRender, updateBest, updateDistance } from 'colorsort-compute'
+import { computedSerialize, computePlan, computeRender, updateBest, updateDistance } from 'colorsort-compute'
 import chroma from 'chroma-js'
 import { render } from 'colorsort-compute/src/render.js'
+import { analyze } from './analyse.js'
 
-import { algorithmStats, palettesData, topCoverageAlgorithms } from 'colorsort-analysis'
+import { palettesData, topCoverageAlgorithms } from 'colorsort-analysis'
 
 import { deserialize } from 'colorsort-compute'
 
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
+import { toRaw } from 'vue'
 
 const COMPUTED = deserialize(SORTED)
 
@@ -444,9 +494,12 @@ export default {
     isVisiblePending: {},
     isVisibleTimer: null,
     menu: false,
+    menuMethodHint: false,
     palette: null,
     lastMouseEnter: -Infinity,
-    focusPending: false,
+    focusPendingA: false,
+    focusPendingB: false,
+    appBar: false,
     routeLoaded: false,
     showMethods: false,
     showMethodsTarget: null,
@@ -456,7 +509,8 @@ export default {
     showAll: false,
     includeOriginal: false,
     showColorsTarget: null,
-    showColors: false
+    showColors: false,
+    algorithmStats: []
   }),
   methods: {
     async sort () {
@@ -483,6 +537,8 @@ export default {
         this.sorted = sorted
         this.rendered = 1
       }
+      const records = computedSerialize(toRaw(this.types))
+      this.algorithmStats = await analyze({ records })
     },
     onRender (p) {
       this.rendered = p.done
@@ -491,10 +547,10 @@ export default {
     formatTypes (obj) {
       return Object.fromEntries(
           Object.entries(obj).map(([k, v]) => [
-              k.replace(/([a-z])([A-Z])/g, '$1 $2')
-                  .split(' ')
-                  .map((x, i) => i && x.length > 1 ? x.toLowerCase() : x)
-                  .join(' '),
+            k.replace(/([a-z])([A-Z])/g, '$1 $2')
+                .split(' ')
+                .map((x, i) => i && x.length > 1 ? x.toLowerCase() : x)
+                .join(' '),
             v.toFixed(2)]),
       )
     },
@@ -558,8 +614,18 @@ export default {
       }, 0)
     },
     number,
-    onFocusIn () { this.focusPending = true },
-    onFocusOut () { this.focusPending = false },
+    onFocusInA () {
+      this.focusPendingA = true
+    },
+    onFocusOutA () {
+      this.focusPendingA = false
+    },
+    onFocusInB () {
+      this.focusPendingB = true
+    },
+    onFocusOutB () {
+      this.focusPendingB = false
+    },
     updateQuery (newParams) {
       this.$router.replace({
         path: '/',
@@ -698,6 +764,13 @@ export default {
 
             if (this.filterMethod[0] === '#') {
               groups = t.groups.filter(g => g.methods.some(m => names.includes(m.method.mid)))
+            } else if (this.filterMethod === '$') {
+              groups = t.groups.filter(g => g.methods.some(x => x.best))
+            } else if (this.filterMethod === '$$') {
+              groups = t.groups.filter(g => g.methods.some(x => x.best))
+              groups = groups.length ? groups : t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
+            } else if (this.filterMethod === '$$$') {
+              groups = t.groups.filter(g => g.methods.some(x => x.best) || g.methods.some(x => x.method.mid === 'Original'))
             } else {
               groups = t.groups.filter(g => g.methods.some(m => m.method.mid.includes(this.filterMethod)))
             }
@@ -709,10 +782,10 @@ export default {
           })
           .filter(t => t.groups.length)
     },
-    algorithmStats () {
-      return algorithmStats(this.types)
-          .sort((a, b) => b.bestCount - a.bestCount)
-    },
+    // algorithmStats () {
+    //   return algorithmStats(this.types)
+    //       .sort((a, b) => b.bestCount - a.bestCount)
+    // },
     algorithmStatsFiltered () {
       const all = this.algorithmStats
           .map(alSt => ({
@@ -729,14 +802,26 @@ export default {
     palettesData () {
       return palettesData(this.sorted)
     },
-    topCoverageAlgorithmsNoOriginal () {
-      return topCoverageAlgorithms(this.algorithmStats.slice(1), this.targetCoverage)
+    algorithmStatsNoOriginal () {
+      return this.algorithmStats.filter(x => x.mid !== 'Original')
     },
     topCoverageAlgorithms () {
-      return topCoverageAlgorithms(this.includeOriginal ? this.algorithmStats : this.topCoverageAlgorithmsNoOriginal, this.targetCoverage)
+      return topCoverageAlgorithms(
+          this.includeOriginal
+              ? this.algorithmStats
+              : this.algorithmStatsNoOriginal,
+          this.targetCoverage)
+    },
+    focusPending () {
+      return this.focusPendingA || this.focusPendingB
     }
   },
   watch: {
+    focusPending(newValue) {
+      if (!newValue) {
+        document.activeElement.blur()
+      }
+    },
     '$route.matched.length' (newValue) {
       this.routeLoaded = this.routeLoaded || (newValue > 0)
     },
