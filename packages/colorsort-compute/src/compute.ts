@@ -57,6 +57,11 @@ export type SortRecord = {
 
 export type SortRecordGrouped = Omit<SortRecord, 'time' | 'method' | 'render' | 'index' | 'best'>
 
+export type Besties = {
+  key: string
+  mid: string
+}
+
 function groupRecords(palette: PaletteRecord) {
   const groupsMap = new Map<string[], PaletteGroup>()
 
@@ -157,6 +162,42 @@ export function updateBest(palette: PaletteRecordGrouped, methodsIndex: number, 
 
       fr.best = m.best
     }
+  }
+}
+
+export function updateBestAndDistanceAll(palettes: PaletteRecordGrouped[], besties: Besties[]) {
+  const pl = <{ [index: string]: PaletteRecordGrouped }>{}
+
+  for (const p of palettes) {
+    pl[p.key] = p
+  }
+
+  for (const bestie of besties) {
+    const palette = pl[bestie.key]
+
+    if (!palette) {
+      continue
+    }
+
+    let hasBest = false
+    let methodIndex: number | null = null
+
+    for (const g of palette.groups) {
+      const m = g.methods.find((m) => m.best)
+
+      if (m?.method.mid === bestie.mid) {
+        hasBest = m.best
+        methodIndex = m.index
+        break
+      }
+    }
+
+    if (hasBest || methodIndex === null) {
+      continue
+    }
+
+    updateBest(palette, methodIndex, true)
+    updateDistance(palette)
   }
 }
 
