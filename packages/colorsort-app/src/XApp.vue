@@ -127,10 +127,10 @@ a.link-grey {
         </div>
         <div v-else-if="showStats && routeLoaded" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
           <v-spacer />
-          <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-4"></v-switch>
+          <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-8"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
           <v-slider density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8"></v-slider>
-          <div class="mr-8 ml-4 text-right" style="min-width: 210px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target coverage</a> {{targetCoverage}} palettes</div>
+          <div class="mr-8 ml-4 text-right" style="min-width: 288px;"><a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{targetCoverage}} palettes</div>
         </div>
       </template>
     </v-app-bar>
