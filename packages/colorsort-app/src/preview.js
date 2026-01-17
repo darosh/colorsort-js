@@ -67,12 +67,12 @@ export function initPoints(P, M) {
     lch: {
       t: {
         x: -50,
-        y: -50,
+        y: -64,
         z: -180
       },
       s: {
         x: 1 / 100,
-        y: 1 / 100,
+        y: 1 / 128,
         z: 1 / 360
       }
     }
