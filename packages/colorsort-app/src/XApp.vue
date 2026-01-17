@@ -32,6 +32,10 @@
   background: #222;
 }
 
+.trow.trow-original:hover {
+  background: #2a2a2a;
+}
+
 .trow.trow-original + .trow {
   border-top: solid #555 1px;
 }
@@ -57,8 +61,9 @@ a.link-grey {
 
 .previewer {
   background: rgba(0,0,0,.87);
-  border: 1px solid rgba(0,0,0,1);
+  border: 1px solid rgba(127,127,127,.4);
   border-radius: 24px;
+  box-shadow: 0px 0px 2px rgba(128,128,128,.1);
 }
 
 .previewer:hover {
@@ -66,12 +71,24 @@ a.link-grey {
   border-color: rgba(127,127,127,.4);
 }
 
-.previewer .preview-closer {
+.previewer .preview-closer, .previewer .preview-buttons {
   opacity: 0;
 }
 
 .previewer:hover .preview-closer {
   opacity: .3;
+}
+
+.previewer:hover .preview-buttons {
+  opacity: .3;
+}
+
+.previewer:hover .preview-closer:hover {
+  opacity: .8;
+}
+
+.previewer:hover .preview-buttons:hover {
+  opacity: .8;
 }
 </style>
 
@@ -169,8 +186,7 @@ a.link-grey {
               :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}"
               style="position: relative; display: flex; align-items: center; cursor: default;"
               :ref="itemRef"
-              @click="showPreview = !showPreview"
-              @mouseenter="onmouseenter(colors, palette, __key)"
+              @click="showPreview = selectedColors !== colors; onmouseenter(colors, palette, __key)"
             >
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
                 <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{
@@ -291,8 +307,8 @@ a.link-grey {
                 <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, key, methods[0].index, methods.some(m => m.best))" />
               </div>
 
-              <div class="pl-0 flex-grow-1">
-                <div style="display: flex; min-width: 80px; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
+              <div class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
+                <div style="display: flex; align-items: center; width: 100%; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
                   <div @mouseleave="leaveColors" @mousemove="e => enterColors(e, c)" v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
                 </div>
               </div>
@@ -361,8 +377,17 @@ a.link-grey {
     </v-main>
 
     <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
-      <x-preview :points="selectedColors" />
-      <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; bottom: 13px; left: 12px;" />
+      <x-preview ref="previewer" :points="selectedColors" :color-model="previewModel" />
+      <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; top: 13px; right: 15px;" />
+      <v-btn @click="$refs.previewer.reset()" color="transparent" icon="mdi-reload" class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 15px;" />
+      <div style="position: absolute; bottom: 20px; left: 0; width: 100%;" class="text-center preview-buttons">
+        <v-btn-toggle variant="flat" mandatory base-color="transparent" density="compact" v-model="previewModel">
+          <v-btn value="oklab">Oklab</v-btn>
+          <v-btn value="lab">Lab</v-btn>
+          <v-btn value="lch">LCh</v-btn>
+          <v-btn value="rgb">RGB</v-btn>
+        </v-btn-toggle>
+      </div>
     </div>
 
     <v-menu :offset="[16,12]" :model-value="menu" z-index="100000" :target="cursor">
@@ -528,6 +553,7 @@ export default {
   components: { XPreview },
   data: () => ({
     showPreview: false,
+    previewModel: 'oklab',
     sorted: [],
     types: [],
     selectedColors: [],
@@ -612,7 +638,13 @@ export default {
     },
     onmouseenter (colors, palette, key) {
       this.palette = palette
-      this.debouncedPreview(colors)
+
+      if (this.showPreview) {
+        this.debouncedPreview(colors)
+      } else {
+        this.selectedColors = null
+      }
+
       this.lastMouseEnter = Date.now()
       // this.isVisible[key] = true
       this.isVisiblePending[key] = true

@@ -147,7 +147,7 @@ export function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
   return chroma.deltaE(a, b, x, y, z)
 }
 
-function normalizeLab(a: Vector3) {
+export function normalizeLab(a: Vector3) {
   return [a[0] / 100, (a[1] + 128) / 255, (a[2] + 128) / 255]
 }
 

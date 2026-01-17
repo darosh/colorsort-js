@@ -4,7 +4,7 @@ import { Line2 } from 'three/addons/lines/Line2.js'
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Vector3 } from 'three'
-import { gl, oklab } from 'colorsort'
+import { gl, oklab, lab, normalizeLab, lch } from 'colorsort'
 
 let line, renderer, scene, camera, controls
 let geometry
@@ -14,8 +14,8 @@ let innerHeight = 424 - 12 * 2
 
 const S = 40
 
-export function initPoints(P) {
-  if (!scene) {
+export function initPoints(P, M) {
+  if (!scene || !M || !P?.length) {
     return
   }
 
@@ -25,8 +25,62 @@ export function initPoints(P) {
     P = ['#000', '#777', '#fff']
   }
 
-  const R = P.map((c) => oklab(c))
-  const points = R.map((c) => new Vector3((c[0] - 0.5) * S, (c[1] - 0) * S * 1.5, (c[2] - 0) * S))
+  const R = M === 'oklab' ? P.map((c) => oklab(c)) : M === 'rgb' ? P.map((c) => gl(c)) : M === 'lch' ? P.map((c) => lch(c)) : P.map((c) => normalizeLab(lab(c)))
+
+  const T = {
+    oklab: {
+      t: {
+        x: -0.5,
+        y: 0,
+        z: 0
+      },
+      s: {
+        x: 1,
+        y: 1.5,
+        z: 1
+      }
+    },
+    rgb: {
+      t: {
+        x: -0.5,
+        y: -0.5,
+        z: -0.5
+      },
+      s: {
+        x: 1,
+        y: 1,
+        z: 1
+      }
+    },
+    lab: {
+      t: {
+        x: -0.5,
+        y: -0.5,
+        z: -0.5
+      },
+      s: {
+        x: 1,
+        y: 1,
+        z: 1
+      }
+    },
+    lch: {
+      t: {
+        x: -50,
+        y: -50,
+        z: -180
+      },
+      s: {
+        x: 1 / 100,
+        y: 1 / 100,
+        z: 1 / 360
+      }
+    }
+  }
+
+  const Q = T[M]
+
+  const points = R.map((c) => new Vector3((c[0] + Q.t.x) * Q.s.x * S, (c[1] + Q.t.y) * Q.s.y * S, ((c[2] || 0) + Q.t.z) * Q.s.z * S))
 
   // Position and THREE.Color Data
 
@@ -56,7 +110,7 @@ export function initPoints(P) {
   scene.add(line)
 }
 
-export function init(P) {
+export function init(P, M) {
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(innerWidth, innerHeight)
@@ -73,6 +127,7 @@ export function init(P) {
   controls.enableDamping = true
   controls.minDistance = 10
   controls.maxDistance = 500
+  controls.saveState()
   controls._rotateLeft((-85 * Math.PI) / 180)
   controls._pan(1, -20)
 
@@ -92,7 +147,7 @@ export function init(P) {
     alphaToCoverage: true
   })
 
-  initPoints(P)
+  initPoints(P, M)
 
   //
 
@@ -108,6 +163,12 @@ export function init(P) {
 
   window.addEventListener('resize', onWindowResize)
   onWindowResize()
+}
+
+export function reset() {
+  controls.reset()
+  controls._rotateLeft((-85 * Math.PI) / 180)
+  controls._pan(1, -20)
 }
 
 function onWindowResize() {
