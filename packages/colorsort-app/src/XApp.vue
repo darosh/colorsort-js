@@ -15,6 +15,14 @@
   background: rgb(28, 28, 28);
 }
 
+.trow .color-row > div {
+  border-color: rgb(18, 18, 18) !important;
+}
+
+.trow:hover .color-row > div {
+  border-color: rgb(28, 28, 28) !important;
+}
+
 .no-events, .no-events * {
   pointer-events: none;
 }
@@ -32,8 +40,21 @@
   background: #222;
 }
 
+.trow.trow-original .color-row > div {
+  border-color: #222 !important;
+}
+
 .trow.trow-original:hover {
   background: #2a2a2a;
+}
+
+.trow.trow-original:hover .color-row > div {
+  border-color: #2a2a2a !important;
+}
+
+.color-row:hover > div {
+  border-top-width: 10px !important;
+  border-bottom-width: 10px !important;
 }
 
 .trow.trow-original + .trow {
@@ -63,7 +84,7 @@ a.link-grey {
   background: rgba(0,0,0,.87);
   border: 1px solid rgba(127,127,127,.4);
   border-radius: 24px;
-  box-shadow: 0px 0px 2px rgba(128,128,128,.1);
+  box-shadow: 0 0 2px rgba(128,128,128,.1);
 }
 
 .previewer:hover {
@@ -96,7 +117,7 @@ a.link-grey {
   <v-app theme="dark" class="">
     <!--    <v-navigation-drawer v-model="showNav" width="423"></v-navigation-drawer>-->
 
-    <v-app-bar flat id="app-bar" v-model="appBar" :scroll-behavior="focusPending ? null : 'hide'" :scroll-threshold="72" color="transparent">
+    <v-app-bar flat id="app-bar" v-model="appBar" :scroll-behavior="hideBar ? 'hide' : null" :scroll-threshold="72" color="transparent">
       <!--      <v-app-bar-nav-icon @click="showNav = !showNav" />-->
       <v-app-bar-title class="flex-0-0 mr-4" style="width: 194px;">Color Sorting R&D</v-app-bar-title>
       <v-toolbar-items class="mr-4">
@@ -308,8 +329,15 @@ a.link-grey {
               </div>
 
               <div class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
-                <div style="display: flex; align-items: center; width: 100%; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
-                  <div @mouseleave="leaveColors" @mousemove="e => enterColors(e, c)" v-if="!rowIndex || isVisible[__key]" v-for="c in colors" style="flex: 1 1; min-width: 1px; min-height: 10px" :style="{ background: c }" />
+                <div class="color-row" style="display: flex; align-items: center; width: 100%; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
+                  <div
+                    @mouseleave="leaveColors"
+                    @mousemove="e => enterColors(e, c)"
+                    v-if="!rowIndex || isVisible[__key]"
+                    v-for="c in colors"
+                    style="flex: 1 1; min-width: 1px; min-height: 50px; border-top: 20px solid transparent; border-bottom: 20px solid transparent; box-sizing: border-box;"
+                    :style="{ background: c }"
+                  />
                 </div>
               </div>
             </div>
@@ -563,6 +591,7 @@ export default {
     flushRenders: [],
     flushTimeout: null,
     debouncedPreview: null,
+    debouncedSetBarHide: null,
     expandedAll: false,
     expanded: {},
     isVisible: {},
@@ -575,7 +604,8 @@ export default {
     lastMouseEnter: -Infinity,
     focusPendingA: false,
     focusPendingB: false,
-    appBar: false,
+    hideBar: true,
+    appBar: true,
     routeLoaded: false,
     showMethods: false,
     showMethodsTarget: null,
@@ -711,6 +741,9 @@ export default {
     onFocusOutB () {
       this.focusPendingB = false
     },
+    setBarHide (value) {
+      this.hideBar = value
+    },
     updateQuery (newParams) {
       this.$router.replace({
         path: '/',
@@ -752,6 +785,7 @@ export default {
   },
   mounted () {
     this.debouncedPreview = debounce(this.setPreview)
+    this.debouncedSetBarHide = debounce(this.setBarHide)
 
     this.updateShowMethods = debounceFalse((v) => {
       this.showMethods = v
@@ -916,6 +950,8 @@ export default {
       if (!newValue) {
         document.activeElement.blur()
       }
+
+      this.debouncedSetBarHide(!newValue)
     },
     '$route.matched.length' (newValue) {
       this.routeLoaded = this.routeLoaded || (newValue > 0)
