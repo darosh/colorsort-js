@@ -111,6 +111,14 @@ a.link-grey {
 .previewer:hover .preview-buttons:hover {
   opacity: .8;
 }
+
+.text-red-bad {
+  color: #f77;
+}
+
+.text-green-good {
+  color: #3f3;
+}
 </style>
 
 <template>
@@ -374,33 +382,64 @@ a.link-grey {
         </div>
       </div>
 
-      <v-container v-if="showStats">
+      <v-container v-if="showStats" fluid>
         <div class="mx-auto text-center py-8" v-if="!algorithmStats.length">
           <v-progress-circular size="48" indeterminate />
         </div>
 
-        <v-table v-else class="mt-8 mb-8 mx-auto" hover style="max-width: 600px;" striped="odd">
-          <thead>
-            <tr>
-              <th>Method</th>
-              <th class="text-right">Best count</th>
-              <th class="text-right">Only best count</th>
-              <th class="text-right">Win rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="{alSt, incl} in algorithmStatsFiltered">
-              <td>
-                <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{
+        <div class="d-flex flex-wrap align-start justify-center" v-else>
+          <v-table class="mt-8 mb-8 mx-4" hover style="max-width: 600px;" striped="odd">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th class="text-right">Best count</th>
+                <th class="text-right">Only best count</th>
+                <th class="text-right">Win rate</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="{alSt, incl} in algorithmStatsFiltered">
+                <td>
+                  <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{
                   alSt.mid
-                }}</a>
-              </td>
-              <td class="text-right">{{ alSt.bestCount }}</td>
-              <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
-              <td class="text-right">{{ alSt.winRate.toFixed(1) }}%</td>
-            </tr>
-          </tbody>
-        </v-table>
+                  }}</a>
+                </td>
+                <td class="text-right">{{ alSt.bestCount }}</td>
+                <td class="text-right" :class="{'text-grey-darken-2': !alSt.onlyBestCount}">{{ alSt.onlyBestCount }}</td>
+                <td class="text-right">{{ alSt.winRate.toFixed(1) }}%</td>
+              </tr>
+            </tbody>
+          </v-table>
+          <v-table class="mt-8 mb-8 mx-4" hover style="max-width: 600px;" striped="odd">
+            <thead>
+              <tr>
+                <th class="text-right">Palette colors</th>
+                <th class="text-right">Palettes</th>
+                <th class="text-right">Uncovered</th>
+                <th class="text-right">Covered</th>
+                <th class="text-right">Win rate</th>
+              </tr>
+              <tr>
+                <td class="font-italic">Total</td>
+                <td class="text-right font-italic">{{palettesByColorCountTotal.palettes}}</td>
+                <td class="text-right font-italic">{{palettesByColorCountTotal.uncovered}}</td>
+                <td class="text-right font-italic">{{palettesByColorCountTotal.covered}}</td>
+                <td class="text-right font-italic">{{(100 * palettesByColorCountTotal.covered / palettesByColorCountTotal.palettes).toFixed(1)}}%</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="{colors, covered, uncovered, palettes} in palettesByColorCount">
+                <td>
+                  <a class="link" :href="`./#/?p=${encodeURIComponent(`=${colors}`)}&m=${encodeURIComponent('$')}`">{{colors}}</a>
+                </td>
+                <td class="text-right">{{palettes}}</td>
+                <td class="text-right" :class="{'text-grey-darken-2': !uncovered, 'text-red-bad': uncovered}">{{ uncovered }}</td>
+                <td class="text-right" :class="{'text-grey-darken-2': !covered, 'text-green-good': covered}">{{ covered }}</td>
+                <td class="text-right" :style="{color: scale(1 - covered / palettes)}">{{(100 * covered / palettes).toFixed(0)}}%</td>
+              </tr>
+            </tbody>
+          </v-table>
+        </div>
       </v-container>
     </v-main>
 
@@ -429,6 +468,10 @@ a.link-grey {
             <tr>
               <td><b>&gt;64</b></td>
               <td>more than 64 colors</td>
+            </tr>
+            <tr>
+              <td><b>=6</b></td>
+              <td>6 colors</td>
             </tr>
             <tr>
               <td><b>100</b></td>
@@ -540,7 +583,7 @@ import chroma from 'chroma-js'
 import { render } from 'colorsort-compute/src/render.js'
 import { analyze } from './analyse.js'
 
-import { palettesData, topCoverageAlgorithms } from 'colorsort-analysis'
+import { palettesByColorCount, palettesData, topCoverageAlgorithms } from 'colorsort-analysis'
 
 import { deserialize } from 'colorsort-compute'
 
@@ -851,7 +894,7 @@ export default {
 
       let number
 
-      if (this?.filterPalette?.[0] === '<' || this?.filterPalette?.[0] === '>') {
+      if (this?.filterPalette?.[0] === '<' || this?.filterPalette?.[0] === '>' || this?.filterPalette?.[0] === '=') {
         number = Number.parseInt(this.filterPalette.slice(1), 10)
       }
 
@@ -864,6 +907,8 @@ export default {
           return t.colors.length < number
         } else if (this.filterPalette[0] === '>') {
           return t.colors.length > number
+        } else if (this.filterPalette[0] === '=') {
+          return t.colors.length === number
         }
 
         const match = afterMore || `${t.index + 1}:${t.key}`.includes(text)
@@ -878,8 +923,9 @@ export default {
       }
 
       let names
+
       if (this.filterMethod[0] === '#') {
-        names = topCoverageAlgorithms(this.algorithmStats.slice(1), Number.parseInt(this.filterMethod.slice(1), 10))
+        names = topCoverageAlgorithms(this.algorithmStatsNoOriginal, Number.parseInt(this.filterMethod.slice(1), 10))
             .map(x => x.mid)
       }
 
@@ -940,6 +986,22 @@ export default {
               ? this.algorithmStats
               : this.algorithmStatsNoOriginal,
           this.targetCoverage)
+    },
+    palettesByColorCount () {
+      return palettesByColorCount(this.palettesData, this.topCoverageAlgorithms)
+    },
+    palettesByColorCountTotal () {
+      return this.palettesByColorCount.reduce((acc, {palettes, covered, uncovered}) => {
+        return {
+          palettes: acc.palettes + palettes,
+          covered: acc.covered + covered,
+          uncovered: acc.uncovered + uncovered
+        }
+      }, {
+        palettes: 0,
+        covered: 0,
+        uncovered: 0
+      })
     },
     focusPending () {
       return this.focusPendingA || this.focusPendingB

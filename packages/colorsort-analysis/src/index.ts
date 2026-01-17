@@ -34,7 +34,7 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
       for (const methodInfo of group.methods) {
         const mid = methodInfo.method?.mid
 
-        if (!mid || !group.record.score) {
+        if (!mid) {
           continue
         }
 
@@ -56,7 +56,7 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
         }
 
         const stat = <AlgoStat>algoMap.get(mid)
-        stat.scores.push(group.record.score)
+        stat.scores.push(<number>group.record.score)
         stat.totalCount++
 
         const isBest = methodInfo.best || group.methods.some((m) => m.best)
@@ -79,7 +79,7 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
 
         const pt = <PaletteType>stat.paletteTypes.get(pType)
 
-        pt.scores.push(group.record.score)
+        pt.scores.push(<number>group.record.score)
 
         if (isBest) {
           pt.bestCount++
@@ -112,6 +112,62 @@ export function palettesData(sr: SortRecord[]) {
   )
 
   return Object.values(obj)
+}
+
+export function palettesCovered(palettes: { [k: string]: PaletteRecord }, algoStats: AlgoStat[]) {
+  const covered = <
+    {
+      [k: string]: {
+        key: string
+        colors: number
+        covered: boolean
+      }
+    }
+  >{}
+
+  console.log(algoStats)
+
+  for (const { key, colors } of Object.values(palettes)) {
+    covered[key] = {
+      key,
+      colors: colors.length,
+      covered: false
+    }
+  }
+
+  for (const { palettes } of algoStats) {
+    for (const p of palettes) {
+      covered[p].covered = true
+    }
+  }
+
+  return covered
+}
+
+export function palettesByColorCount(palettes: { [k: string]: PaletteRecord }, algoStats: AlgoStat[]) {
+  const pcs = palettesCovered(palettes, algoStats)
+  const map = new Map()
+
+  console.log(palettes)
+
+  for (const { colors, covered } of Object.values(pcs)) {
+    const o = map.get(colors) ?? { colors, palettes: 0, covered: 0, uncovered: 0 }
+
+    o.palettes++
+
+    if (covered) {
+      o.covered++
+    } else {
+      o.uncovered++
+    }
+
+    map.set(colors, o)
+  }
+
+  return map
+    .values()
+    .toArray()
+    .sort((a, b) => a.colors - b.colors)
 }
 
 export function topCoverageAlgorithms(algorithmStats: AlgoStat[], targetCoverage: number) {
