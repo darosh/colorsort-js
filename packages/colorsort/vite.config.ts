@@ -14,6 +14,7 @@ export default defineConfig({
       // the proper extensions will be added
       fileName: 'colorsort',
     },
+    sourcemap: true
   },
   plugins: [
     // dts({ outDir: 'dist/types' })
