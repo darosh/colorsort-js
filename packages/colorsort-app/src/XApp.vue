@@ -213,6 +213,7 @@ a.link-grey {
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
             <div
+              @mouseenter="onmouseenter(undefined, palette, __key)"
               class="trow"
               :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}"
               style="position: relative; display: flex; align-items: center; cursor: default;"
@@ -551,15 +552,15 @@ a.link-grey {
     </v-menu>
   </v-app>
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
-    <v-card style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre pa-4">
+    <v-card rounded="lg" style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre py-2 pl-4 px-5">
       {{ showMethodsList.map(m => m.method.mid).join('\n') }}
     </v-card>
   </v-menu>
   <v-menu :close-delay="0" transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showColors" :target="showColorsTarget">
-    <v-card rounded="xl" style="min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2">
+    <v-card rounded="lg" style="min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2">
       <div class="d-flex align-center justify-center">
-        <div class="mr-3 text-center" style="letter-spacing: 1px; font-family: monospace; margin-top: -1px; width: 15px; height: 15px; border-radius: 50%; box-shadow: rgba(0,0,0,.5) 0px 0px 2px;" :style="{background: showColorsValue}"></div>
-        <div class="mr-2">
+        <div class="mr-3 text-center" style="margin-top: -1px; width: 15px; height: 15px; border-radius: 50%; box-shadow: rgba(0,0,0,.5) 0 0 2px;" :style="{background: showColorsValue}"></div>
+        <div class="mr-2" style="letter-spacing: 1px; font-family: monospace;">
           <template v-if="showColorsValue?.length === 7">
             <span>{{ showColorsValue.slice(1, 3) }}</span>
             <span class="mx-2">{{ showColorsValue.slice(3, 5) }}</span>
@@ -572,7 +573,7 @@ a.link-grey {
           </template>
         </div>
       </div>
-      <div style="margin-left: 37px; font-size: 15px; font-variant-numeric: tabular-nums;">
+      <div style="margin-left: 35px; font-size: 15px; font-variant-numeric: tabular-nums;">
         {{ oklch(showColorsValue) }}
       </div>
     </v-card>
@@ -726,6 +727,10 @@ export default {
     },
     onmouseenter (colors, palette, key) {
       this.palette = palette
+
+      if (!colors) {
+        return
+      }
 
       if (this.showPreview) {
         this.debouncedPreview(colors)
