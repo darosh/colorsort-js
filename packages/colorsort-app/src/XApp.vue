@@ -952,21 +952,50 @@ export default {
             .map(x => x.mid)
       }
 
+      let dlr = null
+      let mtd = this.filterMethod
+
+      if (this.filterMethod.startsWith('$$$')) {
+        dlr = 3
+        mtd = mtd.slice(dlr)
+      } else if (this.filterMethod.startsWith('$$')) {
+        dlr = 2
+        mtd = mtd.slice(dlr)
+      } else if (this.filterMethod.startsWith('$')) {
+        dlr = 1
+        mtd = mtd.slice(dlr)
+      } else if (this.filterMethod.startsWith('@')) {
+        dlr = 4
+        mtd = mtd.slice(1)
+      }
+
       return filtered
           .map(t => {
             let groups
 
             if (this.filterMethod[0] === '#') {
               groups = t.groups.filter(g => g.methods.some(m => names.includes(m.method.mid)))
-            } else if (this.filterMethod === '$') {
-              groups = t.groups.filter(g => g.methods.some(x => x.best))
-            } else if (this.filterMethod === '$$') {
-              groups = t.groups.filter(g => g.methods.some(x => x.best))
-              groups = groups.length ? groups : t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
-            } else if (this.filterMethod === '$$$') {
-              groups = t.groups.filter(g => g.methods.some(x => x.best) || g.methods.some(x => x.method.mid === 'Original'))
             } else {
-              groups = t.groups.filter(g => g.methods.some(m => m.method.mid.includes(this.filterMethod)))
+              if (dlr === 3) {
+                groups = t.groups.filter(g => g.methods.some(x => x.best) || g.methods.some(x => x.method.mid === 'Original'))
+              } else if (dlr === 2) {
+                groups = t.groups.filter(g => g.methods.some(x => x.best))
+                groups = groups.length ? groups : t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
+              } else if (dlr === 1) {
+                groups = t.groups.filter(g => g.methods.some(x => x.best))
+              } else if (dlr === 4) {
+                groups = t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
+              }
+
+              if (mtd) {
+                const mGroups = t.groups.filter(g => g.methods.some(m => m.method.mid.includes(mtd)))
+
+                if (groups) {
+                  groups = new Set([...groups, ...mGroups]).values().toArray()
+                } else {
+                  groups = mGroups
+                }
+              }
             }
 
             return {

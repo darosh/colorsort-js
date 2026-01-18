@@ -78,6 +78,9 @@ importers:
       '@types/node':
         specifier: ^25.0.3
         version: 25.0.8
+      colord:
+        specifier: 2.9.3
+        version: 2.9.3
 
   packages/colorsort-analysis:
     devDependencies:
@@ -999,6 +1002,9 @@ packages:
 
   chroma-js@3.2.0:
     resolution: {integrity: sha512-os/OippSlX1RlWWr+QDPcGUZs0uoqr32urfxESG9U93lhUfbnlyckte84Q8P1UQY/qth983AS1JONKmLS4T0nw==}
+
+  colord@2.9.3:
+    resolution: {integrity: sha512-jeC1axXpnb0/2nn/Y1LPuLdgXBLH7aDcHu4KEKfqw3CUhX7ZpfBSlPKyqXE6btIgEzfWtrX3/tyBCaCvXvMkOw==}
 
   colorgram@0.2.0:
     resolution: {integrity: sha512-eym08lLsN3lURBmQoX5d9CkUmzmNmBP6HW6di+kBf/NhDT/q1gEGxJ8tKBSpKgqklUP2L8+JZOCN+8xXrKtAcQ==}
@@ -2507,6 +2513,8 @@ snapshots:
   chai@6.2.2: {}
 
   chroma-js@3.2.0: {}
+
+  colord@2.9.3: {}
 
   colorgram@0.2.0: {}
 

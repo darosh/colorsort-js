@@ -89,3 +89,15 @@ export function compareColorsH(a: Vector3, b: Vector3): number {
 
   return a[0] - b[0]
 }
+
+export function compareColors210(a: Vector3, b: Vector3): number {
+  if (a[2] !== b[2]) {
+    return (a[2] ?? 0) - (b[2] ?? 0)
+  }
+
+  if (a[1] !== b[1]) {
+    return a[1] - b[1]
+  }
+
+  return a[0] - b[0]
+}
