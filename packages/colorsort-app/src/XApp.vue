@@ -81,15 +81,15 @@ a.link-grey {
 }
 
 .previewer {
-  background: rgba(0,0,0,.87);
-  border: 1px solid rgba(127,127,127,.4);
+  background: rgba(0, 0, 0, .87);
+  border: 1px solid rgba(127, 127, 127, .4);
   border-radius: 24px;
-  box-shadow: 0 0 2px rgba(128,128,128,.1);
+  box-shadow: 0 0 2px rgba(128, 128, 128, .1);
 }
 
 .previewer:hover {
-  background: rgba(0,0,0,1);
-  border-color: rgba(127,127,127,.4);
+  background: rgba(0, 0, 0, 1);
+  border-color: rgba(127, 127, 127, .4);
 }
 
 .previewer .preview-closer, .previewer .preview-buttons {
@@ -196,7 +196,9 @@ a.link-grey {
         </div>
         <div v-else-if="showStats && routeLoaded" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
           <div class="mr-8 ml-4">
-            <a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{ targetCoverage }} {{ targetCoverage === 1 ? 'palette' : 'palettes' }} with {{ algorithmStatsFilteredIncl?.length }} {{ algorithmStatsFilteredIncl?.length === 1 ? 'method' : 'methods'}}
+            <a class="link" :href="`./#/?m=${encodeURIComponent('#')}${targetCoverage}`">Target method coverage</a>: {{ targetCoverage }} {{ targetCoverage === 1 ? 'palette' : 'palettes' }} with
+            {{ algorithmStatsFilteredIncl?.length }}
+            {{ algorithmStatsFilteredIncl?.length === 1 ? 'method' : 'methods' }}
           </div>
           <v-spacer />
           <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-8"></v-switch>
@@ -401,7 +403,7 @@ a.link-grey {
               <tr v-for="{alSt, incl} in algorithmStatsFiltered">
                 <td>
                   <a :class="{'link-grey': !incl}" class="link" :href="`./#/?m=${encodeURIComponent(alSt.mid)}`">{{
-                  alSt.mid
+                    alSt.mid
                   }}</a>
                 </td>
                 <td class="text-right">{{ alSt.bestCount }}</td>
@@ -421,21 +423,29 @@ a.link-grey {
               </tr>
               <tr>
                 <td class="font-italic">Total</td>
-                <td class="text-right font-italic">{{palettesByColorCountTotal.palettes}}</td>
-                <td class="text-right font-italic">{{palettesByColorCountTotal.uncovered}}</td>
-                <td class="text-right font-italic">{{palettesByColorCountTotal.covered}}</td>
-                <td class="text-right font-italic">{{(100 * palettesByColorCountTotal.covered / palettesByColorCountTotal.palettes).toFixed(1)}}%</td>
+                <td class="text-right font-italic">{{ palettesByColorCountTotal.palettes }}</td>
+                <td class="text-right font-italic">{{ palettesByColorCountTotal.uncovered }}</td>
+                <td class="text-right font-italic">{{ palettesByColorCountTotal.covered }}</td>
+                <td class="text-right font-italic">{{ (100 * palettesByColorCountTotal.covered / palettesByColorCountTotal.palettes).toFixed(1) }}%</td>
               </tr>
             </thead>
             <tbody>
               <tr v-for="{colors, covered, uncovered, palettes} in palettesByColorCount">
                 <td>
-                  <a class="link" :href="`./#/?p=${encodeURIComponent(`=${colors}`)}&m=${encodeURIComponent('$')}`">{{colors}}</a>
+                  <a class="link" :href="`./#/?p=${encodeURIComponent(`=${colors}`)}&m=${encodeURIComponent('$')}`">{{ colors }}</a>
                 </td>
-                <td class="text-right">{{palettes}}</td>
-                <td class="text-right" :class="{'text-grey-darken-2': !uncovered, 'text-red-bad': uncovered}">{{ uncovered }}</td>
-                <td class="text-right" :class="{'text-grey-darken-2': !covered, 'text-green-good': covered}">{{ covered }}</td>
-                <td class="text-right" :style="{color: scale(1 - covered / palettes)}">{{(100 * covered / palettes).toFixed(0)}}%</td>
+                <td class="text-right">{{ palettes }}</td>
+                <td class="text-right" :class="{'text-grey-darken-2': !uncovered, 'text-red-bad': uncovered}">
+                  {{
+                  uncovered
+                  }}
+                </td>
+                <td class="text-right" :class="{'text-grey-darken-2': !covered, 'text-green-good': covered}">
+                  {{
+                  covered
+                  }}
+                </td>
+                <td class="text-right" :style="{color: scale(1 - covered / palettes)}">{{ (100 * covered / palettes).toFixed(0) }}%</td>
               </tr>
             </tbody>
           </v-table>
@@ -546,19 +556,24 @@ a.link-grey {
     </v-card>
   </v-menu>
   <v-menu :close-delay="0" transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showColors" :target="showColorsTarget">
-    <v-card rounded="xl" style="letter-spacing: 1px; font-family: monospace; min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2 text-center d-flex align-center justify-center">
-      <div class="mr-3" style="margin-top: -1px; width: 15px; height: 15px; border-radius: 50%; box-shadow: rgba(0,0,0,.5) 0px 0px 2px;" :style="{background: showColorsValue}"></div>
-      <div>
-        <template v-if="showColorsValue?.length === 7">
-          <span>{{ showColorsValue.slice(1,3) }}</span>
-          <span class="mx-2">{{ showColorsValue.slice(3, 5) }}</span>
-          <span>{{ showColorsValue.slice(5, 7) }}</span>
-        </template>
-        <template v-else-if="showColorsValue?.length === 4">
-          <span>{{ showColorsValue.slice(1,2) }}</span>
-          <span class="mx-2">{{ showColorsValue.slice(2, 3) }}</span>
-          <span>{{ showColorsValue.slice(3, 4) }}</span>
-        </template>
+    <v-card rounded="xl" style="min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2">
+      <div class="d-flex align-center justify-center">
+        <div class="mr-3 text-center" style="letter-spacing: 1px; font-family: monospace; margin-top: -1px; width: 15px; height: 15px; border-radius: 50%; box-shadow: rgba(0,0,0,.5) 0px 0px 2px;" :style="{background: showColorsValue}"></div>
+        <div class="mr-2">
+          <template v-if="showColorsValue?.length === 7">
+            <span>{{ showColorsValue.slice(1, 3) }}</span>
+            <span class="mx-2">{{ showColorsValue.slice(3, 5) }}</span>
+            <span>{{ showColorsValue.slice(5, 7) }}</span>
+          </template>
+          <template v-else-if="showColorsValue?.length === 4">
+            <span>{{ showColorsValue.slice(1, 2) }}</span>
+            <span class="mx-2">{{ showColorsValue.slice(2, 3) }}</span>
+            <span>{{ showColorsValue.slice(3, 4) }}</span>
+          </template>
+        </div>
+      </div>
+      <div style="margin-left: 37px; font-size: 15px; font-variant-numeric: tabular-nums;">
+        {{ oklch(showColorsValue) }}
       </div>
     </v-card>
   </v-menu>
@@ -568,7 +583,7 @@ a.link-grey {
 
 <script>
 import { PALETTES } from 'colorsort-data-palettes'
-import { SORTING_METHODS } from 'colorsort'
+import { oklch, SORTING_METHODS } from 'colorsort'
 import XPreview from '@/XPreview.vue'
 import {
   BESTIES,
@@ -820,10 +835,13 @@ export default {
     leaveColors () {
       this.showColors = false
     },
-    cxy(e) {
-      const {x, y, width, height} = e.target.getClientRects().item(0)
+    cxy (e) {
+      const { x, y, width, height } = e.target.getClientRects().item(0)
 
-      return [x + width, y+height]
+      return [x + width, y + height]
+    },
+    oklch (c) {
+      return oklch(c).map((x, i) => x === undefined ? '…' : (x?.toFixed(i === 2 ? 0 : 1).replace('.0', '') + (i === 2 ? '°' : ''))).join(', ')
     }
   },
   mounted () {
@@ -991,7 +1009,7 @@ export default {
       return palettesByColorCount(this.palettesData, this.topCoverageAlgorithms)
     },
     palettesByColorCountTotal () {
-      return this.palettesByColorCount.reduce((acc, {palettes, covered, uncovered}) => {
+      return this.palettesByColorCount.reduce((acc, { palettes, covered, uncovered }) => {
         return {
           palettes: acc.palettes + palettes,
           covered: acc.covered + covered,
@@ -1008,7 +1026,7 @@ export default {
     }
   },
   watch: {
-    focusPending(newValue) {
+    focusPending (newValue) {
       if (!newValue) {
         document.activeElement.blur()
       }
