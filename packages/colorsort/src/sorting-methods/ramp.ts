@@ -322,7 +322,7 @@ function sortColorsByNearestNeighbor(colors: Vector3[]): Vector3[] {
  * Prioritize: Chroma tier → Hue → Lightness
  */
 function sortColorsByWeightedOKLCH(colors: Vector3[]): Vector3[] {
-  return colors.sort((a, b) => {
+  return [...colors].sort((a, b) => {
     // Define chroma tiers
     const getChromaTier = (c: number): number => {
       if (c < 0.08) {
@@ -373,7 +373,7 @@ function sortColorsByWeightedOKLCH(colors: Vector3[]): Vector3[] {
 }
 
 function sortColorsLikeFixture(colors: Vector3[]): Vector3[] {
-  return colors.sort((a, b) => {
+  return [...colors].sort((a, b) => {
     // Only truly neutral colors (C < 0.03) are sorted separately
     // Everything else sorts by hue progression
     const neutralThreshold = 0.03
@@ -542,7 +542,7 @@ function sortColorsLikeFixture(colors: Vector3[]): Vector3[] {
  * across multiple "passes" through the hue spectrum.
  */
 function sortColorsByHueRamps(colors: Vector3[]): Vector3[] {
-  return colors.sort((a, b) => {
+  return [...colors].sort((a, b) => {
     // Step 1: Separate pure achromatic
     const aAchro = a[1] < 0.03 || a[2] === undefined
     const bAchro = b[1] < 0.03 || b[2] === undefined
@@ -630,7 +630,7 @@ function sortColorsByHueRamps(colors: Vector3[]): Vector3[] {
  * the fixture treats each momentum shift as a new "micro-ramp"
  */
 function sortByMomentumMimicry(colors: Vector3[]): Vector3[] {
-  return colors.sort((a, b) => {
+  return [...colors].sort((a, b) => {
     // Achromatic first
     const aAchro = a[1] < 0.03
     const bAchro = b[1] < 0.03
@@ -681,7 +681,7 @@ export function sortColorsByHueRamps2(
   hueRotation: number = 270, // Starting hue angle (default: 270)
   chromaOrder: 'vivid' | 'muted' = 'vivid' // Chroma ordering (default: 'vivid-first')
 ): Vector3[] {
-  return colors.sort((a, b) => {
+  return [...colors].sort(compareColors210).sort((a, b) => {
     // Step 1: Separate achromatic colors
     const aAchro = a[1] < achromaticThreshold || a[2] === undefined
     const bAchro = b[1] < achromaticThreshold || b[2] === undefined
@@ -692,7 +692,8 @@ export function sortColorsByHueRamps2(
 
     if (aAchro) {
       // Sort achromatic by lightness (light to dark)
-      return b[0] - a[0]
+      // return b[0] - a[0]
+      return compareColors(b, a)
     }
 
     // Step 2: Normalize hue to start at rotation point
@@ -750,6 +751,7 @@ export function sortColorsByHueRamps2(
     // Step 7: Tertiary sort - Lightness
     // Creates smooth gradients within each chroma stratum (light to dark)
     const lightDiff = b[0] - a[0]
+
     if (Math.abs(lightDiff) > 0.01) {
       return lightDiff
     }
