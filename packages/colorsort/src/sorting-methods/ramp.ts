@@ -675,7 +675,7 @@ function sortByMomentumMimicry(colors: Vector3[]): Vector3[] {
  *
  */
 export function sortColorsByHueRamps2(
-  colors: Vector3[],
+  colors: Vector3[], // Oklch, Vector3 is [number, number, number]
   achromaticThreshold: number = 0.03, // Chroma below this is considered achromatic (default: 0.03)
   hueZoneSize: number = 40, // Degrees per hue zone (default: 40)
   hueRotation: number = 270, // Starting hue angle (default: 270)
