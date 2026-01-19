@@ -209,6 +209,7 @@ a.link-grey {
     </v-app-bar>
 
     <v-main style="--v-layout-top: 96px;">
+      <!-- Palettes page -->
       <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
           <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
@@ -216,9 +217,10 @@ a.link-grey {
               @mouseenter="onmouseenter(undefined, palette, __key)"
               class="trow"
               :class="{'trow-dark': rowIndex && groupIndex, 'trow-light': rowIndex && !groupIndex, 'trow-original': original}"
-              style="position: relative; display: flex; align-items: center; cursor: default;"
+              style="user-select: none; position: relative; display: flex; align-items: center; cursor: default;"
               :ref="itemRef"
-              @click="showPreview = selectedColors !== colors; onmouseenter(colors, palette, __key)"
+              @click="showPreview = selectedColors !== colors; onmouseenter(colors, palette, __key);"
+              @click.shift="palettePreviewClick(colors, __key)"
             >
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
                 <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{
@@ -361,6 +363,7 @@ a.link-grey {
         </v-virtual-scroll>
       </v-container>
 
+      <!-- Palette panel -->
       <div class="fade" style="pointer-events: none; position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="showFade && !showStats && palette?.type?.data">
         <div style="height: 29px;">{{ palette.index + 1 }}: {{ palette.key }}</div>
 
@@ -390,6 +393,7 @@ a.link-grey {
         </div>
       </div>
 
+      <!-- Stats page -->
       <v-container v-if="showStats" fluid>
         <div class="mx-auto text-center py-8" v-if="!algorithmStats.length">
           <v-progress-circular size="48" indeterminate />
@@ -459,6 +463,7 @@ a.link-grey {
       </v-container>
     </v-main>
 
+    <!-- Preview panel -->
     <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
       <x-preview ref="previewer" :points="selectedColors" :color-model="previewModel" />
       <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; top: 13px; right: 15px;" />
@@ -473,6 +478,7 @@ a.link-grey {
       </div>
     </div>
 
+    <!-- Filter palette tooltip -->
     <v-menu :offset="[16,12]" :model-value="menu" z-index="100000" :target="cursor">
       <v-card min-width="200" max-width="360" class="bg-surface-light">
         <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
@@ -520,6 +526,8 @@ a.link-grey {
         </v-table>
       </v-card>
     </v-menu>
+
+    <!-- Filter method tooltip -->
     <v-menu :offset="[16,12]" :model-value="menuMethodHint" z-index="100000" :target="cursor">
       <v-card min-width="200" max-width="360" class="bg-surface-light">
         <v-table density="compact" class="mt-2 mb-2" style="background: transparent; font-size: 16px;">
@@ -556,11 +564,15 @@ a.link-grey {
       </v-card>
     </v-menu>
   </v-app>
+
+  <!-- Methods tooltip -->
   <v-menu transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showMethods" :target="showMethodsTarget">
     <v-card rounded="lg" style="column-gap: 16px;" :style="{columnCount: Math.ceil(showMethodsList.length / 30)}" v-if="showMethodsList" theme="dark" class="bg-surface-light text-pre py-2 pl-4 px-5">
       {{ showMethodsList.map(m => m.method.mid).join('\n') }}
     </v-card>
   </v-menu>
+
+  <!-- Color tooltip -->
   <v-menu :close-delay="0" transition="fade-transition" content-class="no-events" style="pointer-events: none;" :model-value="showColors" :target="showColorsTarget">
     <v-card rounded="lg" style="min-width: 150px; min-height: 44px; font-size: 18px;" :style="{background: 'red'}" theme="dark" class="bg-surface-light text-pre pa-2">
       <div class="d-flex align-center justify-center">
@@ -716,6 +728,9 @@ export default {
     onRender (p) {
       this.rendered = p.done
       this.renderingTotal = p.total
+    },
+    palettePreviewClick(colors, key) {
+      console.log(`// ${key}; ${colors.length} colors\nconst ${key.replaceAll(/[-:[\],]/g, '_')} = [${colors.map(x => `'${x}'`).join(', ')}]`)
     },
     formatTypes (obj) {
       return Object.fromEntries(
