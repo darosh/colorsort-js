@@ -5,21 +5,30 @@ import { LineMaterial } from 'three/addons/lines/LineMaterial.js'
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js'
 import { Vector3 } from 'three'
 import { gl, oklab, lab, normalizeLab, lch } from 'colorsort'
+import chroma from 'chroma-js'
 
-let line, renderer, scene, camera, controls
-let geometry
+let renderer, scene, camera, controls
 let matLine
+let visualizationObjects
 let innerWidth = 424 - 12 * 2
 let innerHeight = 424 - 12 * 2
+let DIMS
 
 const S = 40
 
-export function initPoints(P, M) {
+const scale_a = chroma.scale(['#3f3', '#f77'])
+const scale_b = chroma.scale(['#33f', '#ff3'])
+
+export function initPoints (P, M, D = '3d') {
   if (!scene || !M || !P?.length) {
     return
   }
 
-  geometry = new LineGeometry()
+  if (visualizationObjects) {
+    visualizationObjects.forEach(o => scene.remove(o))
+  }
+
+  visualizationObjects = []
 
   if (P.length < 3) {
     P = ['#000', '#777', '#fff']
@@ -80,37 +89,133 @@ export function initPoints(P, M) {
 
   const Q = T[M]
 
-  const points = R.map((c) => new Vector3((c[0] + Q.t.x) * Q.s.x * S, (c[1] + Q.t.y) * Q.s.y * S, ((c[2] || 0) + Q.t.z) * Q.s.z * S))
+  const GC = {
+    oklab: [
+      () => '#333333',
+      (o) => scale_a(oklab(o)[1] + .5).toString(),
+      (o) => scale_b(oklab(o)[2] + .5).toString()
+    ],
+    lab: [
+      () => '#333333',
+      (o) => scale_a(oklab(o)[1] + .5).toString(),
+      (o) => scale_b(oklab(o)[2] + .5).toString()
+    ],
+    lch: [() => '#333333', () => '#333333', (o) => o],
+    rgb: [() => '#ff4444', () => '#449944', () => '#4488ff'],
+  }[M]
 
-  // Position and THREE.Color Data
+  const A = S / 2
 
-  const positions = []
-  const colors = []
+  if (D === '3d') {
+    const points = R.map((c) => new Vector3((c[0] + Q.t.x) * Q.s.x * S, (c[1] + Q.t.y) * Q.s.y * S, ((c[2] || 0) + Q.t.z) * Q.s.z * S))
 
-  const divisions = Math.round(points.length)
+    const positions = []
+    const colors = []
 
-  for (let i = 0, l = divisions; i < l; i++) {
-    const point = points[i]
-    positions.push(point.x, point.y, point.z)
-    const c = gl(P[i])
-    colors.push(c[0], c[1], c[2])
+    const divisions = Math.round(points.length)
+
+    for (let i = 0, l = divisions; i < l; i++) {
+      const point = points[i]
+      positions.push(point.x, point.y, point.z)
+      const c = gl(P[i])
+      colors.push(c[0], c[1], c[2])
+    }
+
+    const geometry = new LineGeometry()
+    geometry.setPositions(positions)
+    geometry.setColors(colors)
+
+    const line = new Line2(geometry, matLine)
+    line.computeLineDistances()
+    line.scale.set(1, 1, 1)
+
+    visualizationObjects.push(line)
+  } else {
+    //const compColors = [0xff4444, 0x449944, 0x4488ff]
+
+    const ts = [Q.t.x, Q.t.y, Q.t.z]
+    const ss = [Q.s.x, Q.s.y, Q.s.z]
+    const n = R.length
+    const xScale = (n > 1) ? S / (n - 1) : S
+
+    for (let k = 0; k < 3; k++) {
+      const positions = []
+      const colors = []
+
+      for (let i = 0; i < n; i++) {
+        const x = -A + i * xScale
+        const y = ((R[i][k] + ts[k]) * ss[k] / 3 + (k - 1) / 3) * S
+        const z = 3
+        positions.push(x, y, z)
+        const c = gl(GC[k](P[i]))
+        colors.push(c[0], c[1], c[2])
+      }
+
+      const geometry = new LineGeometry()
+      geometry.setPositions(positions)
+      geometry.setColors(colors)
+
+      const matLineK = new LineMaterial({
+        // color: compColors[k],
+        linewidth: 2,
+        vertexColors: true,
+        dashed: false,
+        alphaToCoverage: true
+      })
+
+      const lineK = new Line2(geometry, matLineK)
+      lineK.computeLineDistances()
+      lineK.scale.set(1, 1, 1)
+
+      visualizationObjects.push(lineK)
+    }
   }
 
-  geometry.setPositions(positions)
-  geometry.setColors(colors)
+  let axiPositions
 
-  if (line) {
-    scene.remove(line)
+  if (D === '3d') {
+    axiPositions = [
+      -A, -A, -A, A, -A, -A,
+      -A, -A, -A, -A, A, -A,
+      -A, -A, -A, -A, -A, A
+    ]
+  } else {
+    axiPositions = [
+      -A, -A, 0, A, -A, 0,
+      -A, -A, 0, -A, A, 0,
+      -A, -A / 3, 0, A, -A / 3, 0,
+      A, -A / 3, 0, -A, -A / 3, 0,
+      -A, +A / 3, 0, A, +A / 3, 0,
+    ]
   }
 
-  line = new Line2(geometry, matLine)
-  line.computeLineDistances()
-  line.scale.set(1, 1, 1)
+  const axiGeometry = new LineGeometry()
+  axiGeometry.setPositions(axiPositions)
 
-  scene.add(line)
+  const matAxis = new LineMaterial({
+    color: 0xaaaaaa,
+    linewidth: 2,
+    vertexColors: false,
+    dashed: false,
+    alphaToCoverage: true
+  })
+
+  const axis = new Line2(axiGeometry, matAxis)
+  axis.computeLineDistances()
+  axis.scale.set(1, 1, 1)
+
+  visualizationObjects.push(axis)
+
+  visualizationObjects.forEach(o => scene.add(o))
+
+  if (DIMS !== D) {
+    DIMS = D
+    reset()
+  }
 }
 
-export function init(P, M) {
+export function init (P, M, D = '3d') {
+  DIMS = null
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
   renderer.setSize(innerWidth, innerHeight)
@@ -128,8 +233,8 @@ export function init(P, M) {
   controls.minDistance = 10
   controls.maxDistance = 500
   controls.saveState()
-  controls._rotateLeft((-85 * Math.PI) / 180)
-  controls._pan(1, -20)
+  // controls._rotateLeft((-85 * Math.PI) / 180)
+  // controls._pan(0, -20)
 
   matLine = new LineMaterial({
     color: 0xffffff,
@@ -139,44 +244,26 @@ export function init(P, M) {
     alphaToCoverage: true
   })
 
-  const matAxis = new LineMaterial({
-    color: 0xffffff,
-    linewidth: 2, // in world units with size attenuation, pixels otherwise
-    vertexColors: false,
-    dashed: false,
-    alphaToCoverage: true
-  })
+  visualizationObjects = []
 
-  initPoints(P, M)
-
-  //
-
-  const A = 20
-  const axiGeometry = new LineGeometry()
-  axiGeometry.setPositions([-A, -A, -A, -A, -A, A, -A, -A, -A, -A, A, -A, -A, -A, -A, A, -A, -A])
-
-  const axis = new Line2(axiGeometry, matAxis)
-  axis.computeLineDistances()
-  axis.scale.set(1, 1, 1)
-
-  scene.add(axis)
+  initPoints(P, M, D)
 
   window.addEventListener('resize', onWindowResize)
   onWindowResize()
 }
 
-export function reset() {
+export function reset () {
   controls.reset()
   controls._rotateLeft((-85 * Math.PI) / 180)
-  controls._pan(1, -20)
+  controls._pan(0, DIMS === '3d' ? -20 : -10)
 }
 
-function onWindowResize() {
+function onWindowResize () {
   camera.aspect = 1
   camera.updateProjectionMatrix()
 }
 
-function animate() {
+function animate () {
   renderer.setClearColor(0x000000, 0)
   renderer.setViewport(0, 0, innerWidth, innerHeight)
   controls.update()

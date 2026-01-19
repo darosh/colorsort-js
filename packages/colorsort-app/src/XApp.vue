@@ -119,6 +119,10 @@ a.link-grey {
 .text-green-good {
   color: #3f3;
 }
+
+.whitespace-nowrap {
+  white-space: nowrap;
+}
 </style>
 
 <template>
@@ -371,7 +375,7 @@ a.link-grey {
           <div v-for="c in  palette.colors" style="flex: 1 1; min-width: .1px; min-height: 10px" :style="{ background: c }" />
         </div>
 
-        <v-table density="compact" class="mt-8 bg-transparent">
+        <v-table density="compact" class="mt-8 bg-transparent whitespace-nowrap">
           <tbody>
             <tr v-for="(value, key) in formatTypes(palette.type.data)">
               <td class="pl-0 px-0">{{ key }}</td>
@@ -465,9 +469,10 @@ a.link-grey {
 
     <!-- Preview panel -->
     <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
-      <x-preview ref="previewer" :points="selectedColors" :color-model="previewModel" />
+      <x-preview ref="previewer" :mode3d="mode3d" :points="selectedColors" :color-model="previewModel" />
       <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; top: 13px; right: 15px;" />
       <v-btn @click="$refs.previewer.reset()" color="transparent" icon="mdi-reload" class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 15px;" />
+      <v-btn @click="mode3d = !mode3d" color="transparent" icon class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 55px;">{{mode3d ? '3D' : '2D'}}</v-btn>
       <div style="position: absolute; bottom: 20px; left: 0; width: 100%;" class="text-center preview-buttons">
         <v-btn-toggle variant="flat" mandatory base-color="transparent" density="compact" v-model="previewModel">
           <v-btn value="oklab">Oklab</v-btn>
@@ -705,7 +710,8 @@ export default {
     showColorsTarget: null,
     showColors: false,
     showColorsValue: '...',
-    algorithmStats: []
+    algorithmStats: [],
+    mode3d: true
   }),
   methods: {
     async sort () {

@@ -14,11 +14,15 @@ export default {
     colorModel: {
       type: String,
       default: 'oklab'
+    },
+    mode3d: {
+      type: Boolean,
+      default: true
     }
   },
   data: () => ({}),
   mounted () {
-    init(this.points, this.colorModel)
+    init(this.points, this.colorModel, this.mode3d ? '3d' : '2d')
   },
   methods: {
     reset () {
@@ -29,16 +33,21 @@ export default {
     points: {
       immediate: true,
       handler (newVal, oldVal) {
-        initPoints(this.points, this.colorModel)
+        initPoints(this.points, this.colorModel, this.mode3d ? '3d' : '2d')
       }
     },
     colorModel: {
       immediate: true,
       handler (newVal, oldVal) {
-        initPoints(this.points, this.colorModel)
+        initPoints(this.points, this.colorModel, this.mode3d ? '3d' : '2d')
+      }
+    },
+    mode3d: {
+      immediate: true,
+      handler (newVal, oldVal) {
+        initPoints(this.points, this.colorModel, this.mode3d ? '3d' : '2d')
       }
     }
-
   }
 }
 </script>
