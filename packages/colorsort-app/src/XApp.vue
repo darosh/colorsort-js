@@ -537,12 +537,24 @@ a.link-grey {
               <td>methods best for 50 palettes</td>
             </tr>
             <tr>
+              <td><b>@</b></td>
+              <td>show original</td>
+            </tr>
+            <tr>
+              <td><b>@RAMP</b></td>
+              <td>show original and RAMP</td>
+            </tr>
+            <tr>
               <td><b>$</b></td>
               <td>show best</td>
             </tr>
             <tr>
               <td><b>$$</b></td>
               <td>show best or original</td>
+            </tr>
+            <tr>
+              <td><b>$$GEN3</b></td>
+              <td>show best or original and GEN3</td>
             </tr>
             <tr>
               <td><b>$$$</b></td>
