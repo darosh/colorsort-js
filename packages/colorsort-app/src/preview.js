@@ -19,13 +19,13 @@ const S = 40
 const scale_a = chroma.scale(['#3f3', '#f77'])
 const scale_b = chroma.scale(['#33f', '#ff3'])
 
-export function initPoints (P, M, D = '3d') {
+export function initPoints(P, M, D = '3d') {
   if (!scene || !M || !P?.length) {
     return
   }
 
   if (visualizationObjects) {
-    visualizationObjects.forEach(o => scene.remove(o))
+    visualizationObjects.forEach((o) => scene.remove(o))
   }
 
   visualizationObjects = []
@@ -90,18 +90,10 @@ export function initPoints (P, M, D = '3d') {
   const Q = T[M]
 
   const GC = {
-    oklab: [
-      () => '#333333',
-      (o) => scale_a(oklab(o)[1] + .5).toString(),
-      (o) => scale_b(oklab(o)[2] + .5).toString()
-    ],
-    lab: [
-      () => '#333333',
-      (o) => scale_a(oklab(o)[1] + .5).toString(),
-      (o) => scale_b(oklab(o)[2] + .5).toString()
-    ],
+    oklab: [() => '#333333', (o) => scale_a(oklab(o)[1] + 0.5).toString(), (o) => scale_b(oklab(o)[2] + 0.5).toString()],
+    lab: [() => '#333333', (o) => scale_a(oklab(o)[1] + 0.5).toString(), (o) => scale_b(oklab(o)[2] + 0.5).toString()],
     lch: [() => '#333333', () => '#333333', (o) => o],
-    rgb: [() => '#ff4444', () => '#449944', () => '#4488ff'],
+    rgb: [() => '#ff4444', () => '#449944', () => '#4488ff']
   }[M]
 
   const A = S / 2
@@ -136,7 +128,7 @@ export function initPoints (P, M, D = '3d') {
     const ts = [Q.t.x, Q.t.y, Q.t.z]
     const ss = [Q.s.x, Q.s.y, Q.s.z]
     const n = R.length
-    const xScale = (n > 1) ? S / (n - 1) : S
+    const xScale = n > 1 ? S / (n - 1) : S
 
     for (let k = 0; k < 3; k++) {
       const positions = []
@@ -144,7 +136,7 @@ export function initPoints (P, M, D = '3d') {
 
       for (let i = 0; i < n; i++) {
         const x = -A + i * xScale
-        const y = ((R[i][k] + ts[k]) * ss[k] / 3 + (k - 1) / 3) * S
+        const y = (((R[i][k] + ts[k]) * ss[k]) / 3 + (k - 1) / 3) * S
         const z = 3
         positions.push(x, y, z)
         const c = gl(GC[k](P[i]))
@@ -174,19 +166,9 @@ export function initPoints (P, M, D = '3d') {
   let axiPositions
 
   if (D === '3d') {
-    axiPositions = [
-      -A, -A, -A, A, -A, -A,
-      -A, -A, -A, -A, A, -A,
-      -A, -A, -A, -A, -A, A
-    ]
+    axiPositions = [-A, -A, -A, A, -A, -A, -A, -A, -A, -A, A, -A, -A, -A, -A, -A, -A, A]
   } else {
-    axiPositions = [
-      -A, -A, 0, A, -A, 0,
-      -A, -A, 0, -A, A, 0,
-      -A, -A / 3, 0, A, -A / 3, 0,
-      A, -A / 3, 0, -A, -A / 3, 0,
-      -A, +A / 3, 0, A, +A / 3, 0,
-    ]
+    axiPositions = [-A, -A, 0, A, -A, 0, -A, -A, 0, -A, A, 0, -A, -A / 3, 0, A, -A / 3, 0, A, -A / 3, 0, -A, -A / 3, 0, -A, +A / 3, 0, A, +A / 3, 0]
   }
 
   const axiGeometry = new LineGeometry()
@@ -206,7 +188,7 @@ export function initPoints (P, M, D = '3d') {
 
   visualizationObjects.push(axis)
 
-  visualizationObjects.forEach(o => scene.add(o))
+  visualizationObjects.forEach((o) => scene.add(o))
 
   if (DIMS !== D) {
     DIMS = D
@@ -214,7 +196,7 @@ export function initPoints (P, M, D = '3d') {
   }
 }
 
-export function init (P, M, D = '3d') {
+export function init(P, M, D = '3d') {
   DIMS = null
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(window.devicePixelRatio)
@@ -252,18 +234,18 @@ export function init (P, M, D = '3d') {
   onWindowResize()
 }
 
-export function reset () {
+export function reset() {
   controls.reset()
   controls._rotateLeft((-85 * Math.PI) / 180)
   controls._pan(0, DIMS === '3d' ? -20 : -10)
 }
 
-function onWindowResize () {
+function onWindowResize() {
   camera.aspect = 1
   camera.updateProjectionMatrix()
 }
 
-function animate () {
+function animate() {
   renderer.setClearColor(0x000000, 0)
   renderer.setViewport(0, 0, innerWidth, innerHeight)
   controls.update()
