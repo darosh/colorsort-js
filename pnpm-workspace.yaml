@@ -1,2 +1,9 @@
 packages:
-  - 'packages/*'
+  - packages/*
+
+onlyBuiltDependencies:
+  - '@carbon/charts'
+  - '@carbon/charts-vue'
+  - '@carbon/colors'
+  - '@carbon/utils-position'
+  - carbon-components
