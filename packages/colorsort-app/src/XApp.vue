@@ -169,7 +169,7 @@ a.link-grey {
           of {{ number(totalGroups) }} {{ totalGroups === 1 ? 'result' : 'results' }}</span
         >
       </div>
-      <template v-if="!showStats && isWide">
+      <template v-if="showHome && isWide">
         <v-text-field @focus="onFocusInA" @focusout="onFocusOutA" clearable prepend-icon="mdi-magnify" autocomplete="off" v-model.lazy="filterPalette" hide-details class="align-self-center mr-4 mt-1" placeholder="Palette" density="compact" variant="solo-filled" max-width="220">
           <template v-slot:append-inner>
             <v-icon id="help-p" style="cursor: help;" @mouseenter="(e) => { cursor = cxy(e); menu = true; }" @mouseleave="() => { menu = false }"> mdi-help-circle </v-icon>
@@ -184,7 +184,7 @@ a.link-grey {
       </template>
 
       <template v-slot:extension>
-        <div v-if="!showStats && routeLoaded && isWide" class="d-flex" style="width: 100%;">
+        <div v-if="showHome && routeLoaded && isWide" class="d-flex" style="width: 100%;">
           <div style="width: 230px;" class="flex-grow-0 px-8"></div>
           <div class="d-flex ext flex-grow-1" style="flex-direction: row; height: 48px; padding-top: 12px;">
             <div style="width: 210px;" class="flex-grow-0"></div>
@@ -194,8 +194,8 @@ a.link-grey {
             <div style="width: 120px;" class="text-grey flex-grow-0 text-center">P, H</div>
             <div style="width: 74px;" class="text-grey flex-grow-0 text-center">LCH</div>
             <div style="width: 52px;" class="text-grey flex-grow-0 text-right">Diff</div>
-            <div style="width: 68px;" class="text-grey flex-grow-0 text-center">Best</div>
-            <div class="flex-grow-1"></div>
+            <div style="width: 60px;" class="text-grey flex-grow-0 text-center">Best</div>
+            <div class="flex-grow-1">{{sortFingerprint ? 'Sorted!' : ''}}</div>
           </div>
         </div>
         <div v-else-if="showStats && routeLoaded && isWide" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
@@ -213,10 +213,13 @@ a.link-grey {
     </v-app-bar>
 
     <v-main style="--v-layout-top: 96px;">
+      <!-- Edit page -->
+      <x-edit v-if="showEdit" :colors="editingColors" />
+
       <!-- Palettes page -->
-      <v-container @mousemove="listMouse" v-if="!showStats" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
-        <v-virtual-scroll :items="filteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality}, methods }, key }, index: rowIndex }">
+      <v-container @mousemove="listMouse" v-if="showHome" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
+        <v-virtual-scroll :items="sortedFilteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
+          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality, fingerprint}, methods }, key }, index: rowIndex }">
             <div
               @mouseenter="onmouseenter(undefined, palette, __key)"
               class="trow"
@@ -224,7 +227,6 @@ a.link-grey {
               style="user-select: none; position: relative; display: flex; align-items: center; cursor: default;"
               :ref="itemRef"
               @click="showPreview = selectedColors !== colors; onmouseenter(colors, palette, __key);"
-              @click.shift="palettePreviewClick(colors, __key)"
             >
               <div v-if="!groupIndex" style="align-self: start; width: 230px; overflow: hidden; text-overflow: ellipsis; padding-right: 16px; white-space: nowrap; position: absolute; left: -230px; margin-top: -1px; padding-top: 16.5px;" class="pl-8 trow-first">
                 <a @click.stop="() => {}" class="link" :href="`./#/?p=${encodeURIComponent(`${palette.index + 1}:${palette.key}`)}`">{{
@@ -240,7 +242,7 @@ a.link-grey {
               <template v-if="isWide">
                 <div class="text-pre text-right flex-grow-0" style="width: 90px; cursor: pointer;" @click.stop="expandIndex(__key)">
                   {{
-                  (methods.length === 1 || isExpanded(__key)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
+                    (methods.length === 1 || isExpanded(__key)) ? methods.map(({ time }) => time !== null ? `${time.toFixed(0)} ms` : '...').join('\n') : `... ${methods[0].time.toFixed(0)}ms`
                   }}
                 </div>
 
@@ -308,35 +310,35 @@ a.link-grey {
                 <div style="width: 100px; line-height: 14px; font-size: 12px;" class="text-center text-no-wrap flex-grow-0 py-2">
                   <template v-if="metrics">
                     <span :style="{color: scale(quality?.lchAvgChange.L)}">{{
-                      metrics.lchAvgChange.L.toFixed(0)
+                        metrics.lchAvgChange.L.toFixed(0)
                     }}</span
                     >,
                     <span :style="{color: scale(quality?.lchAvgChange.C)}">{{
-                      metrics.lchAvgChange.C.toFixed(0)
+                        metrics.lchAvgChange.C.toFixed(0)
                     }}</span
                     >,
                     <span :style="{color: scale(quality?.lchAvgChange.H)}">{{
-                      metrics.lchAvgChange.H.toFixed(0)
+                        metrics.lchAvgChange.H.toFixed(0)
                     }}</span
                     ><br />
                     <span :style="{color: scale(quality?.lchMaxChange.L)}">{{ metrics.lchMaxChange.L.toFixed(0) }}</span
                     >,
                     <span :style="{color: scale(quality?.lchMaxChange.C)}">{{
-                      metrics.lchMaxChange.C.toFixed(0)
+                        metrics.lchMaxChange.C.toFixed(0)
                     }}</span
                     >,
                     <span :style="{color: scale(quality?.lchMaxChange.H)}">{{
-                      metrics.lchMaxChange.H.toFixed(0)
+                        metrics.lchMaxChange.H.toFixed(0)
                     }}</span
                     ><br />
                     <span :style="{color: scale(quality?.lchDeviation.L)}">{{ metrics.lchDeviation.L.toFixed(0) }}</span
                     >,
                     <span :style="{color: scale(quality?.lchDeviation.C)}">{{
-                      metrics.lchDeviation.C.toFixed(0)
+                        metrics.lchDeviation.C.toFixed(0)
                     }}</span
                     >,
                     <span :style="{color: scale(quality?.lchDeviation.H)}">{{
-                      metrics.lchDeviation.H.toFixed(0)
+                        metrics.lchDeviation.H.toFixed(0)
                     }}</span>
                   </template>
                 </div>
@@ -350,7 +352,7 @@ a.link-grey {
                 <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, key, methods[0].index, methods.some(m => m.best))" />
               </div>
 
-              <div class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
+              <div @click.shift.stop="palettePreviewClick(colors, __key, fingerprint)" @click.alt.stop="(e) => openEdit(colors, e)" class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
                 <div class="color-row" style="display: flex; align-items: center; width: 100%; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
                   <div
                     @mouseleave="leaveColors"
@@ -368,7 +370,7 @@ a.link-grey {
       </v-container>
 
       <!-- Palette panel -->
-      <div class="fade" style="pointer-events: none; position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="showFade && !showStats && palette?.type?.data">
+      <div class="fade" style="pointer-events: none; position: fixed; top:0; left: 0; width: 226px; vertical-align: top; padding: 76px 32px 16px 32px;" v-if="showFade && showHome && palette?.type?.data">
         <div style="height: 29px;">{{ palette.index + 1 }}: {{ palette.key }}</div>
 
         <div class="d-flex mt-8">
@@ -468,11 +470,11 @@ a.link-grey {
     </v-main>
 
     <!-- Preview panel -->
-    <div v-if="!showStats && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
+    <div v-if="showHome && showPreview" style="position: fixed; z-index: 2000; bottom:12px; left: 12px;" class="previewer">
       <x-preview ref="previewer" :mode3d="mode3d" :points="selectedColors" :color-model="previewModel" />
       <v-btn @click="showPreview = false" color="transparent" icon="mdi-close" class="preview-closer" density="compact" style="position: absolute; top: 13px; right: 15px;" />
       <v-btn @click="$refs.previewer.reset()" color="transparent" icon="mdi-reload" class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 15px;" />
-      <v-btn @click="mode3d = !mode3d" color="transparent" icon class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 55px;">{{mode3d ? '3D' : '2D'}}</v-btn>
+      <v-btn @click="mode3d = !mode3d" color="transparent" icon class="preview-closer" density="compact" style="position: absolute; top: 13px; left: 55px;">{{ mode3d ? '3D' : '2D' }} </v-btn>
       <div style="position: absolute; bottom: 20px; left: 0; width: 100%;" class="text-center preview-buttons">
         <v-btn-toggle variant="flat" mandatory base-color="transparent" density="compact" v-model="previewModel">
           <v-btn value="oklab">Oklab</v-btn>
@@ -618,7 +620,7 @@ a.link-grey {
 
 <script>
 import { PALETTES } from 'colorsort-data-palettes'
-import { oklch, SORTING_METHODS } from 'colorsort'
+import { compareSpectralFeatures, cosineSimilarity, oklch, SORTING_METHODS } from 'colorsort'
 import XPreview from '@/XPreview.vue'
 import {
   BESTIES,
@@ -639,6 +641,7 @@ import { deserialize } from 'colorsort-compute'
 
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 import { toRaw } from 'vue'
+import XEdit from '@/XEdit.vue'
 
 const COMPUTED = deserialize(SORTED)
 
@@ -671,7 +674,7 @@ function scale (x) {
 const number = new Intl.NumberFormat('en-US').format
 
 export default {
-  components: { XPreview },
+  components: { XEdit, XPreview },
   data: () => ({
     showPreview: false,
     previewModel: 'oklab',
@@ -711,7 +714,8 @@ export default {
     showColors: false,
     showColorsValue: '...',
     algorithmStats: [],
-    mode3d: true
+    mode3d: true,
+    sortFingerprint: null,
   }),
   methods: {
     async sort () {
@@ -747,8 +751,20 @@ export default {
       this.rendered = p.done
       this.renderingTotal = p.total
     },
-    palettePreviewClick(colors, key) {
-      console.log(`// ${key}; ${colors.length} colors\nconst ${key.replaceAll(/[-:[\],]/g, '_')} = [${colors.map(x => `'${x}'`).join(', ')}]`)
+    openEdit (colors, event) {
+      if (event) {
+        event.preventDefault()
+      }
+
+      this.$router.push({
+        path: '/edit',
+        query: {
+          c: encodeURIComponent(colors.map(x => x.slice(1)).join('-'))
+        }
+      })
+    },
+    palettePreviewClick (colors, key, fingerprint) {
+      this.sortFingerprint = this.sortFingerprint === fingerprint ? null : fingerprint
     },
     formatTypes (obj) {
       return Object.fromEntries(
@@ -846,7 +862,7 @@ export default {
       this.hideBar = value
     },
     updateQuery (newParams) {
-      this.$router.replace({
+      this.$router.push({
         path: '/',
         query: {
           ...this.$route.query,
@@ -898,9 +914,26 @@ export default {
     this.sort()
   },
   computed: {
+    showHome: {
+      get () {
+        return this.$route.path === '/'
+      },
+    },
     showStats: {
       get () {
         return this.$route.path === '/stats'
+      },
+    },
+    showEdit: {
+      get () {
+        return this.$route.path === '/edit'
+      },
+    },
+    editingColors: {
+      get () {
+        return this.$route.query?.c
+            ?.split('-')
+            ?.map(x => `#${x}`)
       },
     },
     filterMethod: {
@@ -928,6 +961,44 @@ export default {
     },
     totalGroups () {
       return this.types.reduce((acc, { groups }) => acc + groups.length, 0)
+    },
+    sortedFilteredGroups () {
+      if (!this.sortFingerprint) {
+        return this.filteredGroups
+      }
+
+
+      const arr = [...this.filteredGroups].sort((a, b) => {
+        // return Math.random() - .5
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).structural - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).structural
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).perceptual - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).perceptual
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).overall - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).overall
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).breakdown.complexitySimilarity - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).breakdown.complexitySimilarity
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).breakdown.energyDistributionSimilarity - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).breakdown.energyDistributionSimilarity
+        // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).breakdown.spectrumCorrelation - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).breakdown.spectrumCorrelation
+
+        return (b.group.record.fingerprint && this.sortFingerprint
+                ? cosineSimilarity(this.sortFingerprint, b.group.record.fingerprint)
+                : 0)
+            - (a.group.record.fingerprint && this.sortFingerprint
+                ? cosineSimilarity(this.sortFingerprint, a.group.record.fingerprint)
+                : 0)
+      })
+
+      let groupIndex = 0
+
+      return arr.map((x, index, array) => {
+        if (index && (x.key === array[index-1].key)) {
+          groupIndex++
+        } else {
+          groupIndex = 0
+        }
+
+        return {
+          ...x,
+          groupIndex
+        }
+      })
     },
     filteredGroups () {
       return this.filtered.reduce((acc, { groups, key }) => {
@@ -1113,6 +1184,13 @@ export default {
     },
     '$route.matched' (newValue) {
       if (newValue.length) {
+        setTimeout(() => {
+          window.scrollTo({ top: 0, behavior: 'instant' })
+        }, 0)
+      }
+    },
+    sortedFilteredGroups(newValue) {
+      if (newValue) {
         setTimeout(() => {
           window.scrollTo({ top: 0, behavior: 'instant' })
         }, 0)
