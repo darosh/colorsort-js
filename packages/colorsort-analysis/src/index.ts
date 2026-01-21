@@ -125,7 +125,7 @@ export function palettesCovered(palettes: { [k: string]: PaletteRecord }, algoSt
     }
   >{}
 
-  console.log(algoStats)
+  // console.log(algoStats)
 
   for (const { key, colors } of Object.values(palettes)) {
     covered[key] = {
@@ -148,7 +148,7 @@ export function palettesByColorCount(palettes: { [k: string]: PaletteRecord }, a
   const pcs = palettesCovered(palettes, algoStats)
   const map = new Map()
 
-  console.log(palettes)
+  // console.log(palettes)
 
   for (const { colors, covered } of Object.values(pcs)) {
     const o = map.get(colors) ?? { colors, palettes: 0, covered: 0, uncovered: 0 }
