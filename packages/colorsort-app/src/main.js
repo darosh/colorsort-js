@@ -3,6 +3,10 @@ import 'vuetify/styles'
 import { createApp } from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { createVuetify } from 'vuetify'
+// import ChartsVue from '@carbon/charts-vue'
+
+import '@carbon/charts-vue/styles.css'
+
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
@@ -16,7 +20,8 @@ const vuetify = createVuetify({
 
 const routes = [
   { path: '/', component: XHome },
-  { path: '/stats', component: XHome }
+  { path: '/stats', component: XHome },
+  { path: '/edit', component: XHome }
 ]
 
 const router = createRouter({
@@ -24,4 +29,8 @@ const router = createRouter({
   routes
 })
 
-createApp(App).use(router).use(vuetify).mount('#app')
+createApp(App)
+  .use(router)
+  .use(vuetify)
+  // .use(ChartsVue)
+  .mount('#app')

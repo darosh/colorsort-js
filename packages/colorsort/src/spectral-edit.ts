@@ -6,6 +6,7 @@ import { downsamplePalette, resamplePalette } from './resample.ts'
 export interface SpectralProcessingOptions {
   // EQ (original)
   eq?: { lowGain: number; midGain: number; highGain: number }
+  dc?: number
 
   // Compression/Limiting
   compression?: {
@@ -83,6 +84,7 @@ export function applySpectralProcessing(colors: Vector3[], options: SpectralProc
 
   // Process lightness with gradient smoothing
   let resultL = [...L]
+
   if (options.lightnessSmoothing) {
     resultL = applyLightnessSmoothing(resultL, colors.length * options.lightnessSmoothing)
   }
@@ -107,8 +109,12 @@ export function applySpectralProcessing(colors: Vector3[], options: SpectralProc
   }
 
   // Frequency domain processing
-  resultA = processChannelSpectral(ff, resultA, options)
-  resultB = processChannelSpectral(ff, resultB, options)
+  const rL = processChannelSpectral(ff, resultL, options, true)
+  const rA = processChannelSpectral(ff, resultA, options)
+  const rB = processChannelSpectral(ff, resultB, options)
+
+  resultA = rA.result
+  resultB = rB.result
 
   // Apply compression (post-processing, in time domain)
   if (options.compression) {
@@ -132,123 +138,133 @@ export function applySpectralProcessing(colors: Vector3[], options: SpectralProc
   return {
     colors: downsampled,
     resampled,
-    processed
+    processed,
+    spectrum: [rL.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N), rA.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N), rB.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N)]
   }
 }
 
-function processChannelSpectral(ff: FFT, signal: number[], options: SpectralProcessingOptions): number[] {
+function processChannelSpectral(ff: FFT, signal: number[], options: SpectralProcessingOptions, skip: boolean = false) {
   const N = ff.size
   const spectrum = ff.createComplexArray()
 
   ff.realTransform(spectrum, signal)
-  ff.completeSpectrum(spectrum)
 
   const half = N / 2
 
-  // Apply EQ
-  if (options.eq) {
-    applyEQ(spectrum, half, options.eq)
-  }
+  if (!skip) {
+    if (options.dc) {
+      spectrum[0] *= options.dc
+      spectrum[1] *= options.dc
+    }
 
-  // Apply exciter (harmonic generation)
-  if (options.exciter) {
-    applyExciter(spectrum, half, options.exciter)
-  }
+    // Apply EQ
+    if (options.eq) {
+      applyEQ(spectrum, options.eq)
+    }
 
-  // Apply phase shift
-  if (options.phaseShift) {
-    applyPhaseShift(spectrum, half, options.phaseShift)
-  }
+    // Apply exciter (harmonic generation)
+    if (options.exciter) {
+      applyExciter(spectrum, options.exciter)
+    }
 
-  // Apply reverb (simplified via spectral smearing)
-  if (options.reverb) {
-    applyReverb(spectrum, half, options.reverb)
-  }
+    // Apply phase shift
+    if (options.phaseShift) {
+      applyPhaseShift(spectrum, options.phaseShift)
+    }
 
-  // Apply comb filter
-  if (options.combFilter) {
-    applyCombFilter(spectrum, half, options.combFilter)
-  }
+    // Apply reverb (simplified via spectral smearing)
+    if (options.reverb) {
+      applyReverb(spectrum, half, options.reverb)
+    }
 
-  // Apply spectral blur
-  if (options.spectralBlur) {
-    applySpectralBlur(spectrum, half, options.spectralBlur)
-  }
+    // Apply comb filter
+    if (options.combFilter) {
+      applyCombFilter(spectrum, options.combFilter)
+    }
 
-  // Apply spectral gate
-  if (options.spectralGate) {
-    applySpectralGate(spectrum, half, options.spectralGate)
-  }
+    // Apply spectral blur
+    if (options.spectralBlur) {
+      applySpectralBlur(spectrum, options.spectralBlur)
+    }
 
-  // Apply partial extraction
-  if (options.partialExtraction) {
-    applyPartialExtraction(spectrum, half, options.partialExtraction)
+    // Apply spectral gate
+    if (options.spectralGate) {
+      applySpectralGate(spectrum, options.spectralGate)
+    }
+
+    // Apply partial extraction
+    if (options.partialExtraction) {
+      applyPartialExtraction(spectrum, options.partialExtraction)
+    }
   }
 
   // Inverse transform
+  ff.completeSpectrum(spectrum)
   const outputComplex = ff.createComplexArray()
   ff.inverseTransform(outputComplex, spectrum)
 
   // Extract real parts (no normalization needed - your FFT library handles it)
   const result: number[] = []
+
   for (let i = 0; i < N; i++) {
     result[i] = outputComplex[i * 2]
   }
 
-  return result
+  return { result, spectrum }
 }
 
-function applyEQ(spectrum: number[], half: number, eq: { lowGain: number; midGain: number; highGain: number }) {
-  const lowCutoff = Math.floor(half * 0.05)
-  const highCutoff = Math.floor(half * 0.1)
+function applyEQ(spectrum: number[], eq: { lowGain: number; midGain: number; highGain: number }) {
+  const half = spectrum.length / 2
 
-  for (let k = 0; k <= half; k++) {
+  // Octave-based cutoffs (each band is 2x the frequency of previous)
+  const lowCutoff = Math.pow(2, 3) * 2 // 2^3 = 8 bins
+  const highCutoff = Math.pow(2, 5) * 2 // 2^5 = 32 bins
+
+  for (let idx = 2; idx < half; idx += 2) {
+    // Skip DC, process all
     let gain = 1.0
 
-    if (k < lowCutoff) {
+    if (idx < lowCutoff) {
       gain = eq.lowGain
-    } else if (k < highCutoff) {
+    } else if (idx < highCutoff) {
       gain = eq.midGain
     } else {
       gain = eq.highGain
     }
 
-    const idx = k * 2
+    // Optional: boost high frequencies more
+    const freqScale = 1 + Math.log2(idx / half + 1) * 2
+    gain *= freqScale
+
     spectrum[idx] *= gain
     spectrum[idx + 1] *= gain
-
-    // Mirror to negative frequencies
-    if (k > 0 && k < half) {
-      const N = half * 2
-      const negIdx = (N - k) * 2
-      spectrum[negIdx] = spectrum[idx]
-      spectrum[negIdx + 1] = -spectrum[idx + 1]
-    }
   }
 }
 
-function applyExciter(spectrum: number[], half: number, exciter: { amount: number; frequency: number }) {
+function applyExciter(spectrum: number[], exciter: { amount: number; frequency: number }) {
+  const half = spectrum.length / 2
+
   // Generate harmonics by duplicating energy at higher frequencies
-  const targetBin = Math.floor(half * exciter.frequency)
-  const harmonicStart = targetBin * 2
+  const targetBin = Math.floor(1 + (half / 2) * exciter.frequency)
+  const harmonicStart = Math.max(2, targetBin * 2)
 
-  for (let k = harmonicStart; k <= half && k < half; k++) {
-    const sourceK = Math.floor(k / 2)
-    if (sourceK < half) {
-      const idx = k * 2
-      const srcIdx = sourceK * 2
+  for (let idx = harmonicStart; idx < half; idx += 2) {
+    const sourceK = Math.floor(idx / 4) * 2
+    const srcIdx = sourceK * 2
 
-      spectrum[idx] += spectrum[srcIdx] * exciter.amount * 0.5
-      spectrum[idx + 1] += spectrum[srcIdx + 1] * exciter.amount * 0.5
-    }
+    // Optional: boost high frequencies more
+    const freqScale = 1 + Math.log2(idx / half + 1) * 2
+
+    spectrum[idx] += spectrum[srcIdx] * exciter.amount * 0.5 * freqScale
+    spectrum[idx + 1] += spectrum[srcIdx + 1] * exciter.amount * 0.5 * freqScale
   }
 }
 
-function applyPhaseShift(spectrum: number[], half: number, degrees: number) {
+function applyPhaseShift(spectrum: number[], degrees: number) {
   const radians = (degrees * Math.PI) / 180
+  const half = spectrum.length / 2
 
-  for (let k = 0; k <= half; k++) {
-    const idx = k * 2
+  for (let idx = 2; idx <= half; idx += 2) {
     const re = spectrum[idx]
     const im = spectrum[idx + 1]
 
@@ -258,14 +274,6 @@ function applyPhaseShift(spectrum: number[], half: number, degrees: number) {
 
     spectrum[idx] = mag * Math.cos(phase)
     spectrum[idx + 1] = mag * Math.sin(phase)
-
-    // Mirror
-    if (k > 0 && k < half) {
-      const N = half * 2
-      const negIdx = (N - k) * 2
-      spectrum[negIdx] = spectrum[idx]
-      spectrum[negIdx + 1] = -spectrum[idx + 1]
-    }
   }
 }
 
@@ -354,7 +362,9 @@ function clamp(val: number, min: number, max: number): number {
   return Math.max(min, Math.min(max, val))
 }
 
-function applyCombFilter(spectrum: number[], half: number, comb: { frequency: number; feedback: number; mix: number }) {
+function applyCombFilter(spectrum: number[], comb: { frequency: number; feedback: number; mix: number }) {
+  const half = spectrum.length / 2 / 2
+
   // Comb filter creates notches at regular intervals
   const fundamentalBin = Math.floor(half * comb.frequency)
   if (fundamentalBin === 0) {
@@ -364,7 +374,7 @@ function applyCombFilter(spectrum: number[], half: number, comb: { frequency: nu
   const drySpectrum = new Float64Array(spectrum)
 
   // Create notches at multiples of fundamental
-  for (let k = 0; k <= half; k++) {
+  for (let k = 1; k < half; k++) {
     const idx = k * 2
 
     // Calculate distance to nearest comb tooth
@@ -378,18 +388,12 @@ function applyCombFilter(spectrum: number[], half: number, comb: { frequency: nu
 
     spectrum[idx] = drySpectrum[idx] * (1 - comb.mix) + drySpectrum[idx] * attenuation * comb.mix
     spectrum[idx + 1] = drySpectrum[idx + 1] * (1 - comb.mix) + drySpectrum[idx + 1] * attenuation * comb.mix
-
-    // Mirror
-    if (k > 0 && k < half) {
-      const N = half * 2
-      const negIdx = (N - k) * 2
-      spectrum[negIdx] = spectrum[idx]
-      spectrum[negIdx + 1] = -spectrum[idx + 1]
-    }
   }
 }
 
-function applySpectralBlur(spectrum: number[], half: number, blur: { amount: number }) {
+function applySpectralBlur(spectrum: number[], blur: { amount: number }) {
+  const half = spectrum.length / 2
+
   if (blur.amount === 0) {
     return
   }
@@ -398,16 +402,15 @@ function applySpectralBlur(spectrum: number[], half: number, blur: { amount: num
   const blurred = new Float64Array(spectrum)
 
   // Gaussian-like blur using box filter approximation
-  for (let k = 0; k <= half; k++) {
-    const idx = k * 2
+  for (let idx = 2; idx < half; idx += 2) {
     let sumRe = 0
     let sumIm = 0
     let count = 0
 
     for (let offset = -radius; offset <= radius; offset++) {
-      const neighbor = k + offset
-      if (neighbor >= 0 && neighbor <= half) {
-        const nIdx = neighbor * 2
+      const nIdx = idx + offset
+
+      if (nIdx >= 2 && nIdx < half) {
         sumRe += spectrum[nIdx]
         sumIm += spectrum[nIdx + 1]
         count++
@@ -416,26 +419,21 @@ function applySpectralBlur(spectrum: number[], half: number, blur: { amount: num
 
     blurred[idx] = sumRe / count
     blurred[idx + 1] = sumIm / count
-
-    // Mirror
-    if (k > 0 && k < half) {
-      const N = half * 2
-      const negIdx = (N - k) * 2
-      blurred[negIdx] = blurred[idx]
-      blurred[negIdx + 1] = -blurred[idx + 1]
-    }
   }
 
   // Copy back
-  for (let i = 0; i < spectrum.length; i++) {
+  for (let i = 2; i < half; i++) {
     spectrum[i] = blurred[i]
   }
 }
 
-function applySpectralGate(spectrum: number[], half: number, gate: { threshold: number; ratio: number }) {
+function applySpectralGate(spectrum: number[], gate: { threshold: number; ratio: number }) {
+  const half = spectrum.length / 2 / 2
+
   // Calculate overall magnitude threshold
   let maxMag = 0
-  for (let k = 0; k <= half; k++) {
+
+  for (let k = 1; k < half; k++) {
     const idx = k * 2
     const mag = Math.sqrt(spectrum[idx] ** 2 + spectrum[idx + 1] ** 2)
     maxMag = Math.max(maxMag, mag)
@@ -443,7 +441,7 @@ function applySpectralGate(spectrum: number[], half: number, gate: { threshold: 
 
   const threshold = maxMag * gate.threshold
 
-  for (let k = 0; k <= half; k++) {
+  for (let k = 1; k < half; k++) {
     const idx = k * 2
     const re = spectrum[idx]
     const im = spectrum[idx + 1]
@@ -455,19 +453,13 @@ function applySpectralGate(spectrum: number[], half: number, gate: { threshold: 
       spectrum[idx] *= attenuation
       spectrum[idx + 1] *= attenuation
     }
-
-    // Mirror
-    if (k > 0 && k < half) {
-      const N = half * 2
-      const negIdx = (N - k) * 2
-      spectrum[negIdx] = spectrum[idx]
-      spectrum[negIdx + 1] = -spectrum[idx + 1]
-    }
   }
 }
 
-function applyPartialExtraction(spectrum: number[], half: number, partial: { fundamental: number; harmonics: number; bandwidth: number }) {
+function applyPartialExtraction(spectrum: number[], partial: { fundamental: number; harmonics: number; bandwidth: number }) {
+  const half = spectrum.length / 2 / 2
   const fundamentalBin = Math.floor(half * partial.fundamental)
+
   if (fundamentalBin === 0) {
     return
   }

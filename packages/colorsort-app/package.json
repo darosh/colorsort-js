@@ -9,6 +9,7 @@
     "colorsort-data-sorted": "workspace:*"
   },
   "devDependencies": {
+    "@carbon/charts-vue": "^1.27.2",
     "chroma-js": "^3.2.0",
     "debug": "^4.4.3",
     "three": "^0.182.0",

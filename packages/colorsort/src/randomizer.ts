@@ -1,5 +1,5 @@
-export function randomizer() {
-  let previous = 1
+export function randomizer(p = 1) {
+  let previous = p
 
   return () => {
     previous = (previous * 16807) % 2147483647
