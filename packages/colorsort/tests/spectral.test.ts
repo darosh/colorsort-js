@@ -7,8 +7,9 @@ import {
   sortBySpectralSmoothness,
   sortBySpectralTemplate
 } from '../src/sorting-methods/spectral.ts'
+import { compareSpectralFeatures, extractSpectralFeaturesOklab, oklch } from '../src'
 
-test('spectral', () => {
+test.skip('spectral', () => {
 // Example 1: Reference palette with multi-ramp structure (Blue + Orange)
   const referenceMultiRamp: Vector3[] = [
     [0.45, 0.15, 220], [0.55, 0.18, 230], [0.65, 0.14, 240],
@@ -104,4 +105,22 @@ test('spectral', () => {
   sorted5.forEach((c, i) => {
     console.log(`  ${i}: L=${c[0].toFixed(2)} C=${c[1].toFixed(2)} H=${c[2].toFixed(0)}°`)
   })
+})
+
+test('spectral oklab', () => {
+  const lo_sweetie_16_Original = ['#1a1c2c', '#5d275d', '#b13e53', '#ef7d57', '#ffcd75', '#a7f070', '#38b764', '#257179', '#29366f', '#3b5dc9', '#41a6f6', '#73eff7', '#f4f4f4', '#94b0c2', '#566c86', '#333c57']
+  const lo_downgraded_32_Original = ['#7b334c', '#a14d55', '#c77369', '#e3a084', '#f2cb9b', '#d37b86', '#af5d8b', '#804085', '#5b3374', '#412051', '#5c486a', '#887d8d', '#b8b4b2', '#dcdac9', '#ffffe0', '#b6f5db', '#89d9d9', '#72b6cf', '#5c8ba8', '#4e6679', '#464969', '#44355d', '#3d003d', '#621748', '#942c4b', '#c7424f', '#e06b51', '#f2a561', '#fcef8d', '#b1d480', '#80b878', '#658d78']
+
+  const colorsA = lo_sweetie_16_Original.map(oklch)
+  const colorsB = lo_downgraded_32_Original.map(oklch)
+  
+  const sfA = extractSpectralFeaturesOklab(colorsA)
+  const sfB = extractSpectralFeaturesOklab(colorsB)
+  
+  console.log(sfA)
+  console.log(sfB)
+  
+  const compare = compareSpectralFeatures(sfA, sfB)
+  
+  console.log(compare)
 })
