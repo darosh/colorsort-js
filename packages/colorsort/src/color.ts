@@ -3,6 +3,7 @@ import { UniColor } from './method-runner.ts'
 import chroma from 'chroma-js'
 
 import type { Lab, Lch, Hsl, Hsv, Okhsl, Okhsv, Oklab, Oklch } from 'culori/fn'
+
 import {
   useMode,
   // modeLab65, modeLch65,
@@ -14,7 +15,8 @@ import {
   modeOkhsl,
   modeOklab,
   modeOkhsv,
-  modeOklch
+  modeOklch,
+  formatHex
 } from 'culori/fn'
 
 useMode(modeRgb)
@@ -29,7 +31,23 @@ const cuOklab = useMode(modeOklab)
 const cuOkhsv = useMode(modeOkhsv)
 const cuOklch = useMode(modeOklch)
 
-function gl2luminance ([r_, g_, b_]: [number, number, number]) {
+export function oklch2hex([l, c, h]: Vector3) {
+  return formatHex({ l, c, h, mode: 'oklch' })
+}
+
+export function oklch2oklab([l_, c, h]: Vector3): Vector3 {
+  const { l, a, b } = cuOklab({ l: l_, c, h, mode: 'oklch' })
+
+  return [l, a, b]
+}
+
+export function oklab2oklch([l_, a, b]: Vector3): Vector3 {
+  const { l, c, h } = cuOklch({ l: l_, a, b, mode: 'oklab' })
+
+  return [l, c, <number>h]
+}
+
+function gl2luminance([r_, g_, b_]: [number, number, number]) {
   // relative luminance
   // see http://www.w3.org/TR/2008/REC-WCAG20-20081211/#relativeluminancedef
   const r = luminance_x(r_)
@@ -39,11 +57,11 @@ function gl2luminance ([r_, g_, b_]: [number, number, number]) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b
 }
 
-function luminance_x (x: number) {
+function luminance_x(x: number) {
   return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4)
 }
 
-function memoize (fn: (arg: any) => any) {
+function memoize(fn: (arg: any) => any) {
   const map = new Map()
 
   return (a: any) => {
@@ -57,7 +75,7 @@ function memoize (fn: (arg: any) => any) {
   }
 }
 
-export function hexToRgb (hex: string): [number, number, number] {
+export function hexToRgb(hex: string): [number, number, number] {
   const n = parseInt(hex.slice(1), 16)
   return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
 }
@@ -113,7 +131,7 @@ export const hsv = memoize((c) => {
   return [h, s, v]
 })
 
-export function nonH (H: number) {
+export function nonH(H: number) {
   return H === undefined //|| isNaN(H) || H === null
 }
 
@@ -121,7 +139,7 @@ export function nonH (H: number) {
 
 export const luminance = memoize((c: string) => gl2luminance(gl(c)))
 
-export function compareLumLCH (a: string, b: string) {
+export function compareLumLCH(a: string, b: string) {
   const lA = luminance(a)
   const lB = luminance(b)
 
@@ -143,23 +161,23 @@ export function compareLumLCH (a: string, b: string) {
   return lchA[2] - lchB[2]
 }
 
-export function flatRgb (hexes: string[]) {
+export function flatRgb(hexes: string[]) {
   return hexes.map((c) => hexToRgb(c)).flat()
 }
 
-export function deltaE (a: string, b: string, x = 1, y = 1, z = 1) {
+export function deltaE(a: string, b: string, x = 1, y = 1, z = 1) {
   return chroma.deltaE(a, b, x, y, z)
 }
 
-export function normalizeLab (a: Vector3) {
+export function normalizeLab(a: Vector3) {
   return [a[0] / 100, (a[1] + 128) / 255, (a[2] + 128) / 255]
 }
 
-function intLab (a: Vector3) {
+function intLab(a: Vector3) {
   return [Math.round((a[0] / 100) * 255), Math.round(a[1] + 128), Math.round(a[2] + 128)]
 }
 
-function gl2cmyk ([r, g, b]: number[]) {
+function gl2cmyk([r, g, b]: number[]) {
   const k = 1 - Math.max(r, g, b)
   const f = k < 1 ? 1 / (1 - k) : 0
   const c = (1 - r - k) * f
@@ -172,14 +190,14 @@ function gl2cmyk ([r, g, b]: number[]) {
 // https://github.com/w3c/csswg-drafts/issues/6642#issuecomment-945714988
 const OK2_SCALE = (2.016 + 2.045) / 2
 
-export function distanceOk2 ([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
+export function distanceOk2([L1, a1, b1]: Vector3, [L2, a2, b2]: Vector3) {
   let dL = L1 - L2
   let da = OK2_SCALE * (a1 - a2)
   let db = OK2_SCALE * (b1 - b2)
   return Math.sqrt(dL ** 2 + da ** 2 + db ** 2)
 }
 
-export function convertColors (colors: string[], model: ColorType): [UniColor, string][] {
+export function convertColors(colors: string[], model: ColorType): [UniColor, string][] {
   if (model === 'rgb') {
     return colors.map((c) => [hexToRgb(c), c])
   } else if (model === 'gl') {
@@ -213,21 +231,7 @@ export function convertColors (colors: string[], model: ColorType): [UniColor, s
   }
 }
 
-export type ColorType =
-  'hex'
-  | 'rgb'
-  | 'gl'
-  | 'oklab'
-  | 'oklch'
-  | 'okhsl'
-  | 'okhsv'
-  | 'lab'
-  | 'lab_norm'
-  | 'lab_int'
-  | 'lch'
-  | 'hsv'
-  | 'hsl'
-  | 'cmyk'
+export type ColorType = 'hex' | 'rgb' | 'gl' | 'oklab' | 'oklch' | 'okhsl' | 'okhsv' | 'lab' | 'lab_norm' | 'lab_int' | 'lch' | 'hsv' | 'hsl' | 'cmyk'
 
 export const COLOR_TYPES = {
   rgb: 'rgb',
