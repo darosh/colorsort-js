@@ -1,4 +1,4 @@
-import type { PaletteType, MetricsEx } from 'colorsort'
+import type { PaletteType, MetricsEx, Fingerprint, SpectralFeatures } from 'colorsort'
 import { getMetricsExRange, metricsExQuality, metricsExQualitySum } from 'colorsort'
 import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'
@@ -49,6 +49,8 @@ export type SortRecord = {
   metrics: MetricsEx<number> | null
   quality: MetricsEx<number> | null
   score: number | null
+  fingerprint: Fingerprint | null
+  spectral: SpectralFeatures | null
   render: Function
   best: boolean
   bestDistance: number | null
@@ -99,6 +101,8 @@ function groupRecords(palette: PaletteRecord) {
           metrics: record.metrics,
           quality: record.quality,
           score: record.score,
+          fingerprint: record.fingerprint,
+          spectral: record.spectral,
           bestDistance: record.bestDistance,
           bestDistanceQuality: record.bestDistanceQuality
         },
@@ -252,9 +256,11 @@ export function updateDistance(palette: PaletteRecordGrouped) {
   }
 }
 
-export function updateScore(palette: PaletteRecordGrouped) {
+export async function updateScore(palette: PaletteRecordGrouped, render: Function) {
   for (const g of palette.groups) {
     g.record.score = metricsExQualitySum(<MetricsEx<number>>g.record.quality) //+ <number>g.record.bestDistanceQuality
+    g.record.fingerprint = (await render({ getFingerprint: g.record.colors })).analysis.fingerprint
+    // g.record.spectral = await render({ getSpectral: g.record.colors })
 
     for (const { index } of g.methods) {
       const qr = palette.records.find((pr) => pr.index === index)
@@ -264,6 +270,8 @@ export function updateScore(palette: PaletteRecordGrouped) {
       }
 
       qr.score = g.record.score
+      qr.fingerprint = g.record.fingerprint
+      qr.spectral = g.record.spectral
     }
   }
 }
@@ -308,13 +316,15 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
         metrics: null,
         quality: null,
         score: null,
+        fingerprint: null,
+        spectral: null,
         best: (method.mid === 'Original' && isArtist(key)) || BESTIES.some((d) => d.key === key && d.mid === method.mid),
         bestDistance: null,
         bestDistanceQuality: null,
         render: () =>
           render({ sortName: method.name, palette: colors })
             // @ts-ignore
-            .then(({ result, metrics, elapsed }) => {
+            .then(async ({ result, metrics, elapsed }) => {
               row.colors = result
               row.time = elapsed
               row.metrics = metrics
@@ -323,7 +333,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
                 groupRecords(row.palette)
                 updateRangeAndQuality(<PaletteRecordGrouped>row.palette)
                 updateDistance(<PaletteRecordGrouped>row.palette)
-                updateScore(<PaletteRecordGrouped>row.palette)
+                await updateScore(<PaletteRecordGrouped>row.palette, render)
 
                 ;(<PaletteRecordGrouped>row.palette).groups.sort((a, b) => <number>a.record.score - <number>b.record.score)
                 donePalettes++

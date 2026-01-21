@@ -1,4 +1,5 @@
-import { detectPaletteType, SORTING_METHODS } from 'colorsort'
+import { detectPaletteType, extractSpectralFeaturesOklab, metricsFft, oklch, SORTING_METHODS } from 'colorsort'
+
 import { lch, oklab } from 'colorsort'
 import { metricsEx } from 'colorsort'
 
@@ -10,7 +11,7 @@ export async function timed(fn) {
 }
 
 self.onmessage = async (msg) => {
-  const { sortName, getPaletteType, palette } = msg.data
+  const { sortName, getPaletteType, palette, getFingerprint, getSpectral } = msg.data
 
   if (sortName) {
     const fn = SORTING_METHODS.find((d) => d.name === sortName).fn
@@ -32,5 +33,11 @@ self.onmessage = async (msg) => {
   } else if (getPaletteType) {
     const lchColors = getPaletteType.map((c) => lch(c))
     self.postMessage(detectPaletteType(lchColors))
+  } else if (getFingerprint) {
+    const lchColors = getFingerprint.map((c) => lch(c))
+    self.postMessage(metricsFft(lchColors))
+  } else if (getSpectral) {
+    const lchColors = getSpectral.map((c) => oklch(c))
+    self.postMessage(extractSpectralFeaturesOklab(lchColors))
   }
 }
