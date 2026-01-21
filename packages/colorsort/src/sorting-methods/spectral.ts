@@ -67,7 +67,7 @@ export function extractSpectralFeatures(colors: Vector3[]): SpectralFeatures {
   const smoothness = highFreqEnergy > 0 ? lowFreqEnergy / highFreqEnergy : Infinity
 
   // console.log({lowFreqEnergy, highFreqEnergy, smoothness, cutoff, huePattern})
-  
+
   // Calculate spectral entropy (complexity measure)
   const totalEnergy = huePattern.reduce((sum, m) => sum + m * m, 0)
   const probabilities = huePattern.map((m) => (m * m) / totalEnergy)
