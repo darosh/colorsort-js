@@ -129,7 +129,7 @@
   </div>
 </template>
 <script>
-import { applySpectralProcessing, oklch, oklch2hex, oklch2oklab, randomizer } from 'colorsort'
+import { applySpectralProcessing, oklab, oklab2hex, randomizer } from 'colorsort'
 import { CcvLineChart } from '@carbon/charts-vue'
 
 let id = 0
@@ -211,11 +211,11 @@ export default {
   }),
   computed: {
     colorsEq () {
-      const lchs = this.colors.map(oklch)
+      const labColors = this.colors.map(oklab)
 
       if (this.randomize) {
         const rand = randomizer(this.randomize)
-        lchs.sort((a, b) => {
+        labColors.sort((a, b) => {
           if (rand() < this.randomize / 10) {
             return rand() - .5
           } else {
@@ -290,27 +290,26 @@ export default {
 
       // console.log(JSON.stringify(options))
 
-      const { colors, processed, resampled, spectrum } = applySpectralProcessing(lchs, options)
+      const { colors, processed, resampled, spectrum } = applySpectralProcessing(labColors, options)
 
       const cl = colors.length - 1
       const sl = spectrum[0].length - 1
-      const labs = colors.map(oklch2oklab)
 
       this.chartData = [
         ...spectrum[0].map((value, index) => ({ value, t: index / sl, group: 'L~' })),
         ...spectrum[1].map((value, index) => ({ value, t: index / sl, group: 'a~' })),
         ...spectrum[2].map((value, index) => ({ value, t: index / sl, group: 'b~' })),
-        ...labs.map((value, index) => ({ value: value[0], t: index / cl, group: 'L'})),
-        ...labs.map((value, index) => ({ value: value[1], t: index / cl, group: 'a'})),
-        ...labs.map((value, index) => ({ value: value[2], t: index / cl, group: 'b'})),
+        ...colors.map((value, index) => ({ value: value[0], t: index / cl, group: 'L'})),
+        ...colors.map((value, index) => ({ value: value[1], t: index / cl, group: 'a'})),
+        ...colors.map((value, index) => ({ value: value[2], t: index / cl, group: 'b'})),
       ]
 
       // console.log(this.chartData)
 
       return {
-        colors: colors.map(oklch2hex),
-        processed: processed.map(oklch2hex),
-        resampled: resampled.map(oklch2hex)
+        colors: colors.map(oklab2hex),
+        processed: processed.map(oklab2hex),
+        resampled: resampled.map(oklab2hex)
       }
     }
   },

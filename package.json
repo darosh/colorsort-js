@@ -18,6 +18,7 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r --filter='./packages/*' run build",
+    "build:compute": "pnpm -r --filter='./packages/colorsort-data-sorted' run build",
     "build:no-compute": "pnpm -r --filter='./packages/*' --filter=!'./packages/colorsort-data-sorted' run build",
     "dev": "pnpm -r --parallel --filter='./packages/*' run dev",
     "dev:fast": "cross-env FAST=1 pnpm -r --parallel --filter='./packages/*' run dev",

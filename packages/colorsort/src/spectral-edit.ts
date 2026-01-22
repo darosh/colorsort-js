@@ -1,7 +1,6 @@
 import FFT from 'fft.js'
 import { Vector3 } from './vector.ts'
-import { oklab2oklch, oklch2oklab } from './color.ts'
-import { downsamplePalette, resamplePalette } from './resample.ts'
+import { downsamplePalette, resamplePaletteSnap } from './resample.ts'
 
 export interface SpectralProcessingOptions {
   // EQ (original)
@@ -69,24 +68,23 @@ export interface SpectralProcessingOptions {
   lightnessSmoothing?: number // gradient smoothing amount (0-1)
 }
 
-export function applySpectralProcessing(colors: Vector3[], options: SpectralProcessingOptions = {}) {
+export function applySpectralProcessing(labColors: Vector3[], options: SpectralProcessingOptions = {}) {
   const N = 256
   const ff = new FFT(N)
 
   // Resample and convert
-  const resampled = resamplePalette(colors, N)
-  const oklabColors = resampled.map(oklch2oklab)
+  const resampledLabs = resamplePaletteSnap(labColors, N)
 
   // Extract channels
-  const L = oklabColors.map((c) => c[0])
-  const a = oklabColors.map((c) => c[1])
-  const b = oklabColors.map((c) => c[2])
+  const L = resampledLabs.map((c) => c[0])
+  const a = resampledLabs.map((c) => c[1])
+  const b = resampledLabs.map((c) => c[2])
 
   // Process lightness with gradient smoothing
   let resultL = [...L]
 
   if (options.lightnessSmoothing) {
-    resultL = applyLightnessSmoothing(resultL, colors.length * options.lightnessSmoothing)
+    resultL = applyLightnessSmoothing(resultL, labColors.length * options.lightnessSmoothing)
   }
 
   // Process a and b channels
@@ -130,14 +128,15 @@ export function applySpectralProcessing(colors: Vector3[], options: SpectralProc
       clamp(resultA[i], -0.4, 0.4), // Oklab a/b typical range
       clamp(resultB[i], -0.4, 0.4)
     ]
-    processed.push(oklab2oklch(lab))
+
+    processed.push(lab)
   }
 
-  const downsampled = downsamplePalette(processed, colors.length)
+  const downsampled = downsamplePalette(processed, labColors.length)
 
   return {
     colors: downsampled,
-    resampled,
+    resampled: resampledLabs,
     processed,
     spectrum: [rL.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N), rA.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N), rB.spectrum.filter((_, i) => i % 2 === 0 && i > 0 && i <= N)]
   }

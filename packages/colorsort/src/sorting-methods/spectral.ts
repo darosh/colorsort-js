@@ -43,11 +43,6 @@ export function extractSpectralFeatures(colors: Vector3[]): SpectralFeatures {
 
   hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
 
-  // Compute FFTs
-  // const hueDeltaFFT = fft(hueDeltas)
-  // const chromaFFT = fft(chromas)
-  // const lightnessFFT = fft(lightnesses)
-
   // Extract magnitudes (first half, excluding DC component)
   const huePattern = magnitude(half(fft(hueDeltas)))
   const chromaPattern = magnitude(half(fft(chromas)))

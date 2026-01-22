@@ -35,6 +35,10 @@ export function oklch2hex([l, c, h]: Vector3) {
   return formatHex({ l, c, h, mode: 'oklch' })
 }
 
+export function oklab2hex([l, a, b]: Vector3) {
+  return formatHex({ l, a, b, mode: 'oklab' })
+}
+
 export function oklch2oklab([l_, c, h]: Vector3): Vector3 {
   const { l, a, b } = cuOklab({ l: l_, c, h, mode: 'oklch' })
 
