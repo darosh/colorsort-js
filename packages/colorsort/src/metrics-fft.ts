@@ -1,8 +1,6 @@
-// FFT implementation (Cooley-Tukey algorithm)
 import { Vector3 } from './vector.ts'
 import { oklch2oklab } from './color.ts'
-
-export type Complex = { re: number; im: number }
+import { fft, half, magnitude } from './fft.ts'
 
 export type Analysis = {
   type: string
@@ -33,64 +31,6 @@ export type Analysis = {
 export type Fingerprint = [number, number, number, number, number, number, number]
 
 export type SpectrumData = { freq: number; hueDelta: number; chroma: number; lightness: number }
-
-export function fft(signal: number[]): Complex[] {
-  const n = signal.length
-
-  if (n <= 1) {
-    return []
-  }
-
-  // Pad to power of 2
-  const nextPow2 = Math.pow(2, Math.ceil(Math.log2(n)))
-  if (n < nextPow2) {
-    signal = [...signal, ...(<number[]>Array.from({ length: nextPow2 - n }).fill(0))]
-  }
-
-  return fftRecursive(signal)
-}
-
-export function fftRecursive(signal: number[]) {
-  const n = signal.length
-  if (n <= 1) {
-    return signal.map((x) => ({ re: x, im: 0 }))
-  }
-
-  const even = fftRecursive(signal.filter((_, i) => i % 2 === 0))
-  const odd = fftRecursive(signal.filter((_, i) => i % 2 === 1))
-
-  const result: Complex[] = Array.from({ length: n })
-
-  for (let k = 0; k < n / 2; k++) {
-    const angle = (-2 * Math.PI * k) / n
-    const wk: Complex = { re: Math.cos(angle), im: Math.sin(angle) }
-    const oddK = complexMult(wk, odd[k])
-
-    result[k] = complexAdd(even[k], oddK)
-    result[k + n / 2] = complexSub(even[k], oddK)
-  }
-
-  return result
-}
-
-function complexMult(a: Complex, b: Complex) {
-  return {
-    re: a.re * b.re - a.im * b.im,
-    im: a.re * b.im + a.im * b.re
-  }
-}
-
-function complexAdd(a: Complex, b: Complex) {
-  return { re: a.re + b.re, im: a.im + b.im }
-}
-
-function complexSub(a: Complex, b: Complex) {
-  return { re: a.re - b.re, im: a.im - b.im }
-}
-
-export function magnitude(c: Complex) {
-  return Math.sqrt(c.re * c.re + c.im * c.im)
-}
 
 // Color palette analysis
 function analyzePaletteStructure(colors: Vector3[]): Analysis {
@@ -132,16 +72,16 @@ function analyzePaletteStructure(colors: Vector3[]): Analysis {
   hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
 
   // FFT on hue differences to detect clustering patterns
-  const hueDeltaFFT = fft(hueDeltas)
-  const hueDeltaMagnitudes = hueDeltaFFT.slice(0, Math.floor(hueDeltaFFT.length / 2)).map(magnitude)
+  // const hueDeltaFFT = fft(hueDeltas)
+  const hueDeltaMagnitudes = magnitude(half(fft(hueDeltas)))
 
   // FFT on chroma sequence to detect variation patterns
-  const chromaFFT = fft(chromas)
-  const chromaMagnitudes = chromaFFT.slice(0, Math.floor(chromaFFT.length / 2)).map(magnitude)
+  // const chromaFFT = fft(chromas)
+  const chromaMagnitudes = magnitude(half(fft(chromas)))
 
   // FFT on lightness sequence to detect banding
-  const lightnessFFT = fft(lightnesses)
-  const lightnessMagnitudes = lightnessFFT.slice(0, Math.floor(lightnessFFT.length / 2)).map(magnitude)
+  // const lightnessFFT = fft(lightnesses)
+  const lightnessMagnitudes = magnitude(half(fft(lightnesses)))
 
   // Calculate features
   const hueSpread = Math.max(...sortedHues) - Math.min(...sortedHues)
@@ -428,17 +368,18 @@ export function extractSpectralFeaturesOklab(colors: Vector3[]): SpectralFeature
   const chroma = oklabColors.map((_, i) => Math.sqrt(aChannel[i] ** 2 + bChannel[i] ** 2))
 
   // Compute FFTs
-  const lightnessFFT = fft(lightness)
-  const aFFT = fft(aChannel)
-  const bFFT = fft(bChannel)
-  const chromaFFT = fft(chroma)
+  // const lightnessFFT = fft(lightness)
+  // const aFFT = fft(aChannel)
+  // const bFFT = fft(bChannel)
+  // const chromaFFT = fft(chroma)
 
   // Extract magnitudes (first half only, skip DC component at index 0)
-  const halfLength = Math.floor(lightnessFFT.length / 2)
-  const lightnessSpectrum = lightnessFFT.slice(1, halfLength).map(magnitude)
-  const aSpectrum = aFFT.slice(1, halfLength).map(magnitude)
-  const bSpectrum = bFFT.slice(1, halfLength).map(magnitude)
-  const chromaSpectrum = chromaFFT.slice(1, halfLength).map(magnitude)
+  // const halfLength = Math.floor(lightnessFFT.length / 2)
+
+  const lightnessSpectrum = magnitude(half(fft(lightness)))
+  const aSpectrum = magnitude(half(fft(aChannel)))
+  const bSpectrum = magnitude(half(fft(bChannel)))
+  const chromaSpectrum = magnitude(half(fft(chroma)))
 
   // Calculate derived metrics
   const spectralCentroid = {
