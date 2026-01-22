@@ -1,5 +1,5 @@
 import { Vector3 } from '../vector.ts'
-import { fft, magnitude } from '../metrics-fft.ts'
+import { fft, half, magnitude } from '../fft.ts'
 
 // ============================================================================
 // Spectral Feature Extraction
@@ -44,14 +44,14 @@ export function extractSpectralFeatures(colors: Vector3[]): SpectralFeatures {
   hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
 
   // Compute FFTs
-  const hueDeltaFFT = fft(hueDeltas)
-  const chromaFFT = fft(chromas)
-  const lightnessFFT = fft(lightnesses)
+  // const hueDeltaFFT = fft(hueDeltas)
+  // const chromaFFT = fft(chromas)
+  // const lightnessFFT = fft(lightnesses)
 
   // Extract magnitudes (first half, excluding DC component)
-  const huePattern = hueDeltaFFT.slice(1, Math.floor(hueDeltaFFT.length / 2)).map(magnitude)
-  const chromaPattern = chromaFFT.slice(1, Math.floor(chromaFFT.length / 2)).map(magnitude)
-  const lightnessPattern = lightnessFFT.slice(1, Math.floor(lightnessFFT.length / 2)).map(magnitude)
+  const huePattern = magnitude(half(fft(hueDeltas)))
+  const chromaPattern = magnitude(half(fft(chromas)))
+  const lightnessPattern = magnitude(half(fft(lightnesses)))
 
   // Find dominant frequencies
   const dominantFrequencies = huePattern

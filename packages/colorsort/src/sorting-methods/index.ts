@@ -10,6 +10,7 @@ import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOkla
 import BENCH from '../../data/bench.json' with { type: 'json' }
 import { UniColor } from '../method-runner.ts'
 import { ramp, rampa, rampb, rampc, rampd, rampe, rampf, rampg } from './ramp.ts'
+import { raw } from './raw.ts'
 // import debug from 'debug'
 
 // const log = debug('cs:method')
@@ -290,6 +291,12 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     name: 'RAMPG',
     fn: rampg,
     mid: 'RAMPG',
+    description: {}
+  },
+  {
+    name: 'RAW',
+    fn: raw,
+    mid: 'RAW',
     description: {}
   }
 ]
