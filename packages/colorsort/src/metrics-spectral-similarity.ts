@@ -1,5 +1,5 @@
-import { SpectralFeatures } from './metrics-spectral.ts'
 import { cosineSimilarity, euclideanDistance, gaussianSimilarity, pearsonCorrelation } from './similarity.ts'
+import { MagnitudesLab, StatsLabEx } from './metrics-spectral.ts'
 
 interface SimilarityResult {
   overall: number // 0-1, higher = more similar
@@ -20,7 +20,7 @@ interface SimilarityResult {
  * Compare two palettes using their spectral features
  * Returns similarity score from 0 (completely different) to 1 (identical)
  */
-export function compareSpectralFeatures(features1: SpectralFeatures, features2: SpectralFeatures): SimilarityResult {
+export function compareSpectralFeatures(features1: StatsLabEx & MagnitudesLab, features2: StatsLabEx & MagnitudesLab): SimilarityResult {
   // 1. Compare scalar metrics with Gaussian similarity
   const smoothnessSim = gaussianSimilarity(features1.smoothness, features2.smoothness, 1.0)
 
@@ -42,10 +42,10 @@ export function compareSpectralFeatures(features1: SpectralFeatures, features2: 
   const rolloffSim = 1 - euclideanDistance(rolloff1, rolloff2) / Math.sqrt(4)
 
   // 5. Compare full spectra using correlation (most important!)
-  const chromaCorr = pearsonCorrelation(features1.chromaSpectrum, features2.chromaSpectrum)
-  const aCorr = pearsonCorrelation(features1.aSpectrum, features2.aSpectrum)
-  const bCorr = pearsonCorrelation(features1.bSpectrum, features2.bSpectrum)
-  const lightnessCorr = pearsonCorrelation(features1.lightnessSpectrum, features2.lightnessSpectrum)
+  const chromaCorr = pearsonCorrelation(features1.chromaMags, features2.chromaMags)
+  const aCorr = pearsonCorrelation(features1.aMags, features2.aMags)
+  const bCorr = pearsonCorrelation(features1.bMags, features2.bMags)
+  const lightnessCorr = pearsonCorrelation(features1.lightnessMags, features2.lightnessMags)
 
   // Average spectrum correlation
   const spectrumCorr = (chromaCorr + aCorr + bCorr + lightnessCorr) / 4

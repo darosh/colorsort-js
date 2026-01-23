@@ -23,7 +23,7 @@ export async function getSorted() {
     }
 
     lastLog = now
-    console.log(`Rows / Palettes: ${progress.toFixed(2)}% / ${progressPalettes.toFixed(2)}%`)
+    console.log(`Rows / Palettes: ${progress.toFixed(2)}% / ${progressPalettes.toFixed(2)}%`, render.stats())
   })
 
   // const sorted = [...computed.sorted].sort((a, b) => a.method.speed - b.method.speed)

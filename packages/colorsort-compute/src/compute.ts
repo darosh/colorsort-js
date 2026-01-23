@@ -1,4 +1,4 @@
-import type { PaletteType, MetricsEx, Fingerprint, SpectralFeatures } from 'colorsort'
+import type { PaletteType, MetricsEx, Fingerprint, StatsLabEx, MagnitudesLab } from 'colorsort'
 import { getMetricsExRange, metricsExQuality, metricsExQualitySum } from 'colorsort'
 import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'
@@ -50,7 +50,7 @@ export type SortRecord = {
   quality: MetricsEx<number> | null
   score: number | null
   fingerprint: Fingerprint | null
-  spectral: SpectralFeatures | null
+  spectral: (StatsLabEx & MagnitudesLab) | null
   render: Function
   best: boolean
   bestDistance: number | null

@@ -61,3 +61,11 @@ export function dispose() {
     worker.worker.terminate()
   }
 }
+
+render.stats = function () {
+  return {
+    pending: pending.length,
+    busy: workers.filter(x => x.busy).length,
+    idle: workers.filter(x => !x.busy).length
+  }
+}

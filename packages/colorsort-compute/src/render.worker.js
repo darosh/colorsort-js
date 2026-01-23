@@ -1,4 +1,4 @@
-import { detectPaletteType, extractSpectralFeatures, metricsFftFingerprint, SORTING_METHODS, lch, oklab, metricsEx } from 'colorsort'
+import { detectPaletteType, featuresLab, metricsFftFingerprint, SORTING_METHODS, lch, oklab, metricsEx } from 'colorsort'
 
 export async function timed(fn) {
   const start = performance.now()
@@ -31,10 +31,10 @@ self.onmessage = async (msg) => {
     const lchColors = getPaletteType.map((c) => lch(c))
     self.postMessage(detectPaletteType(lchColors))
   } else if (getFingerprint) {
-    const labColors = getFingerprint.map((c) => oklab(c))
-    self.postMessage(metricsFftFingerprint(labColors))
+    const lchColors = getFingerprint.map((c) => lch(c))
+    self.postMessage(metricsFftFingerprint(lchColors))
   } else if (getSpectral) {
     const labColors = getSpectral.map((c) => oklab(c))
-    self.postMessage(extractSpectralFeatures(labColors))
+    self.postMessage(featuresLab(labColors))
   }
 }

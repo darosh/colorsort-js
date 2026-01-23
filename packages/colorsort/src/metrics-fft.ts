@@ -1,7 +1,7 @@
 import { Vector3 } from './vector.ts'
-import { fft, half, magnitude } from './fft.ts'
 import { cosineSimilarity, euclideanDistance, manhattanDistance } from './similarity.ts'
 import { energy, highFreqRatio, mean, variance } from './statistics.ts'
+import { chromaticLch, fftLch } from './metrics-spectral.ts'
 
 export type Analysis = {
   type: string
@@ -12,17 +12,17 @@ export type Analysis = {
     hueSpread?: number
     chromaticCount?: number
     largeGaps?: number
-    avgGap?: string
-    maxGap?: string
-    chromaVariance?: string
-    hueHighFreqRatio?: string
-    chromaHighFreqRatio?: string
+    avgGap?: number
+    maxGap?: number
+    chromaVariance?: number
+    hueHighFreqRatio?: number
+    chromaHighFreqRatio?: number
   }
   fingerprint?: Fingerprint
   spectra?: {
-    hueDelta: number[]
-    chroma: number[]
-    lightness: number[]
+    hueDeltaMags: number[]
+    chromaMags: number[]
+    lightnessMags: number[]
     hueDeltaEnergy: number
     chromaEnergy: number
     lightnessEnergy: number
@@ -42,9 +42,7 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
     }
   }
 
-  // Separate chromatic and achromatic
-  const chromatic = lchColors.filter((c) => c[1] >= 0.03)
-  const achromatic = lchColors.filter((c) => c[1] < 0.03)
+  const { chromatic, achromatic } = chromaticLch(lchColors)
 
   if (chromatic.length < 3) {
     return {
@@ -57,30 +55,16 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
     }
   }
 
-  // Extract features
-  const hues = chromatic.map((c) => c[2])
-  const chromas = chromatic.map((c) => c[1])
-  const lightnesses = chromatic.map((c) => c[0])
-
-  // Analyze hue distribution using circular statistics
-  const hueDeltas = []
-  const sortedHues = [...hues].sort((a, b) => a - b)
-
-  for (let i = 0; i < sortedHues.length - 1; i++) {
-    hueDeltas.push(sortedHues[i + 1] - sortedHues[i])
-  }
-
-  // Wrap-around delta
-  hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
-
-  // FFT on hue differences to detect clustering patterns
-  const hueDeltaMagnitudes = magnitude(half(fft(hueDeltas)))
-
-  // FFT on chroma sequence to detect variation patterns
-  const chromaMagnitudes = magnitude(half(fft(chromas)))
-
-  // FFT on lightness sequence to detect banding
-  const lightnessMagnitudes = magnitude(half(fft(lightnesses)))
+  const {
+    hueDeltaMags,
+    chromaMags,
+    lightnessMags,
+    // hues,
+    hueDeltas,
+    sortedHues,
+    chromas,
+    lightnesses
+  } = fftLch(chromatic)
 
   // Calculate features
   const hueSpread = Math.max(...sortedHues) - Math.min(...sortedHues)
@@ -93,13 +77,13 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
   const maxGap = Math.max(...hueDeltas)
 
   // Spectral features (hue-independent)
-  const hueDeltaEnergy = energy(hueDeltaMagnitudes)
-  const chromaEnergy = energy(chromaMagnitudes)
-  const lightnessEnergy = energy(lightnessMagnitudes)
+  const hueDeltaEnergy = energy(hueDeltaMags)
+  const chromaEnergy = energy(chromaMags)
+  const lightnessEnergy = energy(lightnessMags)
 
   // High-frequency content indicates multi-ramp (abrupt transitions)
-  const hueHighFreqRatio = highFreqRatio(hueDeltaMagnitudes)
-  const chromaHighFreqRatio = highFreqRatio(chromaMagnitudes)
+  const hueHighFreqRatio = highFreqRatio(hueDeltaMags)
+  const chromaHighFreqRatio = highFreqRatio(chromaMags)
 
   // Classification logic
   let type = 'unknown'
@@ -120,9 +104,9 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
   }
 
   // Create fingerprint vector (hue-independent features)
-  const fingerprint = [hueHighFreqRatio, chromaHighFreqRatio, chromaVariance, lightnessVariance, largeGaps / hueDeltas.length, maxGap / 360, chromatic.length / lchColors.length]
+  const fingerprint: Fingerprint = [hueHighFreqRatio, chromaHighFreqRatio, chromaVariance, lightnessVariance, largeGaps / hueDeltas.length, maxGap / 360, chromatic.length / lchColors.length]
 
-  return <Analysis>{
+  return {
     type,
     confidence,
     features: {
@@ -130,17 +114,17 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
       chromaticCount: chromatic.length,
       achromaticCount: achromatic.length,
       largeGaps,
-      avgGap: avgGap.toFixed(1),
-      maxGap: maxGap.toFixed(1),
-      chromaVariance: chromaVariance.toFixed(3),
-      hueHighFreqRatio: hueHighFreqRatio.toFixed(3),
-      chromaHighFreqRatio: chromaHighFreqRatio.toFixed(3)
+      avgGap: avgGap,
+      maxGap: maxGap,
+      chromaVariance: chromaVariance,
+      hueHighFreqRatio: hueHighFreqRatio,
+      chromaHighFreqRatio: chromaHighFreqRatio
     },
     fingerprint,
     spectra: {
-      hueDelta: hueDeltaMagnitudes,
-      chroma: chromaMagnitudes,
-      lightness: lightnessMagnitudes,
+      hueDeltaMags,
+      chromaMags,
+      lightnessMags,
       hueDeltaEnergy,
       chromaEnergy,
       lightnessEnergy
@@ -151,12 +135,12 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
 export function metricsFftFingerprint(lchColors: Vector3[]) {
   const analysis: Analysis = analyzePaletteStructure(lchColors)
 
-  const spectrumData: SpectrumData[] = analysis?.spectra?.hueDelta
-    ? analysis.spectra.hueDelta.slice(0, 16).map((mag, i) => ({
+  const spectrumData: SpectrumData[] = analysis?.spectra?.hueDeltaMags
+    ? analysis.spectra.hueDeltaMags.slice(0, 16).map((mag, i) => ({
         freq: i,
         hueDelta: mag,
-        chroma: analysis?.spectra?.chroma[i] || 0,
-        lightness: analysis?.spectra?.lightness[i] || 0
+        chroma: analysis?.spectra?.chromaMags[i] || 0,
+        lightness: analysis?.spectra?.lightnessMags[i] || 0
       }))
     : []
 

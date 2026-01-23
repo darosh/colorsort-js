@@ -12,10 +12,10 @@ export { randomizer } from './randomizer.ts'
 
 export { metricsFftFingerprint } from './metrics-fft.ts'
 export { cosineSimilarity } from './similarity.ts'
-export { extractSpectralFeatures } from './metrics-spectral.ts'
+export { featuresLab } from './metrics-spectral.ts'
 export { compareSpectralFeatures } from './metrics-spectral-similarity.ts'
 
 export type { Fingerprint } from './metrics-fft.ts'
-export type { SpectralFeatures } from './metrics-spectral.ts'
+export type { StatsLabEx, MagnitudesLab } from './metrics-spectral.ts'
 
 export { applySpectralProcessing } from './spectral-edit.ts'
