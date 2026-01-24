@@ -205,9 +205,14 @@ a.link-grey {
             {{ algorithmStatsFilteredIncl?.length === 1 ? 'method' : 'methods' }}
           </div>
           <v-spacer />
+          <v-slider step="1" min="2" max="256" thumb-label thumb-size="20" max-width="210" variant="solo-filled" hide-details density="compact" type="number" v-model="maxColors">
+            <template v-slot:append><span class="ml-2">Max colors</span></template>
+          </v-slider>
           <v-switch v-model="includeOriginal" hide-details label="Include original" class="mx-8"></v-switch>
           <v-switch v-model="showAll" hide-details label="Show all" class="mx-4"></v-switch>
-          <v-slider thumb-label thumb-size="20" density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8 mr-8"></v-slider>
+          <v-slider thumb-label thumb-size="20" density="compact" :step="1" :min="1" :max="palettesData.length" v-model="targetCoverage" hide-details max-width="210" class="ml-8 mr-8">
+            <template v-slot:append><span class="ml-2">Coverage</span></template>
+          </v-slider>
         </div>
       </template>
     </v-app-bar>
@@ -716,6 +721,7 @@ export default {
     algorithmStats: [],
     mode3d: true,
     sortFingerprint: null,
+    maxColors: 16
   }),
   methods: {
     async sort () {
@@ -745,7 +751,7 @@ export default {
         this.rendered = 1
       }
       const records = computedSerialize(toRaw(this.types))
-      this.algorithmStats = await analyze({ records })
+      this.algorithmStats = await analyze({ records, maxColors: this.maxColors })
     },
     onRender (p) {
       this.rendered = p.done
@@ -1136,7 +1142,7 @@ export default {
       return this.algorithmStatsFilteredIncl
     },
     palettesData () {
-      return palettesData(this.sorted)
+      return palettesData(this.sorted, this.maxColors)
     },
     algorithmStatsNoOriginal () {
       return this.algorithmStats.filter(x => x.mid !== 'Original')

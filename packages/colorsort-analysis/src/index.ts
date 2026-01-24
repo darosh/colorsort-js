@@ -21,7 +21,7 @@ export type AlgoStat = {
   palettes: string[]
 }
 
-export function algorithmStats(records: PaletteRecordGrouped[]) {
+export function algorithmStats(records: PaletteRecordGrouped[], maxColors = 16) {
   if (!records.length) {
     return []
   }
@@ -29,6 +29,10 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
   const algoMap = new Map<string, AlgoStat>()
 
   for (const palette of records) {
+    if (palette.colors.length > maxColors) {
+      continue
+    }
+
     for (const group of palette.groups) {
       // Each group has multiple methods that tested the same grouped result
       for (const methodInfo of group.methods) {
@@ -101,9 +105,13 @@ export function algorithmStats(records: PaletteRecordGrouped[]) {
   return Array.from(algoMap.values()).sort((a, b) => a.avgScore - b.avgScore)
 }
 
-export function palettesData(sr: SortRecord[]) {
+export function palettesData(sr: SortRecord[], maxColors = 16) {
   const obj = sr.reduce(
     (acc: { [k: string]: PaletteRecord }, item) => {
+      if (item.palette.colors.length > maxColors) {
+        return acc
+      }
+
       acc[item.palette.key] = acc[item.palette.key] || item.palette
 
       return acc
@@ -137,6 +145,10 @@ export function palettesCovered(palettes: { [k: string]: PaletteRecord }, algoSt
 
   for (const { palettes } of algoStats) {
     for (const p of palettes) {
+      if (!covered[p]) {
+        continue
+      }
+
       covered[p].covered = true
     }
   }
