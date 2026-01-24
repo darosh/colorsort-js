@@ -1,7 +1,6 @@
-import { test, expect } from 'vitest'
+import { test } from 'vitest'
 import { kmeans } from 'ml-kmeans'
 import { oklch } from '../src'
-import { sortMultiRampPalette2 } from './rampi.test.ts'  // your oklch function
 
 // Helper: squared Euclidean distance (common default for kmeans)
 function squaredEuclidean (a: number[], b: number[]): number {
