@@ -34,26 +34,26 @@ export type Fingerprint = [number, number, number, number, number, number, numbe
 export type SpectrumData = { freq: number; hueDelta: number; chroma: number; lightness: number }
 
 function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
-  if (lchColors.length < 4) {
-    return {
-      type: 'insufficient-data',
-      confidence: 0,
-      features: {}
-    }
-  }
+  // if (lchColors.length < 4) {
+  //   return {
+  //     type: 'insufficient-data',
+  //     confidence: 0,
+  //     features: {}
+  //   }
+  // }
 
   const { chromatic, achromatic } = chromaticLch(lchColors)
 
-  if (chromatic.length < 3) {
-    return {
-      type: 'achromatic',
-      confidence: 1.0,
-      features: {
-        chromaticRatio: chromatic.length / lchColors.length,
-        achromaticCount: achromatic.length
-      }
-    }
-  }
+  // if (chromatic.length < 3) {
+  //   return {
+  //     type: 'achromatic',
+  //     confidence: 1.0,
+  //     features: {
+  //       chromaticRatio: chromatic.length / lchColors.length,
+  //       achromaticCount: achromatic.length
+  //     }
+  //   }
+  // }
 
   const {
     hueDeltaMags,
@@ -64,7 +64,8 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
     sortedHues,
     chromas,
     lightnesses
-  } = fftLch(chromatic)
+    // } = fftLch(chromatic)
+  } = fftLch(lchColors)
 
   // Calculate features
   const hueSpread = Math.max(...sortedHues) - Math.min(...sortedHues)
@@ -104,7 +105,7 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
   }
 
   // Create fingerprint vector (hue-independent features)
-  const fingerprint: Fingerprint = [hueHighFreqRatio, chromaHighFreqRatio, chromaVariance, lightnessVariance, largeGaps / hueDeltas.length, maxGap / 360, chromatic.length / lchColors.length]
+  const fingerprint: Fingerprint = [hueHighFreqRatio, chromaHighFreqRatio, chromaVariance, lightnessVariance, largeGaps / hueDeltas.length, (maxGap || 0) / 360, chromatic.length / lchColors.length]
 
   return {
     type,

@@ -109,3 +109,19 @@ export function resamplePaletteLinear(labColors: Vector3[], samples: number = 25
 
   return result
 }
+
+export function resampleLinear(values: number[], samples: number = 256): number[] {
+  const result: number[] = []
+  const step = (values.length - 1) / (samples - 1)
+
+  for (let i = 0; i < samples; i++) {
+    const pos = i * step
+    const idx1 = Math.floor(pos)
+    const idx2 = Math.min(idx1 + 1, values.length - 1)
+    const frac = pos - idx1
+
+    result.push(values[idx1] * (1 - frac) + values[idx2] * frac)
+  }
+
+  return result
+}
