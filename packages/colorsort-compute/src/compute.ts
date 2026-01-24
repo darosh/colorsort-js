@@ -4,12 +4,13 @@ import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'
 import { extract } from 'colorgram'
 // @ts-ignore
-import { isArtist } from 'colorsort-data-palettes'
+// import { isArtist } from 'colorsort-data-palettes'
 import { flatRgb } from 'colorsort'
 
 export type Method = {
   name: string
   fn: Function
+  valid?: Function
   speed: number
   mid: string
   description: {
@@ -307,6 +308,10 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
     paletteIndex++
 
     for (const method of sortingMethods) {
+      if (method.valid && !method.valid(colors)) {
+        continue
+      }
+
       const row = <SortRecord>{
         index,
         colors: null,
@@ -318,7 +323,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
         score: null,
         fingerprint: null,
         spectral: null,
-        best: (method.mid === 'Original' && isArtist(key)) || BESTIES.some((d) => d.key === key && d.mid === method.mid),
+        best: BESTIES.some((d) => d.key === key && d.mid === method.mid),
         bestDistance: null,
         bestDistanceQuality: null,
         render: () =>
@@ -329,7 +334,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
               row.time = elapsed
               row.metrics = metrics
 
-              if (row.palette.records.filter((r) => r.colors).length === sortingMethods.length) {
+              if (row.palette.records.filter((r) => r.colors).length === row.palette.records.length) {
                 groupRecords(row.palette)
                 updateRangeAndQuality(<PaletteRecordGrouped>row.palette)
                 updateDistance(<PaletteRecordGrouped>row.palette)

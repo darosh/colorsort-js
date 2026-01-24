@@ -400,6 +400,6 @@ Object.values(PALETTES).forEach((result) => {
   }
 })
 
-export function isArtist(slug) {
-  return slug.startsWith('lo-') && PALETTES_DATA[`${slug.replace(/^lo-/g, '')}`] !== undefined
-}
+// export function isArtist(slug) {
+//   return slug.startsWith('lo-') && PALETTES_DATA[`${slug.replace(/^lo-/g, '')}`] !== undefined
+// }

@@ -57,7 +57,7 @@
   },
   {
     "key": "extreme-2",
-    "mid": "PCA:[gl,tsp-adapt]"
+    "mid": "RAMPE"
   },
   {
     "key": "poline-1",
@@ -104,16 +104,8 @@
     "mid": "HARM:[hsl,dark]"
   },
   {
-    "key": "palette-c",
-    "mid": "PCA:[oklab,tsp]"
-  },
-  {
-    "key": "palette-d",
-    "mid": "PCA:[oklab,tsp]"
-  },
-  {
     "key": "palette-e",
-    "mid": "Original"
+    "mid": "MOM(Closest)-Oklab"
   },
   {
     "key": "palette-g",
@@ -144,14 +136,6 @@
     "mid": "PCA:[gl,tsp]"
   },
   {
-    "key": "palette-32",
-    "mid": "HARM:[okhsv,bright]"
-  },
-  {
-    "key": "palette-39",
-    "mid": "GEN-Oklab"
-  },
-  {
     "key": "palette-110",
     "mid": "HARM:[rgb,dark]"
   },
@@ -177,11 +161,11 @@
   },
   {
     "key": "material-deep-purple",
-    "mid": "Original"
+    "mid": "HARM:[hsl,bright]"
   },
   {
     "key": "material-teal",
-    "mid": "Original"
+    "mid": "RAMPB"
   },
   {
     "key": "tailwind3-red-orange-amber",
@@ -317,7 +301,7 @@
   },
   {
     "key": "lo-funkyfuture-8",
-    "mid": "Original"
+    "mid": "HARM:[oklab,dark]"
   },
   {
     "key": "lo-citrink",
@@ -337,27 +321,27 @@
   },
   {
     "key": "lo-japanese-woodblock",
-    "mid": "Original"
+    "mid": "HARM:[okhsv,bright]"
   },
   {
     "key": "lo-mushroom",
-    "mid": "Original"
+    "mid": "HARM:[hsl,bright]"
   },
   {
     "key": "lo-sweetie-16",
-    "mid": "Original"
+    "mid": "HARM:[hsv,bright]"
   },
   {
     "key": "lo-pico-8",
-    "mid": "Original"
+    "mid": "HARM:[oklab,dark]"
   },
   {
     "key": "lo-lost-century",
-    "mid": "Original"
+    "mid": "HARM:[hsl,dark]"
   },
   {
     "key": "lo-na16",
-    "mid": "Original"
+    "mid": "HARM:[oklab,dark]"
   },
   {
     "key": "lo-steam-lords",
@@ -365,7 +349,7 @@
   },
   {
     "key": "lo-island-joy-16",
-    "mid": "Original"
+    "mid": "RAMPC"
   },
   {
     "key": "lo-endesga-16",
@@ -413,7 +397,7 @@
   },
   {
     "key": "lo-wplace-palette-free-colours",
-    "mid": "Original"
+    "mid": "RAMPG:[0,20,270,muted]"
   },
   {
     "key": "lo-endesga-32",

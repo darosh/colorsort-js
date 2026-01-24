@@ -65,7 +65,7 @@ export function dispose() {
 render.stats = function () {
   return {
     pending: pending.length,
-    busy: workers.filter(x => x.busy).length,
-    idle: workers.filter(x => !x.busy).length
+    busy: workers.filter((x) => x.busy).length,
+    idle: workers.filter((x) => !x.busy).length
   }
 }
