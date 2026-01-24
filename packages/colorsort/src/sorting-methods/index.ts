@@ -9,7 +9,7 @@ import { momentumClosestOklab, momentumInlinestOklab, momentumInlinestDeltaEOkla
 
 import BENCH from '../../data/bench.json' with { type: 'json' }
 import { UniColor } from '../method-runner.ts'
-import { ramp, rampa, rampb, rampc, rampd, rampe, rampf, rampg } from './ramp.ts'
+import { ramp, rampa, rampb, rampc, rampd, rampe, rampf, rampg, ramph, rampi } from './ramp.ts'
 import { raw } from './raw.ts'
 // import debug from 'debug'
 
@@ -39,7 +39,10 @@ const DIFFS = {
   DE: ['DE', 'Delta E', 'http://www.brucelindbloom.com/index.html?Eqn_DeltaE_CIE2000.html']
 }
 
-export type SortingFunction = Function & { params?: { name: string; values: any[] }[] }
+export type SortingFunction = Function & {
+  params?: { name: string; values: any[] }[]
+  valid?: Function
+}
 
 export type SortingMethod = {
   name: string
@@ -51,6 +54,7 @@ export type SortingMethod = {
   }
   fn: SortingFunction
   speed?: number
+  valid?: Function
 }
 
 export const SORTING_METHODS_RAW: SortingMethod[] = [
@@ -294,6 +298,18 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     description: {}
   },
   {
+    name: 'RAMPH',
+    fn: ramph,
+    mid: 'RAMPH',
+    description: {}
+  },
+  {
+    name: 'RAMPI',
+    fn: rampi,
+    mid: 'RAMPI',
+    description: {}
+  },
+  {
     name: 'RAW',
     fn: raw,
     mid: 'RAW',
@@ -311,33 +327,16 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
       const combinations = getCombinationsAsArrays(item.fn.params)
 
       for (const combination of combinations) {
-        // const fn = (c: UniColor) => {
-        //   log(`starting '${(<any>fn).name_}'`)
-        //   item.fn.call(null, c, ...combination)
-        // }
-
-        // fn.name_ = item.fn.name
-
         acc.push({
           ...item,
           name: `${item.name} [${combination.join(',')}]`,
           mid: `${item.mid}:[${combination.join(',')}]`,
           speed: (<{ [index: string]: number }>BENCH)[item.mid] || 0,
-          fn: (c: UniColor) => item.fn.call(null, c, ...combination)
+          fn: (c: UniColor) => item.fn.call(null, c, ...combination),
+          valid: item.fn?.valid ? (c: UniColor) => item.fn?.valid?.call(null, c, ...combination) : undefined
         })
       }
     } else {
-      // const fn = (c: UniColor) => {
-      //   log(`starting '${(<any>fn).name_}'`)
-      //   item.fn.call(null, c)
-      // }
-
-      // fn.name_ = item.fn.name
-
-      // acc.push({
-      //   ...item,
-      //   fn
-      // })
       acc.push(item)
     }
 

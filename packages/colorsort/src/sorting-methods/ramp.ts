@@ -258,7 +258,7 @@ function colorDistance(a: Vector3, b: Vector3): number {
 
   // Weight the components for perceptual similarity
   const lightnessWeight = 1.0
-  const chromaWeight = 1.0
+  const chromaWeight = 2.5
   const hueWeight = 2.0 // Hue is most important for grouping
 
   const dL = (a[0] - b[0]) * lightnessWeight
@@ -272,7 +272,7 @@ function colorDistance(a: Vector3, b: Vector3): number {
  * Sort colors using nearest-neighbor traveling salesman approach
  * This creates smooth visual progressions
  */
-function sortColorsByNearestNeighbor(colors: Vector3[]): Vector3[] {
+export function sortColorsByNearestNeighbor(colors: Vector3[]): Vector3[] {
   if (colors.length === 0) {
     return []
   }
@@ -287,6 +287,7 @@ function sortColorsByNearestNeighbor(colors: Vector3[]): Vector3[] {
   for (const c of remaining) {
     const i = remaining.indexOf(c)
     const score = c[0] * 10 - c[1] * 5
+
     if (score > maxScore) {
       maxScore = score
       startIdx = i
@@ -303,7 +304,9 @@ function sortColorsByNearestNeighbor(colors: Vector3[]): Vector3[] {
     let minDistance = Infinity
 
     remaining.forEach((candidate, i) => {
+      // const dist = colorDistance(current, candidate)
       const dist = colorDistance(current, candidate)
+
       if (dist < minDistance) {
         minDistance = dist
         nearestIdx = i
@@ -767,6 +770,146 @@ export function sortColorsByHueRamps2(
   })
 }
 
+export function sortMultiRampPalette2(lchColors: Vector3[], numRamps: number = 3): Vector3[] {
+  let sortedByLightness = [...lchColors].sort((a, b) => a[0] - b[0])
+
+  const ramps: Vector3[][] = Array.from({ length: numRamps }, (_, i) => [sortedByLightness[i]])
+
+  ramps.sort((a, b) => a[0][2] - b[0][2])
+
+  sortedByLightness = sortedByLightness.slice(numRamps)
+
+  // Change to assign one color at a time instead of layers of numRamps
+  while (sortedByLightness.length) {
+    const b = sortedByLightness.shift()!
+
+    let bestCost = Infinity
+    let bestI = -1
+
+    for (let i = 0; i < numRamps; i++) {
+      const a = ramps[i].at(-1)!
+      const prev = ramps[i].at(-2)
+
+      let cost: number
+
+      if (prev) {
+        const hp = prev[2]
+        const z = a[2] - hp
+        const zaH = a[2] + z
+        cost = Math.pow(zaH - b[2], 2)
+      } else {
+        cost = Math.pow(a[2] - b[2], 2)
+      }
+
+      if (cost < bestCost) {
+        bestCost = cost
+        bestI = i
+      }
+    }
+
+    if (bestI === -1) {
+      // throw 'No best'
+      bestI = 0
+    }
+
+    ramps[bestI].push(b)
+  }
+
+  return ramps.flat()
+}
+
+function estimateNumRamps(lchColors: Vector3[], binCount = 72): { suggestedK: number; scores: number[] } {
+  const hues = lchColors.map((c) => c[2]) // hue in [0, 360)
+  const bins: number[] = <number[]>Array.from({ length: binCount }).fill(0)
+
+  for (const h of hues) {
+    const bin = Math.floor((h / 360) * binCount) % binCount
+    bins[bin]++
+  }
+
+  // Count how many "peaks" (local maxima that are meaningfully separated)
+  let peaks = 0
+  let inValley = true
+
+  for (let i = 0; i < binCount * 2; i++) {
+    // ×2 to handle wrap-around
+    const idx = i % binCount
+    const prev = bins[(idx - 1 + binCount) % binCount]
+    const curr = bins[idx]
+    const next = bins[(idx + 1) % binCount]
+
+    if (curr > prev && curr > next && curr >= 2) {
+      // at least 2 colors
+      if (inValley) {
+        peaks++
+        inValley = false
+      }
+    } else if (curr < prev || curr < next) {
+      inValley = true
+    }
+  }
+
+  // Very rough heuristics
+  const suggested = Math.max(1, Math.min(8, peaks || 3))
+
+  return {
+    suggestedK: suggested,
+    scores: bins // you can plot this if you want
+  }
+}
+
+// function evaluateRampQuality(ramps: ColorInfo[][]): number {
+//   let totalCost = 0;
+//
+//   for (const ramp of ramps) {
+//     for (let i = 1; i < ramp.length; i++) {
+//       const prev = ramp[i - 1].lch;
+//       const curr = ramp[i].lch;
+//
+//       // Penalize hue jumps + non-monotonic lightness very strongly
+//       const hueDiff = Math.min(
+//         Math.abs(curr[2] - prev[2]),
+//         360 - Math.abs(curr[2] - prev[2])
+//       );
+//
+//       const lightOk = curr[0] >= prev[0] - 1;   // allow tiny inversions
+//       totalCost += hueDiff * hueDiff + (lightOk ? 0 : 1000);
+//
+//       // Optional: add OK distance penalty for smoothness
+//       // totalCost += distanceOk2(oklab(ramp[i-1].hex), oklab(ramp[i].hex)) ** 1.5;
+//     }
+//   }
+//
+//   // Bonus: penalize very unbalanced ramps
+//   const sizes = ramps.map(r => r.length);
+//   const avg = sizes.reduce((a, b) => a + b, 0) / ramps.length;
+//   const balancePenalty = sizes.reduce((sum, s) => sum + Math.abs(s - avg) ** 1.5, 0);
+//
+//   return totalCost + balancePenalty * 0.5;
+// }
+
+// function x(palette: string[]) {
+//   const costs: number[] = [];
+//   for (let k = 1; k <= Math.min(10, palette.length); k++) {
+//     const sorted = sortMultiRampPalette(palette, k);
+//     // rebuild ramps structure from flat list if needed
+//     const ramps = ... // split back into k ramps
+//     costs.push(evaluateRampQuality(ramps));
+//   }
+//
+// // Find elbow: biggest decrease in cost per added ramp
+//   let bestK = 1;
+//   let maxDrop = -Infinity;
+//
+//   for (let k = 2; k < costs.length; k++) {
+//     const drop = costs[k-1] - costs[k];
+//     if (drop > maxDrop) {
+//       maxDrop = drop;
+//       bestK = k;
+//     }
+//   }
+// }
+
 export function ramp(colors: string[]) {
   return methodRunner(
     colors,
@@ -854,8 +997,36 @@ export function rampg(colors: string[], threshold: number, zone: number, rotatio
 }
 
 rampg.params = [
-  { name: 'threshold', values: [0.01, 0.03, 0.06, 0.09] },
-  { name: 'zone', values: [20, 40, 60] },
+  { name: 'threshold', values: [0, 0.01, 0.03, 0.06, 0.09] },
+  { name: 'zone', values: [20, 40, 60, 90, 120] },
   { name: 'rotation', values: [270, 0] },
   { name: 'order', values: ['vivid', 'muted'] }
 ]
+
+export function ramph(colors: string[], ramps: number = 3) {
+  return methodRunner(
+    colors,
+    function (this: ColorHelper, vectors: Vector3[]) {
+      return sortMultiRampPalette2(vectors, ramps)
+    },
+    'oklch'
+  )
+}
+
+ramph.params = [{ name: 'ramps', values: [2, 3, 4, 5, 6, 8, 8, 9, 12, 24] }]
+
+ramph.valid = (colors: Vector3[], ramps: number) => {
+  return colors.length > ramps
+}
+
+export function rampi(colors: string[]) {
+  return methodRunner(
+    colors,
+    function (this: ColorHelper, vectors: Vector3[]) {
+      const ramps = Math.min(vectors.length, estimateNumRamps(vectors).suggestedK)
+
+      return sortMultiRampPalette2(vectors, ramps)
+    },
+    'oklch'
+  )
+}

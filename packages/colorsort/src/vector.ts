@@ -11,6 +11,13 @@ export function distance(a: Vector3, b: Vector3): number {
   return Math.sqrt(dx * dx + dy * dy + dz * dz)
 }
 
+export function distance12(a: Vector3, b: Vector3): number {
+  const dy = a[1] - b[1]
+  const dz = a[2] - b[2]
+
+  return Math.sqrt(dy * dy + dz * dz)
+}
+
 export function distance4(a: Vector4, b: Vector4): number {
   const dx = a[0] - b[0]
   const dy = a[1] - b[1]
@@ -54,6 +61,10 @@ export function normalize(v: Vector3): Vector3 {
 
 export function subtract(a: Vector3, b: Vector3): Vector3 {
   return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]
+}
+
+export function add(a: Vector3, b: Vector3): Vector3 {
+  return [a[0] + b[0], a[1] + b[1], a[2] + b[2]]
 }
 
 export function dot(a: Vector3, b: Vector3): number {
