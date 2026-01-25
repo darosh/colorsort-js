@@ -13,6 +13,7 @@
   "private": true,
   "scripts": {
     "build": "deno run -A npm:vite build",
+    "build:fast": "cross-env FAST=1 deno run -A npm:vite build",
     "dev": "deno run -A npm:vite build --watch",
     "lint": "oxlint ./src --fix && oxfmt ./src"
   },

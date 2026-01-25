@@ -1,3 +1,5 @@
+import { round3 } from './statistics.ts'
+
 export { SORTING_METHODS } from './sorting-methods/index.ts'
 export type { SortingMethod } from './sorting-methods/index.ts'
 export { metrics } from './metrics.js'
@@ -27,3 +29,4 @@ export { getAuto } from './auto.ts'
 import { oklch } from './color.ts'
 
 export const MASTER_LCH = oklch
+export const MASTER_ROUND = round3

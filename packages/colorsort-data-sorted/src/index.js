@@ -1,8 +1,34 @@
-import { SORTING_METHODS } from 'colorsort'
+import { MASTER_ROUND, SORTING_METHODS } from 'colorsort'
 import { PALETTES } from 'colorsort-data-palettes'
 import { computedSerialize, computePlan, computeRender } from 'colorsort-compute'
 import { dispose, render } from 'colorsort-compute/src/render.js'
 import stringify from 'json-stringify-pretty-compact'
+
+function roundAll(obj) {
+  if (Array.isArray(obj)) {
+    for (let key = 0; key < obj.length; key++) {
+      const value = obj[key]
+
+      if (isFinite(value)) {
+        obj[key] = MASTER_ROUND(value)
+      } else if (typeof value === 'object') {
+        roundAll(value)
+      }
+    }
+
+    return obj
+  }
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (isFinite(value)) {
+      obj[key] = MASTER_ROUND(value)
+    } else if (typeof value === 'object') {
+      roundAll(value)
+    }
+  }
+
+  return obj
+}
 
 export async function getSorted() {
   let palettes = Object.entries(PALETTES)
@@ -31,6 +57,13 @@ export async function getSorted() {
   const promises = computeRender(computed.sorted)
   await Promise.all(promises)
   const serialized = computedSerialize(computed.types)
+
+  for (const s of serialized) {
+    for (const g of s.groups) {
+      g.record.metrics = roundAll(g.record.metrics)
+      g.record.quality = roundAll(g.record.quality)
+    }
+  }
 
   dispose()
 

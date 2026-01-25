@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-pretty-compact'
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 import { deserialize, type PaletteRecordGrouped } from 'colorsort-compute'
-import { compareColors, fingerprintAverage, MASTER_LCH, metricsFftFingerprint } from 'colorsort'
+import { compareColors, fingerprintAverage, MASTER_LCH, MASTER_ROUND, metricsFftFingerprint } from 'colorsort'
 
 export interface Trained {
   mid: string
@@ -46,7 +46,7 @@ export async function getTrained() {
   }
 
   for (const r of result) {
-    r.fingerprint = fingerprintAverage(<number[][]>r?.fingerprints)
+    r.fingerprint = fingerprintAverage(<number[][]>r?.fingerprints).map(MASTER_ROUND)
     r.fingerprints = undefined
   }
 
