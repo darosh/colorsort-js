@@ -26,9 +26,12 @@
     "poline": "^0.13.0"
   },
   "exports": {
-    "types": "./dist/types/src/index.ts",
-    "import": "./dist/colorsort.js",
-    "require": "./dist/colorsort.umd.js"
+    ".": {
+      "types": "./dist/types/src/index.ts",
+      "import": "./dist/colorsort.js",
+      "require": "./dist/colorsort.umd.js"
+    },
+    "./trained.json": "./dist/trained.json"
   },
   "files": [
     "dist/"
@@ -45,6 +48,7 @@
   "scripts": {
     "bench": "deno --allow-write scripts/bench.js",
     "build": "tsc && vite build",
+    "postbuild": "cp ../colorsort-data-trained/dist/trained.json ./dist/trained.json",
     "dev": "vite build --watch",
     "lint": "tsc && oxlint ./src --fix && oxfmt ./src",
     "range": "deno --allow-write scripts/range.js",

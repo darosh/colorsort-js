@@ -30,3 +30,5 @@ import { lch } from './color.ts'
 
 export const MASTER_LCH = lch
 export const MASTER_ROUND = round3
+
+export { auto } from './auto-sort.ts'
