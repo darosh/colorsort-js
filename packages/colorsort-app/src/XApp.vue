@@ -1033,8 +1033,6 @@ export default {
       })
     },
     filtered () {
-      console.log(this.autoTypes)
-
       if (!this.routeLoaded) {
         return []
       }
