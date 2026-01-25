@@ -345,31 +345,31 @@
   },
   {
     "key": "lo-steam-lords",
-    "mid": "Original"
+    "mid": "HARM:[lab,dark]"
   },
   {
     "key": "lo-island-joy-16",
-    "mid": "RAMPC"
+    "mid": "HARM:[oklab,bright]"
   },
   {
     "key": "lo-endesga-16",
-    "mid": "Original"
+    "mid": "PCA:[oklab,tsp]"
   },
   {
     "key": "lo-vanilla-milkshake",
-    "mid": "Original"
+    "mid": "MOM(Closest)-Oklab"
   },
   {
     "key": "lo-bubblegum-16",
-    "mid": "Original"
+    "mid": "HARM:[oklch,bright]"
   },
   {
     "key": "lo-commodore64",
-    "mid": "Original"
+    "mid": "HARM:[lab,dark]"
   },
   {
     "key": "lo-fading-16",
-    "mid": "Original"
+    "mid": "GEN3-Oklab"
   },
   {
     "key": "lo-indecision",
