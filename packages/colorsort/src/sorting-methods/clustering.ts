@@ -414,6 +414,12 @@ export function dbScan(colors: string[], model: 'rgb' | 'lab' = 'rgb', eps: numb
 
 dbScan.params = [
   { name: 'modes', values: ['rgb', 'lab', 'oklab'] },
-  { name: 'eps', values: [0.1, 0.3, 0.5] },
+  {
+    name: 'eps',
+    values: [
+      // 0.1,
+      0.3, 0.5
+    ]
+  },
   { name: 'pts', values: [3, 5, 7] }
 ]

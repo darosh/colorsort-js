@@ -105,7 +105,18 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
   }
 
   // Create fingerprint vector (hue-independent features)
-  const fingerprint: Fingerprint = [hueHighFreqRatio, chromaHighFreqRatio, chromaVariance, lightnessVariance, largeGaps / hueDeltas.length, (maxGap || 0) / 360, chromatic.length / lchColors.length]
+  const fingerprint: Fingerprint = <Fingerprint>[
+    hueHighFreqRatio,
+    chromaHighFreqRatio,
+    chromaVariance,
+    lightnessVariance,
+    largeGaps / hueDeltas.length,
+    (maxGap || 0) / 360,
+    chromatic.length / lchColors.length,
+    // ...hueDeltaMags.slice(0, 4)
+    //     ...chromaMags.slice(0, 4),
+    ...lightnessMags.slice(0, 4)
+  ]
 
   return {
     type,

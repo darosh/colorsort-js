@@ -1,7 +1,15 @@
 import stringify from 'json-stringify-pretty-compact'
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 import { deserialize, type PaletteRecordGrouped } from 'colorsort-compute'
-import { compareColors, fingerprintAverage, MASTER_LCH, MASTER_ROUND, metricsFftFingerprint } from 'colorsort'
+import {
+  compareColors,
+  // fingerprintAverage,
+  // fingerprintMedian,
+  fingerprintAverageWithoutOutliers,
+  MASTER_LCH,
+  MASTER_ROUND,
+  metricsFftFingerprint
+} from 'colorsort'
 
 export interface Trained {
   mid: string
@@ -41,12 +49,22 @@ export async function getTrained() {
     const { fingerprint } = metricsFftFingerprint(colors).analysis
 
     for (const m of bestGroup?.methods?.filter((m) => m.method.mid !== 'Original') || []) {
+      // if (colors.length < 12 && m.method.mid.startsWith('RAMP')) {
+      //   continue
+      // }
+
+      // if (colors.length < 64 && m.method.mid.startsWith('RAW')) {
+      //   continue
+      // }
+
       add(m.method.mid, colors.length, <number[]>fingerprint)
     }
   }
 
   for (const r of result) {
-    r.fingerprint = fingerprintAverage(<number[][]>r?.fingerprints).map(MASTER_ROUND)
+    // r.fingerprint = fingerprintAverage(<number[][]>r?.fingerprints).map(MASTER_ROUND)
+    // r.fingerprint = fingerprintMedian(<number[][]>r?.fingerprints).map(MASTER_ROUND)
+    r.fingerprint = fingerprintAverageWithoutOutliers(<number[][]>r?.fingerprints).map(MASTER_ROUND)
     r.fingerprints = undefined
   }
 

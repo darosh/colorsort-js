@@ -999,7 +999,7 @@ export function rampg(colors: string[], threshold: number, zone: number, rotatio
 rampg.params = [
   { name: 'threshold', values: [0, 0.01, 0.03, 0.06, 0.09] },
   { name: 'zone', values: [20, 40, 60, 90, 120] },
-  { name: 'rotation', values: [270, 0] },
+  { name: 'rotation', values: [/**270,**/ 0] },
   { name: 'order', values: ['vivid', 'muted'] }
 ]
 

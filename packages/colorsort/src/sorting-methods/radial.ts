@@ -133,5 +133,5 @@ export function cylindrical(colors: string[], model: 'hsl' | 'hsv' | 'lch' | 'ok
 
 cylindrical.params = [
   { name: 'model', values: ['hsl', 'hsv', 'lch', 'okhsl', 'okhsv', 'oklch'] },
-  { name: 'direction', values: ['ascending', 'descending'] }
+  { name: 'direction', values: ['ascending' /*, 'descending' */] }
 ]
