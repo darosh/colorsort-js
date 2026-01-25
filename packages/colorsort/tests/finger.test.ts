@@ -1,6 +1,5 @@
 import { test } from 'vitest'
-import { cosineSimilarity, getAuto, metricsFftFingerprint, oklch } from '../src'
-import { fftLch } from '../src/metrics-spectral.ts'
+import { cosineSimilarity, metricsFftFingerprint, oklch } from '../src'
 import { fft } from '../src/fft.ts'
 import { calculateHueSpread } from '../src/type-detect.ts'
 
@@ -16,16 +15,6 @@ test('ss', () => {
   ]
   
   const w = [
-    0.915122210188252,
-    0.35516450930987553,
-    0.005622233637072038,
-    0.0005985254675057181,
-    0.13333333333333333,
-    0.46579972597569586,
-    0.875
-  ]
-  
-  const z = [
     0.915122210188252,
     0.35516450930987553,
     0.005622233637072038,
