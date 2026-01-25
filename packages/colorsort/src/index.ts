@@ -19,3 +19,7 @@ export type { Fingerprint } from './metrics-fft.ts'
 export type { StatsLabEx, MagnitudesLab } from './metrics-spectral.ts'
 
 export { applySpectralProcessing } from './spectral-edit.ts'
+
+export { fingerprintAverage } from './similarity.ts'
+export { compareColors } from './vector.ts'
+export { getAuto } from './auto.ts'

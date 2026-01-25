@@ -1,0 +1,22 @@
+{
+  "name": "colorsort-data-trained",
+  "version": "0.0.0",
+  "devDependencies": {
+    "colorsort": "workspace:*",
+    "colorsort-analysis": "workspace:*",
+    "colorsort-compute": "workspace:*",
+    "colorsort-data-palettes": "workspace:*",
+    "colorsort-data-sorted": "workspace:*",
+    "json-stringify-pretty-compact": "^4.0.0"
+  },
+  "exports": {
+    "./trained.json": "./dist/trained.json"
+  },
+  "private": true,
+  "scripts": {
+    "build": "deno run -A npm:vite build",
+    "dev": "deno run -A npm:vite build --watch",
+    "lint": "oxlint ./src --fix && oxfmt ./src"
+  },
+  "type": "module"
+}

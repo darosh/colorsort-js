@@ -53,3 +53,7 @@ export function pearsonCorrelation(a: number[], b: number[]): number {
   // Pearson returns -1 to 1, convert to 0 to 1
   return (numerator / denominator + 1) / 2
 }
+
+export function fingerprintAverage(fingerprints: number[][]): number[] {
+  return fingerprints.reduce((acc, f) => acc.map((v, i) => v + f[i]), <number[]>Array.from({ length: fingerprints[0].length }).fill(0)).map((x) => x / fingerprints.length)
+}

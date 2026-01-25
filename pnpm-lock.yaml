@@ -206,6 +206,27 @@ importers:
         specifier: ^4.0.0
         version: 4.0.0
 
+  packages/colorsort-data-trained:
+    devDependencies:
+      colorsort:
+        specifier: workspace:*
+        version: link:../colorsort
+      colorsort-analysis:
+        specifier: workspace:*
+        version: link:../colorsort-analysis
+      colorsort-compute:
+        specifier: workspace:*
+        version: link:../colorsort-compute
+      colorsort-data-palettes:
+        specifier: workspace:*
+        version: link:../colorsort-data-palettes
+      colorsort-data-sorted:
+        specifier: workspace:*
+        version: link:../colorsort-data-sorted
+      json-stringify-pretty-compact:
+        specifier: ^4.0.0
+        version: 4.0.0
+
 packages:
 
   '@babel/code-frame@7.28.6':
