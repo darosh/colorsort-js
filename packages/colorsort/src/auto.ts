@@ -30,5 +30,17 @@ export function getAuto(colors: string[], trained: Trained[]) {
 
   selected.sort((a, b) => (b.fingerprint && fingerprint ? cosineSimilarity(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? cosineSimilarity(fingerprint, fix(a.fingerprint)) : 0))
 
+  const noDB = selected
+    .filter(x => !x.mid.startsWith('DBSCAN'))
+    .filter(x => !x.mid.startsWith('RAW'))
+    .filter(x => !x.mid.startsWith('CL'))
+    .filter(x => !x.mid.startsWith('SPI'))
+    .filter(x => !x.mid.startsWith('KM'))
+    .filter(x => !x.mid.startsWith('CYL'))
+  
+  if (noDB.length) {
+    return noDB[0].mid
+  }
+  
   return selected[0].mid
 }

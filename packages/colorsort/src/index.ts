@@ -26,7 +26,7 @@ export { fingerprintAverage } from './similarity.ts'
 export { compareColors } from './vector.ts'
 export { getAuto } from './auto.ts'
 
-import { oklch } from './color.ts'
+import { lch } from './color.ts'
 
-export const MASTER_LCH = oklch
+export const MASTER_LCH = lch
 export const MASTER_ROUND = round3
