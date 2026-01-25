@@ -2,7 +2,7 @@
   "name": "colorsort-app",
   "version": "0.0.0",
   "dependencies": {
-    "colorsort": "workspace:*",
+    "colorsort-js": "workspace:*",
     "colorsort-compute": "workspace:*",
     "colorsort-analysis": "workspace:*",
     "colorsort-data-palettes": "workspace:*",

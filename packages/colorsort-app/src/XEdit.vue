@@ -137,7 +137,7 @@ import {
   oklab2hex,
   oklch,
   randomizer
-} from 'colorsort'
+} from 'colorsort-js'
 import { CcvLineChart } from '@carbon/charts-vue'
 
 let id = 0

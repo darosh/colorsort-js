@@ -2,7 +2,7 @@ import chroma from 'chroma-js'
 import PALETTES_DATA from 'colorsort-data-palettes-lospec/palettes.json' with { type: 'json' }
 import { Poline, positionFunctions } from 'poline'
 import { formatHex } from 'culori'
-import { randomizer, oklab } from 'colorsort'
+import { randomizer, oklab } from 'colorsort-js'
 
 const next = randomizer()
 

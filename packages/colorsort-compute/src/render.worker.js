@@ -1,4 +1,4 @@
-import { detectPaletteType, featuresLab, metricsFftFingerprint, SORTING_METHODS, lch, oklab, metricsEx, MASTER_LCH } from 'colorsort'
+import { detectPaletteType, featuresLab, metricsFftFingerprint, SORTING_METHODS, lch, oklab, metricsEx, MASTER_LCH } from 'colorsort-js'
 
 export async function timed(fn) {
   const start = performance.now()

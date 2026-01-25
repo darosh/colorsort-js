@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "devDependencies": {
     "chroma-js": "^3.2.0",
-    "colorsort": "workspace:*",
+    "colorsort-js": "workspace:*",
     "colorsort-data-palettes-lospec": "workspace:*",
     "culori": "^4.0.2",
     "poline": "^0.13.0"

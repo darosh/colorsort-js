@@ -92,9 +92,6 @@ importers:
 
   packages/colorsort-analysis:
     devDependencies:
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-compute:
         specifier: workspace:*
         version: link:../colorsort-compute
@@ -104,15 +101,15 @@ importers:
       colorsort-data-sorted:
         specifier: workspace:*
         version: link:../colorsort-data-sorted
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
       json-stringify-pretty-compact:
         specifier: ^4.0.0
         version: 4.0.0
 
   packages/colorsort-app:
     dependencies:
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-analysis:
         specifier: workspace:*
         version: link:../colorsort-analysis
@@ -128,6 +125,9 @@ importers:
       colorsort-data-trained:
         specifier: workspace:*
         version: link:../colorsort-data-trained
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
     devDependencies:
       '@carbon/charts-vue':
         specifier: ^1.27.2
@@ -159,12 +159,12 @@ importers:
       colorgram:
         specifier: ^0.2.0
         version: 0.2.0
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-data-palettes:
         specifier: workspace:*
         version: link:../colorsort-data-palettes
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
       js-levenshtein:
         specifier: ^1.1.6
         version: 1.1.6
@@ -174,12 +174,12 @@ importers:
       chroma-js:
         specifier: ^3.2.0
         version: 3.2.0
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-data-palettes-lospec:
         specifier: workspace:*
         version: link:../colorsort-data-palettes-lospec
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
       culori:
         specifier: ^4.0.2
         version: 4.0.2
@@ -195,24 +195,21 @@ importers:
 
   packages/colorsort-data-sorted:
     devDependencies:
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-compute:
         specifier: workspace:*
         version: link:../colorsort-compute
       colorsort-data-palettes:
         specifier: workspace:*
         version: link:../colorsort-data-palettes
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
       json-stringify-pretty-compact:
         specifier: ^4.0.0
         version: 4.0.0
 
   packages/colorsort-data-trained:
     devDependencies:
-      colorsort:
-        specifier: workspace:*
-        version: link:../colorsort
       colorsort-analysis:
         specifier: workspace:*
         version: link:../colorsort-analysis
@@ -225,6 +222,9 @@ importers:
       colorsort-data-sorted:
         specifier: workspace:*
         version: link:../colorsort-data-sorted
+      colorsort-js:
+        specifier: workspace:*
+        version: link:../colorsort
       json-stringify-pretty-compact:
         specifier: ^4.0.0
         version: 4.0.0

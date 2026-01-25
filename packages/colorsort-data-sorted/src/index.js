@@ -1,4 +1,4 @@
-import { MASTER_ROUND, SORTING_METHODS } from 'colorsort'
+import { MASTER_ROUND, SORTING_METHODS } from 'colorsort-js'
 import { PALETTES } from 'colorsort-data-palettes'
 import { computedSerialize, computePlan, computeRender } from 'colorsort-compute'
 import { dispose, render } from 'colorsort-compute/src/render.js'

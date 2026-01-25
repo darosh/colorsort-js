@@ -1,11 +1,11 @@
-import type { PaletteType, MetricsEx, Fingerprint, StatsLabEx, MagnitudesLab } from 'colorsort'
-import { getMetricsExRange, metricsExQuality, metricsExQualitySum } from 'colorsort'
+import type { PaletteType, MetricsEx, Fingerprint, StatsLabEx, MagnitudesLab } from 'colorsort-js'
+import { getMetricsExRange, metricsExQuality, metricsExQualitySum } from 'colorsort-js'
 import BESTIES from './besties.json' with { type: 'json' }
 import { paletteDistance, paletteMap } from './palette-distance.ts'
 import { extract } from 'colorgram'
 // @ts-ignore
 // import { isArtist } from 'colorsort-data-palettes'
-import { flatRgb } from 'colorsort'
+import { flatRgb } from 'colorsort-js'
 
 export type Method = {
   name: string

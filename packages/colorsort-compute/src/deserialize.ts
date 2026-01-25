@@ -1,7 +1,7 @@
 import type { Method, PaletteRecordGrouped } from './compute.ts'
 
 //@ts-ignore
-import { SORTING_METHODS } from 'colorsort'
+import { SORTING_METHODS } from 'colorsort-js'
 
 export function deserialize(types: PaletteRecordGrouped[]) {
   const sorted = []

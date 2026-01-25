@@ -627,7 +627,7 @@ a.link-grey {
 <script>
 import { PALETTES } from 'colorsort-data-palettes'
 import TRAINED from 'colorsort-data-trained/trained.json' with { type: 'json' }
-import { compareSpectralFeatures, cosineSimilarity, getAuto, oklch, SORTING_METHODS } from 'colorsort'
+import { compareSpectralFeatures, cosineSimilarity, getAuto, oklch, SORTING_METHODS } from 'colorsort-js'
 import XPreview from '@/XPreview.vue'
 import {
   BESTIES,

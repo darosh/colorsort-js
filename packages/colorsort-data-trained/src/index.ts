@@ -9,7 +9,7 @@ import {
   MASTER_LCH,
   MASTER_ROUND,
   metricsFftFingerprint
-} from 'colorsort'
+} from 'colorsort-js'
 
 export interface Trained {
   mid: string

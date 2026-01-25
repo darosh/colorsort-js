@@ -2,7 +2,7 @@
   "name": "colorsort-data-trained",
   "version": "0.0.0",
   "devDependencies": {
-    "colorsort": "workspace:*",
+    "colorsort-js": "workspace:*",
     "colorsort-analysis": "workspace:*",
     "colorsort-compute": "workspace:*",
     "colorsort-data-palettes": "workspace:*",
