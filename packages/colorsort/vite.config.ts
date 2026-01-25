@@ -1,7 +1,7 @@
 import { fileURLToPath, URL } from 'node:url'
 import { dirname, resolve } from 'node:path'
 import { defineConfig } from 'vite'
-// import dts from 'vite-plugin-dts'
+import dts from 'vite-plugin-dts'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 
@@ -17,7 +17,7 @@ export default defineConfig({
     sourcemap: true
   },
   plugins: [
-    // dts({ outDir: 'dist/types' })
+    dts({ outDir: 'dist/types' })
   ],
   resolve: {
     alias: {
