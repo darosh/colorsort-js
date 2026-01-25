@@ -10,7 +10,7 @@ npm i colorsort-js
 
 ```javascript
 import { auto } from 'colorsort-js'
-import DATA from 'colorsort/trained.json' with { type: 'json' }
+import DATA from 'colorsort-js/trained.json' with { type: 'json' }
 
 const colors = ['#000000', '#fff000', '#000fff']
 const sorted = auto(colors, DATA)
