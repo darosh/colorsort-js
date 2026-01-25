@@ -126,6 +126,9 @@ importers:
       colorsort-data-sorted:
         specifier: workspace:*
         version: link:../colorsort-data-sorted
+      colorsort-data-trained:
+        specifier: workspace:*
+        version: link:../colorsort-data-trained
     devDependencies:
       '@carbon/charts-vue':
         specifier: ^1.27.2

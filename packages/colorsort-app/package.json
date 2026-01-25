@@ -6,7 +6,8 @@
     "colorsort-compute": "workspace:*",
     "colorsort-analysis": "workspace:*",
     "colorsort-data-palettes": "workspace:*",
-    "colorsort-data-sorted": "workspace:*"
+    "colorsort-data-sorted": "workspace:*",
+    "colorsort-data-trained": "workspace:*"
   },
   "devDependencies": {
     "@carbon/charts-vue": "^1.27.2",

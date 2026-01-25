@@ -224,7 +224,7 @@ a.link-grey {
       <!-- Palettes page -->
       <v-container @mousemove="listMouse" v-if="showHome" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="sortedFilteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality, fingerprint}, methods }, key }, index: rowIndex }">
+          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { auto, record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality, fingerprint}, methods }, key }, index: rowIndex }">
             <div
               @mouseenter="onmouseenter(undefined, palette, __key)"
               class="trow"
@@ -240,6 +240,7 @@ a.link-grey {
               </div>
 
               <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px;" :style="{cursor: methods.length > 1 ? 'pointer' : null}" @click.stop="expandIndex(__key)">
+                <v-icon v-if="auto" size="22" icon="mdi-lightbulb-on-outline" color="#4f4" />
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
@@ -625,7 +626,8 @@ a.link-grey {
 
 <script>
 import { PALETTES } from 'colorsort-data-palettes'
-import { compareSpectralFeatures, cosineSimilarity, oklch, SORTING_METHODS } from 'colorsort'
+import TRAINED from 'colorsort-data-trained/trained.json' with { type: 'json' }
+import { compareSpectralFeatures, cosineSimilarity, getAuto, oklch, SORTING_METHODS } from 'colorsort'
 import XPreview from '@/XPreview.vue'
 import {
   BESTIES,
@@ -973,7 +975,6 @@ export default {
         return this.filteredGroups
       }
 
-
       const arr = [...this.filteredGroups].sort((a, b) => {
         // return Math.random() - .5
         // return compareSpectralFeatures(this.sortFingerprint, b.group.record.spectral).structural - compareSpectralFeatures(this.sortFingerprint, a.group.record.spectral).structural
@@ -1017,16 +1018,32 @@ export default {
         }))]
       }, [])
     },
+    autoTypes () {
+      return this.types.map(t => {
+        const auto = getAuto(t.colors, TRAINED)
+
+        return {
+          ...t,
+          auto,
+          groups: t.groups.map(g => ({
+            ...g,
+            auto: g.methods.some(m => m.method.mid === auto)
+          }))
+        }
+      })
+    },
     filtered () {
+      console.log(this.autoTypes)
+
       if (!this.routeLoaded) {
         return []
       }
 
       if (!this.filterPalette && !this.filterMethod) {
-        return this.types
+        return this.autoTypes
       }
 
-      if (!this.types) {
+      if (!this.autoTypes) {
         return []
       }
 
@@ -1040,7 +1057,7 @@ export default {
       const text = more ? this.filterPalette.slice(0, -1) : this.filterPalette
       let afterMore = false
 
-      const filtered = !this.filterPalette ? this.types : this.types.filter(t => {
+      const filtered = !this.filterPalette ? this.autoTypes : this.autoTypes.filter(t => {
         if (this.filterPalette[0] === '<') {
           return t.colors.length < number
         } else if (this.filterPalette[0] === '>') {
@@ -1082,6 +1099,9 @@ export default {
       } else if (this.filterMethod.startsWith('@')) {
         dlr = 4
         mtd = mtd.slice(1)
+      } else if (this.filterMethod.startsWith('?')) {
+        dlr = 5
+        mtd = mtd.slice(1)
       }
 
       return filtered
@@ -1100,6 +1120,8 @@ export default {
                 groups = t.groups.filter(g => g.methods.some(x => x.best))
               } else if (dlr === 4) {
                 groups = t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
+              } else if (dlr === 5) {
+                groups = t.groups.filter(g => g.auto)
               }
 
               if (mtd) {
