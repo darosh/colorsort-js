@@ -43,28 +43,6 @@ importers:
         version: 4.0.17(@types/node@25.0.8)(jiti@2.6.1)(lightningcss@1.30.2)
 
   packages/colorsort:
-    dependencies:
-      chroma-js:
-        specifier: ^3.2.0
-        version: 3.2.0
-      colorgram:
-        specifier: ^0.2.0
-        version: 0.2.0
-      colorjs.io:
-        specifier: ^0.6.0
-        version: 0.6.0
-      culori:
-        specifier: ^4.0.2
-        version: 4.0.2
-      js-levenshtein:
-        specifier: ^1.1.6
-        version: 1.1.6
-      ml-kmeans:
-        specifier: ^7.0.0
-        version: 7.0.0
-      poline:
-        specifier: ^0.13.0
-        version: 0.13.0
     devDependencies:
       '@types/chroma-js':
         specifier: ^3.1.2
@@ -81,15 +59,36 @@ importers:
       '@types/node':
         specifier: ^25.0.3
         version: 25.0.8
+      chroma-js:
+        specifier: ^3.2.0
+        version: 3.2.0
       colord:
         specifier: 2.9.3
         version: 2.9.3
+      colorgram:
+        specifier: ^0.2.0
+        version: 0.2.0
+      colorjs.io:
+        specifier: ^0.6.0
+        version: 0.6.0
       commons-math-interpolation:
         specifier: ^2.2.4
         version: 2.2.4
+      culori:
+        specifier: ^4.0.2
+        version: 4.0.2
       fft.js:
         specifier: ^4.0.4
         version: 4.0.4
+      js-levenshtein:
+        specifier: ^1.1.6
+        version: 1.1.6
+      ml-kmeans:
+        specifier: ^7.0.0
+        version: 7.0.0
+      poline:
+        specifier: ^0.13.0
+        version: 0.13.0
 
   packages/colorsort-analysis:
     devDependencies:
