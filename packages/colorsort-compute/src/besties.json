@@ -396,10 +396,6 @@
     "mid": "Original"
   },
   {
-    "key": "lo-wplace-palette-free-colours",
-    "mid": "RAMPG:[0,20,270,muted]"
-  },
-  {
     "key": "lo-endesga-32",
     "mid": "Original"
   },
@@ -453,7 +449,11 @@
   },
   {
     "key": "lo-fleja-master-palette",
-    "mid": "Original"
+    "mid": "PCA:[gl,tsp]"
+  },
+  {
+    "key": "lo-mega-drive-blue",
+    "mid": "PCA:[gl,tsp]"
   },
   {
     "key": "lo-pear36",
