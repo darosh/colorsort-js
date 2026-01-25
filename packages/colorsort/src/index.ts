@@ -23,3 +23,7 @@ export { applySpectralProcessing } from './spectral-edit.ts'
 export { fingerprintAverage } from './similarity.ts'
 export { compareColors } from './vector.ts'
 export { getAuto } from './auto.ts'
+
+import { oklch } from './color.ts'
+
+export const MASTER_LCH = oklch

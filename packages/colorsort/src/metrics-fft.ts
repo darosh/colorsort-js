@@ -68,14 +68,14 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
   } = fftLch(lchColors)
 
   // Calculate features
-  const hueSpread = Math.max(...sortedHues) - Math.min(...sortedHues)
+  const maxGap = Math.max(...hueDeltas)
+  const hueSpread = sortedHues.length > 0 ? 360 - maxGap : 0
   const chromaVariance = variance(chromas)
   const lightnessVariance = variance(lightnesses)
 
   // Detect gaps in hue distribution (indicates multi-ramp)
   const largeGaps = hueDeltas.filter((d) => d > 45).length
   const avgGap = mean(hueDeltas)
-  const maxGap = Math.max(...hueDeltas)
 
   // Spectral features (hue-independent)
   const hueDeltaEnergy = energy(hueDeltaMags)

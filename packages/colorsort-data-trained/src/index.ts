@@ -1,7 +1,7 @@
 import stringify from 'json-stringify-pretty-compact'
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 import { deserialize, type PaletteRecordGrouped } from 'colorsort-compute'
-import { compareColors, fingerprintAverage, metricsFftFingerprint, oklch } from 'colorsort'
+import { compareColors, fingerprintAverage, MASTER_LCH, metricsFftFingerprint } from 'colorsort'
 
 export interface Trained {
   mid: string
@@ -32,7 +32,7 @@ export async function getTrained() {
       continue
     }
 
-    const colors = (<string[]>bestGroup?.record?.colors || []).map(oklch).sort(compareColors)
+    const colors = (<string[]>bestGroup?.record?.colors || []).map(MASTER_LCH).sort(compareColors)
 
     if (!colors.length) {
       continue

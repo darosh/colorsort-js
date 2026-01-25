@@ -35,15 +35,21 @@ export function fftLch(lchColors: Vector3[]): MagnitudesLch {
   const chromas = lchColors.map((c) => c[1])
   const hues = lchColors.map((c) => c[2])
 
+  // Normalize hues to [0, 360)
+  const normalizedHues = hues.map((h) => ((h % 360) + 360) % 360)
+
   // Sort hues and calculate deltas (captures clustering pattern)
-  const sortedHues = [...hues].sort((a, b) => a - b)
+  const sortedHues = [...normalizedHues].filter((x) => isFinite(x)).sort((a, b) => a - b)
+
   const hueDeltas: number[] = []
 
   for (let i = 0; i < sortedHues.length - 1; i++) {
     hueDeltas.push(sortedHues[i + 1] - sortedHues[i])
   }
 
-  hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
+  if (sortedHues.length > 0) {
+    hueDeltas.push(360 - sortedHues[sortedHues.length - 1] + sortedHues[0])
+  }
 
   // Extract magnitudes (first half, excluding DC component)
   const hueDeltaMags = magnitude(half(fft(hueDeltas)))
@@ -54,7 +60,7 @@ export function fftLch(lchColors: Vector3[]): MagnitudesLch {
     hueDeltaMags,
     chromaMags,
     lightnessMags,
-    hues,
+    hues: normalizedHues,
     hueDeltas,
     sortedHues,
     chromas,

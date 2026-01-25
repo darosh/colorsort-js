@@ -2,7 +2,11 @@ import FFT from 'fft.js'
 import { resampleLinear } from './resample.ts'
 
 export function fft(numbers: number[]) {
-  const size = Math.pow(2, Math.ceil(Math.log(numbers.length) / Math.log(2)))
+  if (!numbers.length) {
+    return [0, 0]
+  }
+
+  const size = Math.pow(2, Math.ceil(Math.log(Math.max(2, numbers.length)) / Math.log(2)))
   const values = numbers.length < size ? resampleLinear(numbers, size) : numbers
 
   const ff = new FFT(size)

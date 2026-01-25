@@ -129,7 +129,15 @@
   </div>
 </template>
 <script>
-import { applySpectralProcessing, oklab, oklab2hex, randomizer } from 'colorsort'
+import {
+  applySpectralProcessing,
+  MASTER_LCH,
+  metricsFftFingerprint,
+  oklab,
+  oklab2hex,
+  oklch,
+  randomizer
+} from 'colorsort'
 import { CcvLineChart } from '@carbon/charts-vue'
 
 let id = 0
@@ -315,6 +323,7 @@ export default {
   },
   methods: {
     click(colors) {
+      console.log(metricsFftFingerprint(colors.map(MASTER_LCH)))
       id++
       console.log(`const colors_${id} = [${colors.map(x => `'${x}'`).join(', ')}]`)
     }
