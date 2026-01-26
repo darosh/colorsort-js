@@ -576,7 +576,7 @@ a.link-grey {
               <td>show best and original</td>
             </tr>
             <tr>
-              <td><b>@</b></td>
+              <td><b>?</b></td>
               <td>show auto method</td>
             </tr>
             <tr>
