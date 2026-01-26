@@ -1,0 +1,638 @@
+// https://okpalette.color.pizza/
+
+poster
+
+#D40C7A | Prince Charming
+#980B78 | Persian Luxury Purple
+#124C83 | Night Mode
+#0C0F0F | Black Wash
+#F1F2F2 | Lighthouse
+#3A9360 | Eucalyptus
+#EEE16B | Pollination
+#DA6716 | Chocolate
+
+#D40C7A | Prince Charming
+#510A36 | Dark Sanctuary
+#980B78 | Persian Luxury Purple
+#1D1E6B | Intergalactic Cowboy
+#000002 | Black Hole
+#124C83 | Night Mode
+#84BDE7 | Electric Eel
+#1481BF | Honolulu Blue
+#0C0F0F | Black Wash
+#F1F2F2 | Lighthouse
+#3A9360 | Eucalyptus
+#95B44E | Frog on a Log
+#EEE16B | Pollination
+#EAB410 | Trumpet Gold
+#DA6716 | Chocolate
+#A12408 | Burnt Red
+
+#D40C7A | Prince Charming
+#510A36 | Dark Sanctuary
+#980B78 | Persian Luxury Purple
+#EB75D0 | Nervous Neon Pink
+#4F389B | Ruthless Empress
+#1D1E6B | Intergalactic Cowboy
+#060835 | Oblivion
+#000002 | Black Hole
+#124C83 | Night Mode
+#CCCDCD | Iron Fist
+#84BDE7 | Electric Eel
+#1481BF | Honolulu Blue
+#1FA2D4 | Blue Burst
+#0C0F0F | Black Wash
+#F1F2F2 | Lighthouse
+#206949 | Into the Green
+#3A9360 | Eucalyptus
+#133317 | Dark Serpent
+#95B44E | Frog on a Log
+#EEE16B | Pollination
+#EAB410 | Trumpet Gold
+#E88A0B | Hotter Butter
+#DA6716 | Chocolate
+#A12408 | Burnt Red
+#CA2602 | Piment Piquant
+
+swatches
+
+#1B3E9F | Smalt
+#0B1D26 | Black Stallion
+#F2F8F7 | Everlasting Ice
+#3C9A5B | Militant Vegan
+#FDF43D | Golden Ginkgo
+#661717 | Bloodlust
+#E1383D | Cute Crab
+#FDAEC0 | Poodle Skirt
+
+#B795DE | Dreamy Candy Forest
+#6574CE | Flood
+#1B3E9F | Smalt
+#0B1D26 | Black Stallion
+#F2F8F7 | Everlasting Ice
+#3C9A5B | Militant Vegan
+#16441B | Realm of the Underworld
+#67B45D | Bud Green
+#D8D546 | Dragon’s Gold
+#FDF43D | Golden Ginkgo
+#661717 | Bloodlust
+#E1383D | Cute Crab
+#9A3138 | Queen of Hearts
+#1D0003 | Dwarf Fortress
+#FDAEC0 | Poodle Skirt
+#000000 | Black
+
+#B795DE | Dreamy Candy Forest
+#0E0023 | Mysterious Depths
+#6574CE | Flood
+#1B3E9F | Smalt
+#025EB3 | Wing Commander
+#89BFE9 | Electric Eel
+#0B1D26 | Black Stallion
+#B5E6FD | Frozen Landscape
+#F2F8F7 | Everlasting Ice
+#3C9A5B | Militant Vegan
+#000300 | Black
+#16441B | Realm of the Underworld
+#2E6A32 | Bucolic
+#67B45D | Bud Green
+#ACAC36 | Honey and Thyme
+#D8D546 | Dragon’s Gold
+#FDF43D | Golden Ginkgo
+#C9956D | Butterum
+#450000 | Lonely Chocolate
+#661717 | Bloodlust
+#E1383D | Cute Crab
+#9A3138 | Queen of Hearts
+#1D0003 | Dwarf Fortress
+#FDAEC0 | Poodle Skirt
+#000000 | Black Hole
+
+nippon-fish
+
+#0C6194 | Hyper Blue
+#E9E2C7 | Horseradish
+#E9842F | Bourbon Peach
+#DA4924 | Tomato Queen
+
+#0C6194 | Hyper Blue
+#18303E | Blue Whale
+#5595BB | Canadian Tuxedo
+#2D4E59 | Mallard
+#9CD4E5 | Over the Sky
+#4E7371 | Rogue Waters
+#E9E2C7 | Horseradish
+#CAB877 | Canadian Maple
+#918046 | Peas Please
+#E9842F | Bourbon Peach
+#DA4924 | Tomato Queen
+#512F28 | Bitter Chocolate
+#9B3831 | Ketchup
+#F1BFBF | Angry Ghost
+#D36A77 | Mexican Chile
+#E39CA5 | Sprinkled With Pink
+
+#7B7F8A | Nocturnal
+#153D62 | Poseidon
+#0C6194 | Hyper Blue
+#18303E | Blue Whale
+#5595BB | Canadian Tuxedo
+#2D4E59 | Mallard
+#9CD4E5 | Over the Sky
+#86A8B1 | Equanimity
+#4E7371 | Rogue Waters
+#98A96C | Gallant Green
+#D6CEA0 | Court-Bouillon
+#E9E2C7 | Horseradish
+#CAB877 | Canadian Maple
+#918046 | Peas Please
+#674A2D | Cafe Royale
+#FAB16E | Apricot
+#E9842F | Bourbon Peach
+#A15A31 | Indochine
+#B5877A | Dusty Duchess
+#DA4924 | Tomato Queen
+#512F28 | Bitter Chocolate
+#9B3831 | Ketchup
+#F1BFBF | Angry Ghost
+#D36A77 | Mexican Chile
+#E39CA5 | Sprinkled With Pink
+
+cd-player
+
+#E76EAB | Fugitive Flamingo
+#18191B | Dark Moon
+#374A79 | Noble Knight
+#2F74BA | Campanula
+#25ACDD | Mystic Blue
+#EFEFEF | Super Silver
+#F7B69E | Wax Flower
+#E43A4D | Desire
+
+#E76EAB | Fugitive Flamingo
+#18191B | Dark Moon
+#374A79 | Noble Knight
+#000010 | Obsidian Shard
+#2F74BA | Campanula
+#90BAD5 | Gentle Sky
+#25ACDD | Mystic Blue
+#353737 | Wet Concrete
+#32895E | Primal Green
+#050601 | Black Metal
+#EFEFEF | Super Silver
+#F7B69E | Wax Flower
+#FA8F85 | Mona Lisa
+#B04A45 | Intrigue Red
+#671F22 | Bloodlust
+#E43A4D | Desire
+
+#E76EAB | Fugitive Flamingo
+#B05CA0 | Magenta Memoir
+#18191B | Dark Moon
+#202157 | Spacescape
+#3954B2 | Blasphemous Blue
+#374A79 | Noble Knight
+#000010 | Obsidian Shard
+#628CCB | Marina
+#2F74BA | Campanula
+#90BAD5 | Gentle Sky
+#25ACDD | Mystic Blue
+#CCCECF | Whisper of Smoke
+#353737 | Wet Concrete
+#3EA08C | Jewel Weed
+#27684A | Jewel
+#32895E | Primal Green
+#050601 | Black Metal
+#EFEFEF | Super Silver
+#F7B69E | Wax Flower
+#FA8F85 | Mona Lisa
+#B04A45 | Intrigue Red
+#671F22 | Bloodlust
+#E43A4D | Desire
+#FA6474 | Kisses and Hugs
+#7D314B | Flirt
+
+oath
+
+#8B7948 | Capers
+#1B1915 | Twilight Zone
+#413824 | Madras
+#60553C | Olive Bark
+#421C0C | Old Study
+#7A3415 | Drip Coffee
+#D26B48 | Koi
+#B63C18 | Crimson Blaze
+
+#25291A | Marshland
+#0C0C01 | Sinister
+#6B6655 | Ivy Topiary
+#8B7948 | Capers
+#1B1915 | Twilight Zone
+#413824 | Madras
+#60553C | Olive Bark
+#92593B | Coconut
+#CD886C | Escalope
+#421C0C | Old Study
+#B56342 | Caramel Dream
+#7A3415 | Drip Coffee
+#9A3C18 | Choco Chic
+#D26B48 | Koi
+#B63C18 | Crimson Blaze
+#641D09 | Prune
+
+#25291A | Marshland
+#0C0C01 | Sinister
+#6B6655 | Ivy Topiary
+#8B7948 | Capers
+#7B6B41 | Lizard
+#1B1915 | Twilight Zone
+#413824 | Madras
+#60553C | Olive Bark
+#50453D | Espresso Macchiato
+#7D4E2E | Chocolate Bells
+#67412C | Grilled
+#92593B | Coconut
+#B97A5B | Silken Chocolate
+#542D1B | Couch
+#CD886C | Escalope
+#421C0C | Old Study
+#B56342 | Caramel Dream
+#7A3415 | Drip Coffee
+#E27B56 | Sassy Salmon
+#9A3C18 | Choco Chic
+#D26B48 | Koi
+#B63C18 | Crimson Blaze
+#641D09 | Prune
+#D1441F | Underpass Shrine
+#331009 | 3AM Breakup
+
+nippon-tower
+
+#203E5F | Poseidon
+#0A2138 | Trapped Darkness
+#4A6E89 | Shipyard
+#95A7AA | Stormy Bay
+#E4C3A5 | Fabulous Fawn
+#6C4138 | Brunette
+#985951 | Cheek Red
+#C17B73 | Nipple
+
+#203E5F | Poseidon
+#0A2138 | Trapped Darkness
+#32577D | Slumber
+#4A6E89 | Shipyard
+#6B858E | Puddle Jumper
+#B0C7CB | Windy
+#95A7AA | Stormy Bay
+#39514F | Night Watch
+#706D59 | Organic
+#9F936B | A Frond in Need
+#322C21 | Go to Hell Black
+#E4C3A5 | Fabulous Fawn
+#6C4138 | Brunette
+#985951 | Cheek Red
+#E29D94 | She Loves Pink
+#C17B73 | Nipple
+
+#62585C | Wonder Wine
+#203E5F | Poseidon
+#0A2138 | Trapped Darkness
+#32577D | Slumber
+#4A6E89 | Shipyard
+#6B858E | Puddle Jumper
+#B0C7CB | Windy
+#7E979B | Inland Waters
+#95A7AA | Stormy Bay
+#273D3B | Emerald Forest
+#39514F | Night Watch
+#706D59 | Organic
+#B2AA80 | Bamboo Forest
+#9F936B | A Frond in Need
+#DDD9D0 | Skyvory
+#322C21 | Go to Hell Black
+#E4C3A5 | Fabulous Fawn
+#CCB3A1 | Soba
+#9B745F | Whisky Barrel
+#6C4138 | Brunette
+#985951 | Cheek Red
+#E29D94 | She Loves Pink
+#C17B73 | Nipple
+#864747 | Red Elegance
+#4C373C | Vibrant Vine
+
+nippon-swans
+
+#057C90 | Bermuda
+#4C9457 | Wild Forest
+#004A15 | British Racing Green
+#FAF7F3 | White Chalk
+#F2C1A7 | Bellini
+#FC3206 | Boiling Magma
+#530101 | Burned
+#000000 | Black
+
+#000113 | Obsidian Shard
+#02546F | Night Kite
+#057C90 | Bermuda
+#69DCF4 | Splashing Wave
+#4C9457 | Wild Forest
+#AEF3B6 | Ultra Mint
+#004A15 | British Racing Green
+#FAF7F3 | White Chalk
+#0B0A0A | Raven
+#F2C1A7 | Bellini
+#FC7E4F | Coral
+#FC3206 | Boiling Magma
+#CD0E0A | Love Goddess
+#530101 | Burned
+#8D0909 | Scoville Highness
+#000000 | Black
+
+#000113 | Obsidian Shard
+#001E33 | Oxford by Night
+#02546F | Night Kite
+#057C90 | Bermuda
+#69DCF4 | Splashing Wave
+#39B4CB | Viking
+#86FBFE | Glitter Shower
+#106C3D | Bucolic
+#4C9457 | Wild Forest
+#AEF3B6 | Ultra Mint
+#70B578 | Frog Pond
+#004A15 | British Racing Green
+#FEFAA9 | Bollywood Gold
+#FAF7F3 | White Chalk
+#0B0A0A | Raven
+#F2C1A7 | Bellini
+#BD5F26 | Dwarven Bronze
+#FC7E4F | Coral
+#FC3206 | Boiling Magma
+#2D0000 | 3AM Breakup
+#CD0E0A | Love Goddess
+#530101 | Burned
+#8D0909 | Scoville Highness
+#FC8E9B | Pick Your Brain
+#000000 | Black
+
+luggable-computer
+
+#191819 | Dark Void
+#2B3466 | Galaxea
+#0390F8 | Too Blue to Be True
+#F8F7F6 | Venerable White
+#F1C48D | Honeyed Glow
+#E48C19 | Hotter Butter
+#EA1723 | Blood Donor
+#872322 | Noble Red
+
+#191819 | Dark Void
+#E39AE3 | Diva Mecha
+#2B3466 | Galaxea
+#056EC6 | Matt Blue
+#0390F8 | Too Blue to Be True
+#34C4F9 | Thor’s Thunder
+#466548 | Herbes de Provence
+#F8F7F6 | Venerable White
+#FEF080 | Spätzle Yellow
+#F1C48D | Honeyed Glow
+#E48C19 | Hotter Butter
+#A2572C | Garfield
+#090000 | Knight Rider
+#EA1723 | Blood Donor
+#872322 | Noble Red
+#000000 | Black
+
+#191819 | Dark Void
+#E39AE3 | Diva Mecha
+#FBD6FB | Bubblegum Crisis
+#2B3466 | Galaxea
+#01052D | Illicit Darkness
+#0348A1 | Cascade Twilight
+#056EC6 | Matt Blue
+#0390F8 | Too Blue to Be True
+#34C4F9 | Thor’s Thunder
+#59ECFF | Sparky Blue
+#239575 | Pool Table
+#466548 | Herbes de Provence
+#F8F7F6 | Venerable White
+#FEF080 | Spätzle Yellow
+#F9C128 | Marigold
+#F1C48D | Honeyed Glow
+#E48C19 | Hotter Butter
+#A2572C | Garfield
+#FF6412 | Orange Piñata
+#090000 | Knight Rider
+#B01B1D | Siren Scarlet
+#EA1723 | Blood Donor
+#872322 | Noble Red
+#550B0E | Cherry Picking
+#000000 | Black
+
+seascape
+
+#395D7A | Dark Blue
+#F2DDB2 | Pina Colada
+#D19B53 | Bengal
+#89480D | Otterly Brown
+
+#080E1B | Midnight Edition
+#527AAA | Endless River
+#7D909F | Inland Waters
+#395D7A | Dark Blue
+#293F4E | Depths of the Nile
+#C9E0E6 | Melting Point
+#B2B4B0 | Steam Engine
+#F7FCED | Amnesiac White
+#F2DDB2 | Pina Colada
+#F6B853 | Fizzy Peach
+#D19B53 | Bengal
+#B66B15 | Indocile Tiger
+#27180D | Burnt Coffee
+#89480D | Otterly Brown
+#5C2908 | Count Chocula
+#D34422 | Underpass Shrine
+
+#20273A | Midnight Express
+#080E1B | Midnight Edition
+#527AAA | Endless River
+#7D909F | Inland Waters
+#395D7A | Dark Blue
+#293F4E | Depths of the Nile
+#C9E0E6 | Melting Point
+#577273 | Rogue Waters
+#B2B4B0 | Steam Engine
+#F7FCED | Amnesiac White
+#97976D | Guacamole
+#F2DDB2 | Pina Colada
+#5B4920 | Jungle Beat
+#84692D | Aged Antics
+#F6B853 | Fizzy Peach
+#D19B53 | Bengal
+#B66B15 | Indocile Tiger
+#27180D | Burnt Coffee
+#89480D | Otterly Brown
+#91796C | Hemp
+#5C2908 | Count Chocula
+#F67237 | Extreme Carrot
+#D34422 | Underpass Shrine
+#C88273 | Earthworm
+#705553 | Afternoon Coffee
+
+darosh-fireworks
+
+#9283E2 | Perrywinkle
+#1503B0 | Bohemian Blue
+#FEDF72 | Ravioli al Limone
+#010101 | Black
+#F2A949 | Artisans Gold
+#F54E18 | Fiery Glow
+#AC1D01 | Salsa Picante
+#380101 | 3AM Breakup
+
+#E2A8FF | Testosterose
+#9283E2 | Perrywinkle
+#504CA1 | Galaxy Express
+#191568 | Dying Storm Blue
+#1503B0 | Bohemian Blue
+#01013C | Storm
+#FEDF72 | Ravioli al Limone
+#010101 | Black
+#F2A949 | Artisans Gold
+#C4811D | Harvest at Dusk
+#9D581F | Chilli Con Carne
+#F54E18 | Fiery Glow
+#AC1D01 | Salsa Picante
+#6F0705 | Hellbound
+#380101 | 3AM Breakup
+#F3EFF0 | Plastic Clouds
+
+#680557 | Purple Velour
+#FDCFFD | Sugar Chic
+#E2A8FF | Testosterose
+#3E0A8F | Space Battle Blue
+#9283E2 | Perrywinkle
+#6356CF | Warm Blue
+#504CA1 | Galaxy Express
+#191568 | Dying Storm Blue
+#1503B0 | Bohemian Blue
+#01013C | Storm
+#E8FFBF | Kiwi Kiss
+#B6B6B4 | Tangled Web
+#FEDF72 | Ravioli al Limone
+#010101 | Black
+#F2A949 | Artisans Gold
+#C4811D | Harvest at Dusk
+#160901 | Asphalt
+#9D581F | Chilli Con Carne
+#6E3C14 | Walnut
+#F54E18 | Fiery Glow
+#F87A5D | Slippery Salmon
+#AC1D01 | Salsa Picante
+#6F0705 | Hellbound
+#380101 | 3AM Breakup
+#F3EFF0 | Plastic Clouds
+
+darosh-chalk-painting
+
+#5C91CB | Winter Lake
+#4C718F | Beach View
+#90BADB | Double Denim
+#353736 | Wet Concrete
+#1B1D1A | Coco’s Black
+#DEC73A | Golden Kingdom
+#8D6531 | Woodgrain
+#DB6530 | Bronzed
+
+#38507B | Noble Knight
+#5C91CB | Winter Lake
+#BFDBF4 | Oh Boy!
+#4C718F | Beach View
+#90BADB | Double Denim
+#353736 | Wet Concrete
+#1B1D1A | Coco’s Black
+#4F4E26 | Jungle King
+#DEC73A | Golden Kingdom
+#E6D8A4 | Beige
+#B98F1D | Nugget
+#E6A13A | Persimmon
+#8D6531 | Woodgrain
+#DB6530 | Bronzed
+#753C25 | Stone Age Queen
+#BB4D2C | Spice Market
+
+#4569B7 | Starstruck
+#38507B | Noble Knight
+#5C91CB | Winter Lake
+#BFDBF4 | Oh Boy!
+#4C718F | Beach View
+#90BADB | Double Denim
+#6BA8C8 | Serene Sea
+#7A979B | Cavolo Nero
+#47605E | Rosemary
+#353736 | Wet Concrete
+#1B1D1A | Coco’s Black
+#A7A779 | Cardamom
+#4F4E26 | Jungle King
+#868447 | Overgrown Citadel
+#DEC73A | Golden Kingdom
+#E6D8A4 | Beige
+#B98F1D | Nugget
+#E6A13A | Persimmon
+#8D6531 | Woodgrain
+#DAB28D | Porcini
+#D0896A | Escalope
+#DB6530 | Bronzed
+#753C25 | Stone Age Queen
+#BB4D2C | Spice Market
+#924634 | Fire
+
+darosh-sunflower
+
+#182001 | Midnight Pines
+#D2D113 | Sun Flooded Woods
+#FCFB18 | Electric Yellow
+#E09305 | Tiger King
+#854D02 | Mochaccino
+
+#000003 | Raven’s Coat
+#898B8B | Argent
+#484A49 | Armadillo
+#42531B | Godzilla
+#718349 | Grasshopper
+#030500 | Black Metal
+#182001 | Midnight Pines
+#D2D113 | Sun Flooded Woods
+#FCFB18 | Electric Yellow
+#AAA866 | Garden of Earthly Delights
+#FDB70C | Sunflower Mango
+#E09305 | Tiger King
+#B36B04 | Indocile Tiger
+#854D02 | Mochaccino
+#4A1802 | Chocolate Rush
+#1E0001 | Dwarf Fortress
+
+#371D3A | Purple Void
+#0A0012 | Obsidian Shard
+#000003 | Raven’s Coat
+#898B8B | Argent
+#6C6D6C | Shadows
+#484A49 | Armadillo
+#223602 | Darkest Forest
+#42531B | Godzilla
+#718349 | Grasshopper
+#030500 | Black Metal
+#182001 | Midnight Pines
+#B3BD07 | Leafy Woodland
+#D2D113 | Sun Flooded Woods
+#FCFB18 | Electric Yellow
+#AAA866 | Garden of Earthly Delights
+#CAC696 | Court-Bouillon
+#F8E143 | Angel’s Trumpet
+#AF8E06 | Faint Gold
+#FDB70C | Sunflower Mango
+#E09305 | Tiger King
+#B36B04 | Indocile Tiger
+#854D02 | Mochaccino
+#772E09 | Chestnut
+#4A1802 | Chocolate Rush
+#1E0001 | Dwarf Fortress
