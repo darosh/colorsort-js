@@ -27,7 +27,7 @@
   },
   "exports": {
     ".": {
-      "types": "./dist/types/src/index.ts",
+      "types": "./dist/types/src/index.d.ts",
       "import": "./dist/colorsort.js",
       "require": "./dist/colorsort.umd.js"
     },
@@ -57,5 +57,5 @@
     "test:ramp": "deno run -A npm:vitest run ./tests/ramp.test.ts"
   },
   "type": "module",
-  "types": "./dist/types/src/index.ts"
+  "types": "./dist/types/src/index.d.ts"
 }
