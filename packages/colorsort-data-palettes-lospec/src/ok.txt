@@ -636,3 +636,13 @@ darosh-sunflower
 #772E09 | Chestnut
 #4A1802 | Chocolate Rush
 #1E0001 | Dwarf Fortress
+
+chocolate
+
+#EBECF0 | Errigal White
+#2D4B97 | Cascade Twilight
+#3ABAEF | Blue Bikini
+#FFC169 | Solar Storm
+#FF6C00 | Flush Orange
+#FF0031 | Hornet Sting
+#C20024 | Racing Red

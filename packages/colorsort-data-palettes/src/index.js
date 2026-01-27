@@ -389,9 +389,13 @@ export const PALETTES = {
 
 // Object.assign(PALETTES, Object.fromEntries(Array(28).fill().map((_,i) => [`poline-random-${i+1}`, rp()])))
 
-Object.assign(PALETTES, Object.fromEntries(Object.entries(PALETTES_DATA)
-  // .map(([key, value]) => [`lo-${key}`, value])
-))
+Object.assign(
+  PALETTES,
+  Object.fromEntries(
+    Object.entries(PALETTES_DATA)
+    // .map(([key, value]) => [`lo-${key}`, value])
+  )
+)
 
 Object.values(PALETTES).forEach((result) => {
   const first = oklab(result[0])

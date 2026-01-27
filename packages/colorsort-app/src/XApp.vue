@@ -184,7 +184,7 @@ a.link-grey {
       </template>
 
       <v-btn href="https://github.com/darosh/colorsort-js" icon="mdi-github" />
-      
+
       <template v-slot:extension>
         <div v-if="showHome && routeLoaded && isWide" class="d-flex" style="width: 100%;">
           <div style="width: 230px;" class="flex-grow-0 px-8"></div>

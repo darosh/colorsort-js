@@ -105,3 +105,43 @@ export function fingerprintAverageWithoutOutliers(fingerprints: number[][]): num
   // Return average of remaining
   return fingerprintAverage(filtered)
 }
+
+export function fingerprintAverageMAD(fingerprints: number[][], madThreshold = 3): number[] {
+  if (fingerprints.length === 0) {
+    return []
+  }
+
+  const median = fingerprintMedian(fingerprints)
+
+  // Calculate MAD
+  const deviations = fingerprints.map((fp) => Math.sqrt(fp.reduce((sum, val, i) => sum + Math.pow(val - median[i], 2), 0)))
+
+  const medianDeviation = [...deviations].sort((a, b) => a - b)[Math.floor(deviations.length / 2)]
+  const mad = medianDeviation * 1.4826 // scale factor for normal distribution
+
+  // Filter fingerprints within threshold
+  const filtered = fingerprints.filter((_, i) => deviations[i] <= mad * madThreshold)
+
+  return fingerprintAverage(filtered.length ? filtered : fingerprints)
+}
+
+export function fingerprintAveragePercentile(fingerprints: number[][], keepPercentile = 0.8): number[] {
+  if (fingerprints.length === 0) {
+    return []
+  }
+
+  const median = fingerprintMedian(fingerprints)
+
+  // Calculate distance from median for each fingerprint
+  const withDistances = fingerprints.map((fp) => ({
+    fp,
+    distance: Math.sqrt(fp.reduce((sum, val, i) => sum + Math.pow(val - median[i], 2), 0))
+  }))
+
+  // Sort by distance and keep closest X%
+  withDistances.sort((a, b) => a.distance - b.distance)
+  const keepCount = Math.ceil(withDistances.length * keepPercentile)
+  const filtered = withDistances.slice(0, keepCount).map((x) => x.fp)
+
+  return fingerprintAverage(filtered.length ? filtered : fingerprints)
+}

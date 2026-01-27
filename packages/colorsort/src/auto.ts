@@ -9,6 +9,7 @@ export interface Trained {
   mid: string
   colors: number
   fingerprint: number[]
+  fingerprints: number
 }
 
 function fix(fingerprint: number[]) {
@@ -39,52 +40,32 @@ export function getAuto(colors: string[], trained: Trained[]) {
   selected.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(a.fingerprint)) : 0))
   selected2.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(a.fingerprint)) : 0))
 
-  let noDb = [...selected, ...selected2]
-
-  if (colors.length < 64) {
-    noDb = noDb.filter((x) => !x.mid.startsWith('RAW'))
-  }
-
-  if (colors.length < 32) {
-    noDb = noDb.filter((x) => !x.mid.startsWith('RAMPH'))
-  }
-
-  if (colors.length < 6) {
-    noDb = noDb.filter((x) => !x.mid.startsWith('SPI'))
-  }
-
-  if (colors.length < 9) {
-    noDb = noDb.filter((x) => !x.mid.startsWith('CYL'))
-  }
-
-  // if (colors.length < 13) {
-  //   const noDB = selected
-  //     .filter(x => !x.mid.startsWith('DBSCAN'))
-  //     .filter(x => !x.mid.startsWith('RAW'))
-  //     .filter(x => !x.mid.startsWith('CL'))
-  //     .filter(x => !x.mid.startsWith('SPI'))
-  //     .filter(x => !x.mid.startsWith('KM'))
-  //     .filter(x => !x.mid.startsWith('CYL'))
-  //
-  //   if (noDB.length) {
-  //     return noDB[0].mid
-  //   }
-  // } else if (colors.length < 17) {
-  //   const noDB = selected
-  //     .filter(x => !x.mid.startsWith('DBSCAN'))
-  //     .filter(x => !x.mid.startsWith('RAW'))
-  //     .filter(x => !x.mid.startsWith('CL'))
-  //
-  //   if (noDB.length) {
-  //     return noDB[0].mid
-  //   }
-  // }
-
-  if (noDb.length) {
-    return noDb[0].mid
-  }
-
   if (selected.length) {
+    if (selected.length > 1) {
+      const multi = selected.filter((x) => Math.abs(1 - cosineSimilarity(selected[0].fingerprint, x.fingerprint)) < 0.5)
+
+      if (multi.length > 1) {
+        multi.sort((a, b) => {
+          const d = b.fingerprints - a.fingerprints
+
+          if (d !== 0) {
+            return d
+          }
+
+          const aCount = trained.filter((t) => t.mid === a.mid && t.colors <= colors.length && t.colors >= colors.length / 2).length
+          const bCount = trained.filter((t) => t.mid === b.mid && t.colors <= colors.length && t.colors >= colors.length / 2).length
+
+          // console.log({aCount, bCount})
+
+          return bCount - aCount
+        })
+
+        console.log(multi.map((x) => x.mid))
+
+        return multi[0].mid
+      }
+    }
+
     return selected[0].mid
   }
 
