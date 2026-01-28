@@ -60,7 +60,7 @@ export function getAuto(colors: string[], trained: Trained[]) {
           return bCount - aCount
         })
 
-        console.log(multi.map((x) => x.mid))
+        // console.log(multi.map((x) => x.mid))
 
         return multi[0].mid
       }
