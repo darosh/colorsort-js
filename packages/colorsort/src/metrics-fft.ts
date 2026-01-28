@@ -115,7 +115,7 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
     chromatic.length / lchColors.length,
     // ...hueDeltaMags.slice(0, 4),
     // ...chromaMags.slice(0, 4),
-    ...lightnessMags.slice(0, 1)
+    ...(lightnessMags.length ? lightnessMags.slice(0, 1) : [0])
   ]
 
   return {
