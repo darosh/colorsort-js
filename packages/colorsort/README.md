@@ -13,11 +13,17 @@ npm i colorsort-js
 ```javascript
 import { auto } from 'colorsort-js'
 import DATA from 'colorsort-js/trained.json' with { type: 'json' }
+import { multiAuto } from './auto-sort'
 
 const colors = ['#000000', '#fff000', '#000fff']
-const sorted = auto(colors, DATA)
 
+// SINGLE SORT
+const sorted = auto(colors, DATA)
 console.log(sorted) // outputs sorted array ['#000fff', ...]
+
+// MULTIPLE SORT - runs multiple methods, first item should be the best
+const multipleSorted = multiAuto(colors, DATA)
+console.log(multipleSorted[0].sorted) // outputs sorted array ['#000fff', ...]
 ```
 
 - The sorting method is selected automatically

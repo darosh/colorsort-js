@@ -41,6 +41,12 @@ export function getAuto(colors: string[], trained: Trained[]) {
   selected2.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(a.fingerprint)) : 0))
 
   if (selected.length) {
+    // const close = selected.filter((x) => Math.abs(1 - cosineSimilarity(selected[0].fingerprint, x.fingerprint)) < 0.001)
+    //
+    // if (close.length === 1) {
+    //   return close.map((d) => d.mid)
+    // }
+
     if (selected.length > 1) {
       const multi = selected.filter((x) => Math.abs(1 - cosineSimilarity(selected[0].fingerprint, x.fingerprint)) < 0.5)
 
@@ -62,12 +68,15 @@ export function getAuto(colors: string[], trained: Trained[]) {
 
         // console.log(multi.map((x) => x.mid))
 
-        return multi[0].mid
+        // return multi[0].mid
+        return multi.map((d) => d.mid)
       }
     }
 
-    return selected[0].mid
+    // return selected[0].mid
+    return selected.map((d) => d.mid)
   }
 
-  return selected2[0].mid
+  // return selected2[0].mid
+  return selected2.map((d) => d.mid)
 }

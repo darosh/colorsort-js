@@ -1,34 +1,8 @@
-import { MASTER_ROUND, SORTING_METHODS } from 'colorsort-js'
+import { SORTING_METHODS, roundAll } from 'colorsort-js'
 import { PALETTES } from 'colorsort-data-palettes'
 import { computedSerialize, computePlan, computeRender } from 'colorsort-compute'
 import { dispose, render } from 'colorsort-compute/src/render.js'
 import stringify from 'json-stringify-pretty-compact'
-
-function roundAll(obj) {
-  if (Array.isArray(obj)) {
-    for (let key = 0; key < obj.length; key++) {
-      const value = obj[key]
-
-      if (isFinite(value)) {
-        obj[key] = MASTER_ROUND(value)
-      } else if (typeof value === 'object') {
-        roundAll(value)
-      }
-    }
-
-    return obj
-  }
-
-  for (const [key, value] of Object.entries(obj)) {
-    if (isFinite(value)) {
-      obj[key] = MASTER_ROUND(value)
-    } else if (typeof value === 'object') {
-      roundAll(value)
-    }
-  }
-
-  return obj
-}
 
 export async function getSorted() {
   let palettes = Object.entries(PALETTES)

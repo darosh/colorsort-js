@@ -197,7 +197,10 @@ a.link-grey {
             <div style="width: 74px;" class="text-grey flex-grow-0 text-center">LCH</div>
             <div style="width: 52px;" class="text-grey flex-grow-0 text-right">Diff</div>
             <div style="width: 60px;" class="text-grey flex-grow-0 text-center">Best</div>
-            <div class="flex-grow-1">{{sortFingerprint ? 'Sorted!' : ''}}</div>
+            <div class="flex-grow-1">
+              <v-select v-model="sorting" :items="sortings" hide-details density="compact" variant="plain" style="position: relative; top: -8px;" />
+              {{sortFingerprint ? 'Sorted!' : ''}}
+            </div>
           </div>
         </div>
         <div v-else-if="showStats && routeLoaded && isWide" class="d-flex ext" style="width: 100%; flex-direction: row; height: 48px; align-items: center">
@@ -222,11 +225,12 @@ a.link-grey {
     <v-main style="--v-layout-top: 96px;">
       <!-- Edit page -->
       <x-edit v-if="showEdit" :colors="editingColors" />
+      <x-test v-if="showTest" :colors="editingColors" />
 
       <!-- Palettes page -->
       <v-container @mousemove="listMouse" v-if="showHome" fluid class="px-4 d-flex" style="flex-direction: column; padding-left: 230px !important;">
         <v-virtual-scroll :items="sortedFilteredGroups" renderless :height="tableHeight" item-key="__key" :item-height="58">
-          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, group: { auto, record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality, fingerprint}, methods }, key }, index: rowIndex }">
+          <template v-slot:default="{ itemRef, item: { __key, groupIndex, original, autos, group: { auto, record: {colors, palette, quality, metrics, bestDistance, bestDistanceQuality, fingerprint}, methods }, key }, index: rowIndex }">
             <div
               @mouseenter="onmouseenter(undefined, palette, __key)"
               class="trow"
@@ -242,7 +246,9 @@ a.link-grey {
               </div>
 
               <div @mousemove="e => enterMethods(e, methods, __key)" @mouseleave="leaveMethods" class="text-pre flex-grow-0 fill" style="width: 210px;" :style="{cursor: methods.length > 1 ? 'pointer' : null}" @click.stop="expandIndex(__key)">
-                <v-icon v-if="auto" size="22" icon="mdi-lightbulb-on-outline" color="#4f4" />
+                {{autos}}
+                <v-icon v-if="auto === true" size="22" icon="mdi-lightbulb-on-outline" color="#4f4" />
+                <span v-else-if="auto >= 1 && auto < MAX_AUTO" style="color: #4f4; font-size: 18px; padding-bottom: 2px;">+{{auto}}</span>
                 {{
                   (methods.length === 1 || isExpanded(__key)) ? methods.map(m => m.method.mid).join('\n') : `${methods[0].method.mid} ...+${methods.length - 1}`
                 }}
@@ -360,7 +366,7 @@ a.link-grey {
                 <v-checkbox-btn style="margin-right: -6px; margin-left: -4px;" :model-value="methods.some(m => m.best)" @click.stop="e => bestChange(e, key, methods[0].index, methods.some(m => m.best))" />
               </div>
 
-              <div @click.shift.stop="palettePreviewClick(colors, __key, fingerprint)" @click.alt.stop="(e) => openEdit(colors, e)" class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
+              <div @click.shift.stop="palettePreviewClick(colors, __key, fingerprint)" @click.alt.stop="(e) => openEdit(colors, e)" @click.meta.stop="(e) => openTest(colors, e)" class="d-flex pl-0 flex-grow-1 align-self-stretch" @mouseenter="onmouseenter(colors, palette, __key)">
                 <div class="color-row" style="display: flex; align-items: center; width: 100%; cursor: crosshair;" v-intersect="v => onIntersect(v, __key, palette)">
                   <div
                     @mouseleave="leaveColors"
@@ -633,7 +639,7 @@ a.link-grey {
 <script>
 import { PALETTES } from 'colorsort-data-palettes'
 import TRAINED from 'colorsort-data-trained/trained.json' with { type: 'json' }
-import { compareSpectralFeatures, cosineSimilarity, getAuto, oklch, SORTING_METHODS } from 'colorsort-js'
+import { compareSpectralFeatures, cosineSimilarity, getAuto, oklch, SORTING_METHODS, MAX_AUTO } from 'colorsort-js'
 import XPreview from '@/XPreview.vue'
 import {
   BESTIES,
@@ -655,6 +661,7 @@ import { deserialize } from 'colorsort-compute'
 import SORTED from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 import { toRaw } from 'vue'
 import XEdit from '@/XEdit.vue'
+import XTest from '@/XTest.vue'
 
 const COMPUTED = deserialize(SORTED)
 
@@ -687,8 +694,9 @@ function scale (x) {
 const number = new Intl.NumberFormat('en-US').format
 
 export default {
-  components: { XEdit, XPreview },
+  components: { XTest, XEdit, XPreview },
   data: () => ({
+    sorting: 'Overall',
     showPreview: false,
     previewModel: 'oklab',
     sorted: [],
@@ -772,6 +780,18 @@ export default {
 
       this.$router.push({
         path: '/edit',
+        query: {
+          c: encodeURIComponent(colors.map(x => x.slice(1)).join('-'))
+        }
+      })
+    },
+    openTest (colors, event) {
+      if (event) {
+        event.preventDefault()
+      }
+
+      this.$router.push({
+        path: '/test',
         query: {
           c: encodeURIComponent(colors.map(x => x.slice(1)).join('-'))
         }
@@ -928,6 +948,9 @@ export default {
     this.sort()
   },
   computed: {
+    MAX_AUTO() {
+      return MAX_AUTO
+    },
     showHome: {
       get () {
         return this.$route.path === '/'
@@ -943,12 +966,29 @@ export default {
         return this.$route.path === '/edit'
       },
     },
+    showTest: {
+      get () {
+        return this.$route.path === '/test'
+      },
+    },
     editingColors: {
       get () {
         return this.$route.query?.c
             ?.split('-')
             ?.map(x => `#${x}`)
       },
+    },
+    sortings () {
+      return [
+        'Overall',
+        'Distance',
+        'Harmonic',
+        'Harmonic Curve',
+        'Curve Uniformity',
+        'Perceptual Uniformity',
+        'Average Angle',
+        'Max Angle'
+      ]
     },
     filterMethod: {
       get () {
@@ -1026,14 +1066,44 @@ export default {
     },
     autoTypes () {
       return this.types.map(t => {
-        const auto = getAuto(t.colors, TRAINED)
+        const autos = getAuto(t.colors, TRAINED)
+
+        function autoIndex(g) {
+          for (let index = 0; index < autos.length; index++) {
+            if (g.methods.some(m => m.method.mid === autos[index])) {
+              return index === 0 || index
+            }
+          }
+
+          return false
+        }
+
+        const t_groups = [...t.groups]
+
+        if (this.sorting === 'Overall') {
+          t_groups.sort((a, b) => a.record.score - b.record.score)
+        } else if (this.sorting === 'Distance') {
+          t_groups.sort((a, b) => a.record.metrics.totalDistance - b.record.metrics.totalDistance)
+        } else if (this.sorting === 'Harmonic') {
+          t_groups.sort((a, b) => a.record.metrics.harmonicScore - b.record.metrics.harmonicScore)
+        } else if (this.sorting === 'Harmonic Curve') {
+          t_groups.sort((a, b) => a.record.metrics.harmonicCurveScore - b.record.metrics.harmonicCurveScore)
+        } else if (this.sorting === 'Curve Uniformity') {
+          t_groups.sort((a, b) => a.record.metrics.curveUniformity - b.record.metrics.curveUniformity)
+        } else if (this.sorting === 'Perceptual Uniformity') {
+          t_groups.sort((a, b) => a.record.metrics.perceptualUniformity - b.record.metrics.perceptualUniformity)
+        } else if (this.sorting === 'Average Angle') {
+          t_groups.sort((a, b) => a.record.metrics.avgAngleChange - b.record.metrics.avgAngleChange)
+        } else if (this.sorting === 'Max Angle') {
+          t_groups.sort((a, b) => a.record.metrics.maxAngleChange - b.record.metrics.maxAngleChange)
+        }
 
         return {
           ...t,
-          auto,
-          groups: t.groups.map(g => ({
+          autos,
+          groups: t_groups.map(g => ({
             ...g,
-            auto: g.methods.some(m => m.method.mid === auto)
+            auto: autoIndex(g)
           }))
         }
       })
@@ -1103,6 +1173,12 @@ export default {
       } else if (this.filterMethod.startsWith('@')) {
         dlr = 4
         mtd = mtd.slice(1)
+      } else if (this.filterMethod.startsWith('???')) {
+        dlr = 7
+        mtd = mtd.slice(3)
+      } else if (this.filterMethod.startsWith('??')) {
+        dlr = 6
+        mtd = mtd.slice(2)
       } else if (this.filterMethod.startsWith('?')) {
         dlr = 5
         mtd = mtd.slice(1)
@@ -1125,7 +1201,11 @@ export default {
               } else if (dlr === 4) {
                 groups = t.groups.filter(g => g.methods.some(x => x.method.mid === 'Original'))
               } else if (dlr === 5) {
-                groups = t.groups.filter(g => g.auto)
+                groups = t.groups.filter(g => g.auto === true)
+              } else if (dlr === 6) {
+                groups = t.groups.filter(g => g.auto && g.auto < this.MAX_AUTO)
+              } else if (dlr === 7) {
+                groups = t.groups.filter(g => g.auto && g.auto < this.MAX_AUTO).slice(0, 1)
               }
 
               if (mtd) {

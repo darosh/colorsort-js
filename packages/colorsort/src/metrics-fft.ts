@@ -110,12 +110,12 @@ function analyzePaletteStructure(lchColors: Vector3[]): Analysis {
     chromaHighFreqRatio,
     chromaVariance,
     lightnessVariance,
-    largeGaps / hueDeltas.length,
-    (maxGap || 0) / 360,
+    largeGaps / hueDeltas.length || 0,
+    isFinite(maxGap) ? maxGap / 360 : 0,
     chromatic.length / lchColors.length,
-    // ...hueDeltaMags.slice(0, 4)
-    //     ...chromaMags.slice(0, 4),
-    ...lightnessMags.slice(0, 4)
+    // ...hueDeltaMags.slice(0, 4),
+    // ...chromaMags.slice(0, 4),
+    ...lightnessMags.slice(0, 1)
   ]
 
   return {
