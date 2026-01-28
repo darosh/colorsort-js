@@ -1,7 +1,7 @@
 {
   "name": "colorsort-js",
   "description": "Various color sorting methods",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "author": {
     "name": "Jan Forst",
     "email": "ensonador@gmail.com"

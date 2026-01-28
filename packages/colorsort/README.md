@@ -11,9 +11,8 @@ npm i colorsort-js
 ## Usage
 
 ```javascript
-import { auto } from 'colorsort-js'
+import { auto, multiAuto } from 'colorsort-js'
 import DATA from 'colorsort-js/trained.json' with { type: 'json' }
-import { multiAuto } from './auto-sort'
 
 const colors = ['#000000', '#fff000', '#000fff']
 
