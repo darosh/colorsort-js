@@ -1,0 +1,191 @@
+bad-a
+
+#0A2138 | Trapped Darkness
+#203E5F | Poseidon
+#4A6E89 | Shipyard
+#985951 | Cheek Red
+#6C4138 | Brunette
+#C17B73 | Nipple
+#95A7AA | Stormy Bay
+#E4C3A5 | Fabulous Fawn
+
+bad-b
+
+#D26B48 | Koi
+#B63C18 | Crimson Blaze
+#7A3415 | Drip Coffee
+#421C0C | Old Study
+#413824 | Madras
+#60553C | Olive Bark
+#8B7948 | Capers
+#1B1915 | Twilight Zone
+
+bad-c
+
+#EFEFEF | Super Silver
+#F7B69E | Wax Flower
+#E43A4D | Desire
+#E76EAB | Fugitive Flamingo
+#2F74BA | Campanula
+#374A79 | Noble Knight
+#18191B | Dark Moon
+#25ACDD | Mystic Blue
+
+bad-d
+
+#1A1414 | Scandinavian Liquorice
+#683B30 | Hairy Heath
+#40522F | Zen Garden Olive
+#6F845D | Emerald City
+#B5823F | Weissbier
+#CEAD76 | Fawn
+#F8F5E6 | Flickering Firefly
+
+bad-e
+
+#FBFAF7 | Lotion
+#DCD966 | Succulent Lime
+#91908F | Tin
+#FC224A | Cherry Soda
+#9F2131 | Hong Kong Taxi
+#661821 | Forbidden Passion
+#25272A | Noble Black
+#070000 | Knight Rider
+
+bad-f
+
+#EBDAC1 | Clam Up
+#A8A4A1 | Shadow of the Colossus
+#B28753 | Exhumed Gold
+#836754 | Pastel Brown
+#613F30 | Grilled
+#432317 | Délicieux au Chocolat
+#CF513C | Warming Heart
+#E1AC12 | Honeycomb
+
+bad-g
+
+#1E0001 | Dwarf Fortress
+#D0B68E | Goldfrapp
+#FCF1DA | Flashlight
+#558494 | Horizon
+#336175 | Atlantis
+#132D3B | Oceanic Noir
+
+bad-h
+
+#FEF0C2 | Candle in the Wind
+#DFC7A3 | Gourmet Honey
+#ECC738 | Montezuma Gold
+#BC8432 | Gothic Gold
+#715430 | Oak Barrel
+#383838 | Lacquered Liquorice
+#1C191A | Umbra
+#0B0000 | Knight Rider
+
+bad-i
+
+#4B4845 | Onyx
+#5F604A | Tree of Life
+#8E7D57 | Mushroom Forest
+#8A968B | Mummy’s Tomb
+#B6A275 | Veranda Gold
+#E9D79E | Sunny Glory
+#B4CDC2 | Misty Morning
+#EDEBE6 | Blanco
+
+bad-j
+
+#1C0000 | Dwarf Fortress
+#496242 | Turf
+#263F36 | Everglade
+#8F995E | Vitality
+#BBBB7F | Kiss a Frog
+#E7D9C5 | Oatmeal Cookie
+
+bad-k
+
+#010101 | Black
+#092003 | Nightmare
+#15112D | Mysterious Depths
+#375130 | Ficus
+#807E7B | Concord
+#76BB66 | Leafy Greens
+#ACD8A1 | Fizz
+#FAF2D8 | Sunny Honey
+
+bad-l
+
+#FAF4E4 | Whiskers
+#FAC026 | Marigold
+#90CD5E | Fairy Tale Green
+#93918E | Pedigrey
+#49642E | Bimi Green
+#292826 | Dire Wolf
+#000000 | Black
+#011400 | Cosmic Bit Flip
+
+bad-m
+
+#F9F2E4 | Milk Moustache
+#BAB7B5 | Grey Marble
+#7C88D7 | Perrywinkle
+#5C5A58 | Iron
+#020202 | Black
+#360116 | What We Do in the Shadows
+#491C60 | Fading Horizon
+#CF3B80 | Magentarama
+
+bad-n
+
+#03140C | Jedi Night
+#0F3026 | Pitch-Black Forests
+#1E554E | Cape Verde
+#6D381B | Meatloaf
+#B16636 | Bourbon
+#669A97 | Martian Cerulean
+#AFBFBF | Trade Winds
+#EEDADC | Discrete Pink
+
+bad-o
+
+#F6F3F5 | French Porcelain
+#D4C7D8 | Mecha Kitty
+#A4A5A6 | Quicksilver
+#EFBD49 | Creamy Sweet Corn
+#4D604E | Muddy Olive
+#182E26 | Nightmare
+#060E08 | Jedi Night
+#C02823 | Red Inferno
+
+bad-p
+
+#161815 | Twilight Zone
+#142B44 | Midnight Ocean
+#4D271F | Bitter Chocolate
+#557479 | Rogue Waters
+#9C7565 | Woodhaven
+#A5A9A9 | Elephant in the Room
+#B1CDDA | Pale Whale
+#DEE3E3 | Shaving Cream
+
+bad-q
+
+#000007 | Eight Ball
+#390203 | 3AM Breakup
+#821C26 | Polished Apple
+#C74E43 | Conker
+#B3A372 | Windy Meadow
+#F4E1A1 | Sugar Cookie
+#FDFDDE | Winter Duvet
+#504A34 | Olive Leaf
+
+bad-dbscan
+
+#1A1414 | Scandinavian Liquorice
+#683B30 | Hairy Heath
+#40522F | Zen Garden Olive
+#6F845D | Emerald City
+#B5823F | Weissbier
+#CEAD76 | Fawn
+#F8F5E6 | Flickering Firefly

@@ -17,8 +17,8 @@ async function lospec() {
   return Object.fromEntries(ents)
 }
 
-async function ok() {
-  const txt = await readFile('./src/ok.txt', 'utf8')
+async function ok(path) {
+  const txt = await readFile(path, 'utf8')
   const lines = txt.split('\n').filter((l) => !l.startsWith('//'))
 
   const ents = lines
@@ -42,7 +42,7 @@ async function ok() {
 }
 
 export async function getPalettes() {
-  const obj = { ...(await lospec()), ...(await ok()) }
+  const obj = { ...(await lospec()), ...(await ok('./src/ok.txt')), ...(await ok('./src/ok-bad.txt')) }
 
   return stringify(obj, { maxLength: 3200 })
 }
