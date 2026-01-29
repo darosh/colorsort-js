@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Add link to readme: used in https://okpalette.color.pizza/
 - [ ] Fix DBSCAN duplicates colors (ok-bad-dbscan palette)
 - [ ] Add tests with snapshots (for refactoring)
 - [ ] Add test for duplicate check
