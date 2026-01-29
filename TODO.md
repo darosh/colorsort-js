@@ -1,5 +1,12 @@
 # TODO
 
+- [ ] Fix DBSCAN duplicates colors (ok-bad-dbscan palette)
+- [ ] Add tests with snapshots (for refactoring)
+- [ ] Add test for duplicate check
+- [ ] Add normalize direction fn
+
+## Research, obsolete?
+
 - [ ] isReversed (per method)
 - [ ] Hilbert distance dev metrics 
 - [ ] analyze best picks (sorter vs type, ...?) 
