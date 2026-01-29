@@ -14,13 +14,14 @@ export function multiAuto(colors: string[], DATA: any, max = MAX_AUTO) {
   const mids = getAuto(colors, DATA).slice(0, max)
 
   return mids
-    .map((mid) => {
+    .map((mid, index) => {
       const sorted = <string[]>SORTING_METHODS.find((x) => x.mid === mid)?.fn(colors)
-      const metrics = metricsEx(colors)
+      const metrics = metricsEx(sorted)
 
       return {
         sorted,
         mid,
+        index,
         metrics
       }
     })
