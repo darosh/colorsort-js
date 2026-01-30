@@ -279,7 +279,7 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
     if (neighbors.length < minPts) {
       noise.push(idx)
     } else {
-      const cluster: number[] = []
+      const cluster: number[] = [idx] // ✅ Add seed point immediately
       const queue = [...neighbors]
 
       while (queue.length > 0) {
@@ -287,14 +287,14 @@ export function sortByDBSCAN(colors: Vector3[], eps: number = 30, minPts: number
 
         if (!visited.has(neighborIdx)) {
           visited.add(neighborIdx)
+          cluster.push(neighborIdx)
+
           const neighborNeighbors = regionQuery(colors, neighborIdx, eps)
 
           if (neighborNeighbors.length >= minPts) {
             queue.push(...neighborNeighbors)
           }
         }
-
-        cluster.push(neighborIdx)
       }
 
       clusters.push(cluster)
