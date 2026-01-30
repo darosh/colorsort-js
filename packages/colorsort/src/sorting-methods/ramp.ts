@@ -1013,7 +1013,7 @@ export function ramph(colors: string[], ramps: number = 3) {
   )
 }
 
-ramph.params = [{ name: 'ramps', values: [2, 3, 4, 5, 6, 8, 8, 9, 12, 24] }]
+ramph.params = [{ name: 'ramps', values: [2, 3, 4, 5, 6, 7, 8, 9, 12, 24] }]
 
 ramph.valid = (colors: Vector3[], ramps: number) => {
   return colors.length > ramps
