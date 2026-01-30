@@ -1,0 +1,55 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`worker 1`] = `
+{
+  "elapsed": 0,
+  "metrics": {
+    "avgAngleChange": 0,
+    "curveRatio": 2.220446049250313e-16,
+    "curveUniformity": 0.9709896005103462,
+    "devCurveDistance": 0.029877147473470554,
+    "devDistance": 0.02987714747347057,
+    "harmonicCurveScore": 0.6883958402041386,
+    "harmonicScore": 0.6883958402041386,
+    "lchAvgChange": {
+      "C": 0,
+      "H": 0,
+      "L": 6.319749810896093,
+    },
+    "lchDeviation": {
+      "C": 0,
+      "H": 0,
+      "L": 0.7697678797028789,
+    },
+    "lchMaxChange": {
+      "C": 0,
+      "H": 0,
+      "L": 7.6155035046905795,
+    },
+    "maxAngleChange": 0,
+    "meanCurveDistance": 0.06367600335034015,
+    "meanDistance": 0.06367600335034014,
+    "perceptualUniformity": 0.9709896005103462,
+    "totalCurveDistance": 0.9551400502551023,
+    "totalDistance": 0.9551400502551022,
+  },
+  "result": [
+    "#000000",
+    "#101010",
+    "#202020",
+    "#303030",
+    "#404040",
+    "#505050",
+    "#606060",
+    "#707070",
+    "#808080",
+    "#909090",
+    "#a0a0a0",
+    "#b0b0b0",
+    "#c0c0c0",
+    "#d0d0d0",
+    "#e0e0e0",
+    "#f0f0f0",
+  ],
+}
+`;

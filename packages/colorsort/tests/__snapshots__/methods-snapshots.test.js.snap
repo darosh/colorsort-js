@@ -1,0 +1,4178 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`snapshot:CL:[lab,average,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[lab,average,breadth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[lab,average,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[lab,complete,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[lab,complete,breadth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[lab,complete,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[lab,single,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[lab,single,breadth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[lab,single,depth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[oklab,average,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[oklab,average,breadth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[oklab,average,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[oklab,complete,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[oklab,complete,breadth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[oklab,complete,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[oklab,single,balanced] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[oklab,single,breadth-first] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#40522F",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[oklab,single,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#40522F",
+  "#CEAD76",
+  "#6F845D",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:CL:[rgb,average,balanced] 1`] = `
+[
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:CL:[rgb,average,breadth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:CL:[rgb,average,depth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:CL:[rgb,complete,balanced] 1`] = `
+[
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[rgb,complete,breadth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:CL:[rgb,complete,depth-first] 1`] = `
+[
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:CL:[rgb,single,balanced] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CL:[rgb,single,breadth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:CL:[rgb,single,depth-first] 1`] = `
+[
+  "#F8F5E6",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:CYL:[hsl,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#B5823F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CYL:[hsv,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CYL:[lch,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CYL:[okhsl,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#B5823F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CYL:[okhsv,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:CYL:[oklch,ascending] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#B5823F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.3,3] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.3,5] 1`] = `
+[
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.3,7] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.5,3] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.5,5] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:DBSCAN:[lab,0.5,7] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.3,3] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.3,5] 1`] = `
+[
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.3,7] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.5,3] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.5,5] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:DBSCAN:[oklab,0.5,7] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.3,3] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.3,5] 1`] = `
+[
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#40522F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.3,7] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.5,3] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.5,5] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:DBSCAN:[rgb,0.5,7] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:GEN-Oklab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:GEN3-Oklab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARM:[cmyk,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[cmyk,dark] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARM:[hsl,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[hsl,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HARM:[hsv,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[hsv,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HARM:[lab,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:HARM:[lab,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARM:[lch,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:HARM:[lch,dark] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARM:[okhsl,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[okhsl,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HARM:[okhsv,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[okhsv,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HARM:[oklab,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:HARM:[oklab,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARM:[oklch,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:HARM:[oklch,dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HARM:[rgb,bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:HARM:[rgb,dark] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:HARMED:[bright] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+]
+`;
+
+exports[`snapshot:HARMED:[dark] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:HIL:[lab_int] 1`] = `
+[
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#6F845D",
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:HIL:[rgb] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.3,10] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.3,50] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.3,100] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.3,250] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.5,10] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.5,50] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.5,100] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.5,250] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.7,10] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.7,50] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.7,100] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[lab,0.7,250] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.3,10] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.3,50] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.3,100] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.3,250] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.5,10] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.5,50] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.5,100] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.5,250] 1`] = `
+[
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.7,10] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.7,50] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.7,100] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[oklab,0.7,250] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.3,10] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.3,50] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.3,100] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.3,250] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.5,10] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.5,50] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.5,100] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.5,250] 1`] = `
+[
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.7,10] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.7,50] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.7,100] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:KM:[rgb,0.7,250] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:MOM(Closest)-Oklab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:MOM(Closest+)-Oklab:[raw] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:MOM(Closest+)-Oklab:[tsp] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:MOM(Closest+,DE)-Oklab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:MOM(Inlinest)-Oklab 1`] = `
+[
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:MOM(Inlinest,DE)-Oklab 1`] = `
+[
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:MOM(Inlinest,DE++)-Oklab 1`] = `
+[
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:NNA(DE) Lab:[raw] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:NNA(DE) Lab:[tsp] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:NNA(DE+) Lab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:NNA(DE++) Lab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:NNA(DE+1) Lab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:NNA(DE+2) Lab 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:Original 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[gl,raw] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[gl,tsp] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[gl,tsp-adapt] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[lab,raw] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[lab,tsp] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[lab,tsp-adapt] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[oklab,raw] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[oklab,tsp] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:PCA:[oklab,tsp-adapt] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAMP 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0.05,cl] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0.05,lc] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0.1,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[0,0.1,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0.05,cl] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0.05,lc] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0.1,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[30,0.1,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0.05,cl] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0.05,lc] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0.1,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[40,0.1,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0.05,cl] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0.05,lc] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0.1,cl] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPA:[60,0.1,lc] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPB 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPC 1`] = `
+[
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+  "#CEAD76",
+]
+`;
+
+exports[`snapshot:RAMPD 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPE 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPF 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,20,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,20,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,40,0,muted] 1`] = `
+[
+  "#683B30",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,40,0,vivid] 1`] = `
+[
+  "#683B30",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,60,0,muted] 1`] = `
+[
+  "#683B30",
+  "#1A1414",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,60,0,vivid] 1`] = `
+[
+  "#683B30",
+  "#1A1414",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,90,0,muted] 1`] = `
+[
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,90,0,vivid] 1`] = `
+[
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,120,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0,120,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,20,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,20,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,40,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,40,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,60,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,60,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,90,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,90,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#F8F5E6",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,120,0,muted] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.01,120,0,vivid] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,20,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,20,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,40,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,40,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,60,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,60,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,90,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,90,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,120,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.03,120,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,20,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,20,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,40,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,40,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,60,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,60,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,90,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,90,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,120,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.06,120,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#40522F",
+  "#1A1414",
+  "#CEAD76",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,20,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,20,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,40,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,40,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,60,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,60,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,90,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,90,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,120,0,muted] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPG:[0.09,120,0,vivid] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAMPH:[2] 1`] = `
+[
+  "#1A1414",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPH:[3] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPH:[4] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPH:[5] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPH:[6] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAMPH:[7] 1`] = `
+[
+  "#000000",
+  "#010101",
+  "#7f7f7f",
+  "#808080",
+  "#fefefe",
+  "#ffffff",
+  "#010000",
+  "#7f0000",
+  "#7f0001",
+  "#7f0100",
+  "#7f0101",
+  "#800000",
+  "#800001",
+  "#800100",
+  "#800101",
+  "#807f7f",
+  "#fe0000",
+  "#fe0001",
+  "#fe0100",
+  "#fe0101",
+  "#ff0000",
+  "#ff0001",
+  "#ff0100",
+  "#ff0101",
+  "#fe007f",
+  "#fe017f",
+  "#fe0080",
+  "#fe0180",
+  "#ff007f",
+  "#ff017f",
+  "#ff0080",
+  "#ff0180",
+  "#fe7f00",
+  "#fe7f01",
+  "#ff7f00",
+  "#ff7f01",
+  "#fe8000",
+  "#fe8001",
+  "#ff8000",
+  "#ff8001",
+  "#fe7f7f",
+  "#fe7f80",
+  "#ff7f7f",
+  "#fe807f",
+  "#ff7f80",
+  "#fe8080",
+  "#ff807f",
+  "#ff8080",
+  "#fffefe",
+  "#010100",
+  "#7f7f00",
+  "#7f7f01",
+  "#807f00",
+  "#807f01",
+  "#7f8000",
+  "#7f8001",
+  "#808000",
+  "#808001",
+  "#80807f",
+  "#fefe00",
+  "#fefe01",
+  "#fffe00",
+  "#fffe01",
+  "#feff00",
+  "#feff01",
+  "#ffff00",
+  "#ffff01",
+  "#fefe7f",
+  "#fefe80",
+  "#fffe7f",
+  "#fffe80",
+  "#feff7f",
+  "#feff80",
+  "#ffff7f",
+  "#ffff80",
+  "#fffffe",
+  "#000100",
+  "#007f00",
+  "#007f01",
+  "#017f00",
+  "#017f01",
+  "#008000",
+  "#008001",
+  "#018000",
+  "#018001",
+  "#7f807f",
+  "#00fe00",
+  "#00fe01",
+  "#01fe00",
+  "#01fe01",
+  "#00ff00",
+  "#00ff01",
+  "#01ff00",
+  "#01ff01",
+  "#00fe7f",
+  "#01fe7f",
+  "#00fe80",
+  "#01fe80",
+  "#00ff7f",
+  "#01ff7f",
+  "#00ff80",
+  "#01ff80",
+  "#7ffe00",
+  "#7ffe01",
+  "#80fe00",
+  "#80fe01",
+  "#7fff00",
+  "#7fff01",
+  "#80ff00",
+  "#80ff01",
+  "#7ffe7f",
+  "#7ffe80",
+  "#80fe7f",
+  "#80fe80",
+  "#7fff7f",
+  "#7fff80",
+  "#80ff7f",
+  "#80ff80",
+  "#fefffe",
+  "#000101",
+  "#007f7f",
+  "#017f7f",
+  "#007f80",
+  "#017f80",
+  "#00807f",
+  "#01807f",
+  "#008080",
+  "#018080",
+  "#7f8080",
+  "#00fefe",
+  "#01fefe",
+  "#00feff",
+  "#01feff",
+  "#00fffe",
+  "#01fffe",
+  "#00ffff",
+  "#01ffff",
+  "#7ffefe",
+  "#7ffeff",
+  "#80fefe",
+  "#80feff",
+  "#7ffffe",
+  "#7fffff",
+  "#80fffe",
+  "#80ffff",
+  "#feffff",
+  "#000001",
+  "#00007f",
+  "#01007f",
+  "#00017f",
+  "#01017f",
+  "#000080",
+  "#010080",
+  "#000180",
+  "#010180",
+  "#0000fe",
+  "#0100fe",
+  "#0001fe",
+  "#0101fe",
+  "#0000ff",
+  "#0100ff",
+  "#0001ff",
+  "#0101ff",
+  "#7f00fe",
+  "#7f01fe",
+  "#7f00ff",
+  "#8000fe",
+  "#7f01ff",
+  "#8001fe",
+  "#8000ff",
+  "#8001ff",
+  "#7f7f80",
+  "#007ffe",
+  "#017ffe",
+  "#007fff",
+  "#017fff",
+  "#0080fe",
+  "#0180fe",
+  "#0080ff",
+  "#0180ff",
+  "#7f7ffe",
+  "#7f7fff",
+  "#807ffe",
+  "#807fff",
+  "#7f80fe",
+  "#7f80ff",
+  "#8080fe",
+  "#8080ff",
+  "#fefeff",
+  "#010001",
+  "#7f007f",
+  "#7f017f",
+  "#7f0080",
+  "#7f0180",
+  "#80007f",
+  "#80017f",
+  "#800080",
+  "#800180",
+  "#807f80",
+  "#fe00fe",
+  "#fe01fe",
+  "#fe00ff",
+  "#fe01ff",
+  "#ff00fe",
+  "#ff01fe",
+  "#ff00ff",
+  "#ff01ff",
+  "#fe7ffe",
+  "#fe7fff",
+  "#ff7ffe",
+  "#fe80fe",
+  "#ff7fff",
+  "#fe80ff",
+  "#ff80fe",
+  "#ff80ff",
+  "#fffeff",
+]
+`;
+
+exports[`snapshot:RAMPH:[8] 1`] = `
+[
+  "#000000",
+  "#7f7f7f",
+  "#808080",
+  "#fefefe",
+  "#ffffff",
+  "#010000",
+  "#7f0000",
+  "#7f0001",
+  "#7f0100",
+  "#7f0101",
+  "#800000",
+  "#800001",
+  "#800100",
+  "#800101",
+  "#807f7f",
+  "#fe0000",
+  "#fe0001",
+  "#fe0100",
+  "#fe0101",
+  "#ff0000",
+  "#ff0001",
+  "#ff0100",
+  "#ff0101",
+  "#fe007f",
+  "#fe017f",
+  "#fe0080",
+  "#fe0180",
+  "#ff007f",
+  "#ff017f",
+  "#ff0080",
+  "#ff0180",
+  "#fe7f00",
+  "#fe7f01",
+  "#ff7f00",
+  "#ff7f01",
+  "#fe8000",
+  "#fe8001",
+  "#ff8000",
+  "#ff8001",
+  "#fe7f7f",
+  "#fe7f80",
+  "#ff7f7f",
+  "#fe807f",
+  "#ff7f80",
+  "#fe8080",
+  "#ff807f",
+  "#ff8080",
+  "#fffefe",
+  "#010100",
+  "#7f7f00",
+  "#7f7f01",
+  "#807f00",
+  "#807f01",
+  "#7f8000",
+  "#7f8001",
+  "#808000",
+  "#808001",
+  "#80807f",
+  "#fefe00",
+  "#fefe01",
+  "#fffe00",
+  "#fffe01",
+  "#feff00",
+  "#feff01",
+  "#ffff00",
+  "#ffff01",
+  "#fefe7f",
+  "#fefe80",
+  "#fffe7f",
+  "#fffe80",
+  "#feff7f",
+  "#feff80",
+  "#ffff7f",
+  "#ffff80",
+  "#fffffe",
+  "#000100",
+  "#007f00",
+  "#007f01",
+  "#017f00",
+  "#017f01",
+  "#008000",
+  "#008001",
+  "#018000",
+  "#018001",
+  "#7f807f",
+  "#00fe00",
+  "#00fe01",
+  "#01fe00",
+  "#01fe01",
+  "#00ff00",
+  "#00ff01",
+  "#01ff00",
+  "#01ff01",
+  "#00fe7f",
+  "#01fe7f",
+  "#00fe80",
+  "#01fe80",
+  "#00ff7f",
+  "#01ff7f",
+  "#00ff80",
+  "#01ff80",
+  "#7ffe00",
+  "#7ffe01",
+  "#80fe00",
+  "#80fe01",
+  "#7fff00",
+  "#7fff01",
+  "#80ff00",
+  "#80ff01",
+  "#7ffe7f",
+  "#7ffe80",
+  "#80fe7f",
+  "#80fe80",
+  "#7fff7f",
+  "#7fff80",
+  "#80ff7f",
+  "#80ff80",
+  "#fefffe",
+  "#000101",
+  "#007f7f",
+  "#017f7f",
+  "#007f80",
+  "#017f80",
+  "#00807f",
+  "#01807f",
+  "#008080",
+  "#018080",
+  "#7f8080",
+  "#00fefe",
+  "#01fefe",
+  "#00feff",
+  "#01feff",
+  "#00fffe",
+  "#01fffe",
+  "#00ffff",
+  "#01ffff",
+  "#7ffefe",
+  "#7ffeff",
+  "#80fefe",
+  "#80feff",
+  "#7ffffe",
+  "#7fffff",
+  "#80fffe",
+  "#80ffff",
+  "#feffff",
+  "#000001",
+  "#00007f",
+  "#01007f",
+  "#00017f",
+  "#01017f",
+  "#000080",
+  "#010080",
+  "#000180",
+  "#010180",
+  "#0000fe",
+  "#0100fe",
+  "#0001fe",
+  "#0101fe",
+  "#0000ff",
+  "#0100ff",
+  "#0001ff",
+  "#0101ff",
+  "#7f00fe",
+  "#7f01fe",
+  "#7f00ff",
+  "#8000fe",
+  "#7f01ff",
+  "#8001fe",
+  "#8000ff",
+  "#8001ff",
+  "#7f7f80",
+  "#007ffe",
+  "#017ffe",
+  "#007fff",
+  "#017fff",
+  "#0080fe",
+  "#0180fe",
+  "#0080ff",
+  "#0180ff",
+  "#7f7ffe",
+  "#7f7fff",
+  "#807ffe",
+  "#807fff",
+  "#7f80fe",
+  "#7f80ff",
+  "#8080fe",
+  "#8080ff",
+  "#fefeff",
+  "#010001",
+  "#7f007f",
+  "#7f017f",
+  "#7f0080",
+  "#7f0180",
+  "#80007f",
+  "#80017f",
+  "#800080",
+  "#800180",
+  "#807f80",
+  "#fe00fe",
+  "#fe01fe",
+  "#fe00ff",
+  "#fe01ff",
+  "#ff00fe",
+  "#ff01fe",
+  "#ff00ff",
+  "#ff01ff",
+  "#fe7ffe",
+  "#fe7fff",
+  "#ff7ffe",
+  "#fe80fe",
+  "#ff7fff",
+  "#fe80ff",
+  "#ff80fe",
+  "#ff80ff",
+  "#fffeff",
+  "#010101",
+]
+`;
+
+exports[`snapshot:RAMPH:[9] 1`] = `
+[
+  "#000000",
+  "#7f7f7f",
+  "#808080",
+  "#fefefe",
+  "#ffffff",
+  "#010000",
+  "#7f0000",
+  "#7f0001",
+  "#7f0100",
+  "#7f0101",
+  "#800000",
+  "#800001",
+  "#800100",
+  "#800101",
+  "#807f7f",
+  "#fe0000",
+  "#fe0001",
+  "#fe0100",
+  "#fe0101",
+  "#ff0000",
+  "#ff0001",
+  "#ff0100",
+  "#ff0101",
+  "#fe007f",
+  "#fe017f",
+  "#fe0080",
+  "#fe0180",
+  "#ff007f",
+  "#ff017f",
+  "#ff0080",
+  "#ff0180",
+  "#fe7f00",
+  "#fe7f01",
+  "#ff7f00",
+  "#ff7f01",
+  "#fe8000",
+  "#fe8001",
+  "#ff8000",
+  "#ff8001",
+  "#fe7f7f",
+  "#fe7f80",
+  "#ff7f7f",
+  "#fe807f",
+  "#ff7f80",
+  "#fe8080",
+  "#ff807f",
+  "#ff8080",
+  "#fffefe",
+  "#010100",
+  "#7f7f00",
+  "#7f7f01",
+  "#807f00",
+  "#807f01",
+  "#7f8000",
+  "#7f8001",
+  "#808000",
+  "#808001",
+  "#80807f",
+  "#fefe00",
+  "#fefe01",
+  "#fffe00",
+  "#fffe01",
+  "#feff00",
+  "#feff01",
+  "#ffff00",
+  "#ffff01",
+  "#fefe7f",
+  "#fefe80",
+  "#fffe7f",
+  "#fffe80",
+  "#feff7f",
+  "#feff80",
+  "#ffff7f",
+  "#ffff80",
+  "#fffffe",
+  "#000100",
+  "#007f00",
+  "#007f01",
+  "#017f00",
+  "#017f01",
+  "#008000",
+  "#008001",
+  "#018000",
+  "#018001",
+  "#7f807f",
+  "#00fe00",
+  "#00fe01",
+  "#01fe00",
+  "#01fe01",
+  "#00ff00",
+  "#00ff01",
+  "#01ff00",
+  "#01ff01",
+  "#00fe7f",
+  "#01fe7f",
+  "#00fe80",
+  "#01fe80",
+  "#00ff7f",
+  "#01ff7f",
+  "#00ff80",
+  "#01ff80",
+  "#7ffe00",
+  "#7ffe01",
+  "#80fe00",
+  "#80fe01",
+  "#7fff00",
+  "#7fff01",
+  "#80ff00",
+  "#80ff01",
+  "#7ffe7f",
+  "#7ffe80",
+  "#80fe7f",
+  "#80fe80",
+  "#7fff7f",
+  "#7fff80",
+  "#80ff7f",
+  "#80ff80",
+  "#fefffe",
+  "#000101",
+  "#007f7f",
+  "#017f7f",
+  "#007f80",
+  "#017f80",
+  "#00807f",
+  "#01807f",
+  "#008080",
+  "#018080",
+  "#7f8080",
+  "#00fefe",
+  "#01fefe",
+  "#00feff",
+  "#01feff",
+  "#00fffe",
+  "#01fffe",
+  "#00ffff",
+  "#01ffff",
+  "#7ffefe",
+  "#7ffeff",
+  "#80fefe",
+  "#80feff",
+  "#7ffffe",
+  "#7fffff",
+  "#80fffe",
+  "#80ffff",
+  "#feffff",
+  "#000001",
+  "#00017f",
+  "#01017f",
+  "#010080",
+  "#000180",
+  "#010180",
+  "#7f00fe",
+  "#7f01fe",
+  "#7f00ff",
+  "#8000fe",
+  "#7f01ff",
+  "#8001fe",
+  "#8000ff",
+  "#8001ff",
+  "#7f7f80",
+  "#7f7ffe",
+  "#7f7fff",
+  "#807ffe",
+  "#807fff",
+  "#7f80fe",
+  "#7f80ff",
+  "#8080fe",
+  "#8080ff",
+  "#fefeff",
+  "#00007f",
+  "#01007f",
+  "#000080",
+  "#0000fe",
+  "#0100fe",
+  "#0001fe",
+  "#0101fe",
+  "#0000ff",
+  "#0100ff",
+  "#0001ff",
+  "#0101ff",
+  "#007ffe",
+  "#017ffe",
+  "#007fff",
+  "#017fff",
+  "#0080fe",
+  "#0180fe",
+  "#0080ff",
+  "#0180ff",
+  "#010001",
+  "#7f007f",
+  "#7f017f",
+  "#7f0080",
+  "#7f0180",
+  "#80007f",
+  "#80017f",
+  "#800080",
+  "#800180",
+  "#807f80",
+  "#fe00fe",
+  "#fe01fe",
+  "#fe00ff",
+  "#fe01ff",
+  "#ff00fe",
+  "#ff01fe",
+  "#ff00ff",
+  "#ff01ff",
+  "#fe7ffe",
+  "#fe7fff",
+  "#ff7ffe",
+  "#fe80fe",
+  "#ff7fff",
+  "#fe80ff",
+  "#ff80fe",
+  "#ff80ff",
+  "#fffeff",
+  "#010101",
+]
+`;
+
+exports[`snapshot:RAMPH:[12] 1`] = `
+[
+  "#000000",
+  "#7f7f7f",
+  "#808080",
+  "#fefefe",
+  "#ffffff",
+  "#010000",
+  "#7f0000",
+  "#7f0001",
+  "#7f0100",
+  "#7f0101",
+  "#800000",
+  "#800001",
+  "#800100",
+  "#800101",
+  "#807f7f",
+  "#fe0000",
+  "#fe0001",
+  "#fe0100",
+  "#fe0101",
+  "#ff0000",
+  "#ff0001",
+  "#ff0100",
+  "#ff0101",
+  "#fe007f",
+  "#fe017f",
+  "#fe0080",
+  "#fe0180",
+  "#ff007f",
+  "#ff017f",
+  "#ff0080",
+  "#ff0180",
+  "#fe7f00",
+  "#fe7f01",
+  "#ff7f00",
+  "#ff7f01",
+  "#fe8000",
+  "#fe8001",
+  "#ff8000",
+  "#ff8001",
+  "#fe7f7f",
+  "#fe7f80",
+  "#ff7f7f",
+  "#fe807f",
+  "#ff7f80",
+  "#fe8080",
+  "#ff807f",
+  "#ff8080",
+  "#fffefe",
+  "#010100",
+  "#7f7f00",
+  "#7f7f01",
+  "#807f00",
+  "#807f01",
+  "#7f8000",
+  "#7f8001",
+  "#808000",
+  "#808001",
+  "#80807f",
+  "#fefe00",
+  "#fefe01",
+  "#fffe00",
+  "#fffe01",
+  "#feff00",
+  "#feff01",
+  "#ffff00",
+  "#ffff01",
+  "#fefe7f",
+  "#fefe80",
+  "#fffe7f",
+  "#fffe80",
+  "#feff7f",
+  "#feff80",
+  "#ffff7f",
+  "#ffff80",
+  "#fffffe",
+  "#000100",
+  "#007f00",
+  "#007f01",
+  "#017f00",
+  "#017f01",
+  "#008000",
+  "#008001",
+  "#018000",
+  "#018001",
+  "#7f807f",
+  "#00fe00",
+  "#00fe01",
+  "#01fe00",
+  "#01fe01",
+  "#00ff00",
+  "#00ff01",
+  "#01ff00",
+  "#01ff01",
+  "#00fe7f",
+  "#01fe7f",
+  "#00fe80",
+  "#01fe80",
+  "#00ff7f",
+  "#01ff7f",
+  "#00ff80",
+  "#01ff80",
+  "#7ffe00",
+  "#7ffe01",
+  "#80fe00",
+  "#80fe01",
+  "#7fff00",
+  "#7fff01",
+  "#80ff00",
+  "#80ff01",
+  "#7ffe7f",
+  "#7ffe80",
+  "#80fe7f",
+  "#80fe80",
+  "#7fff7f",
+  "#7fff80",
+  "#80ff7f",
+  "#80ff80",
+  "#fefffe",
+  "#000101",
+  "#007f7f",
+  "#017f7f",
+  "#007f80",
+  "#017f80",
+  "#00807f",
+  "#01807f",
+  "#008080",
+  "#018080",
+  "#7f8080",
+  "#00fefe",
+  "#01fefe",
+  "#00feff",
+  "#01feff",
+  "#00fffe",
+  "#01fffe",
+  "#00ffff",
+  "#01ffff",
+  "#7ffefe",
+  "#7ffeff",
+  "#80fefe",
+  "#80feff",
+  "#7ffffe",
+  "#7fffff",
+  "#80fffe",
+  "#80ffff",
+  "#feffff",
+  "#000001",
+  "#000080",
+  "#0000ff",
+  "#0001ff",
+  "#007ffe",
+  "#00007f",
+  "#0000fe",
+  "#0001fe",
+  "#017ffe",
+  "#007fff",
+  "#017fff",
+  "#0080fe",
+  "#0180fe",
+  "#0080ff",
+  "#0180ff",
+  "#00017f",
+  "#000180",
+  "#0100fe",
+  "#0101fe",
+  "#0100ff",
+  "#0101ff",
+  "#7f00ff",
+  "#8000fe",
+  "#7f01ff",
+  "#8001fe",
+  "#8000ff",
+  "#8001ff",
+  "#7f7f80",
+  "#7f7ffe",
+  "#7f7fff",
+  "#807ffe",
+  "#807fff",
+  "#7f80fe",
+  "#7f80ff",
+  "#8080fe",
+  "#8080ff",
+  "#fefeff",
+  "#01007f",
+  "#010080",
+  "#7f01fe",
+  "#010001",
+  "#7f007f",
+  "#7f017f",
+  "#7f0080",
+  "#7f0180",
+  "#80007f",
+  "#80017f",
+  "#800080",
+  "#800180",
+  "#fe00fe",
+  "#fe01fe",
+  "#fe00ff",
+  "#fe01ff",
+  "#ff00fe",
+  "#ff01fe",
+  "#ff00ff",
+  "#ff01ff",
+  "#fe7ffe",
+  "#fe7fff",
+  "#ff7ffe",
+  "#fe80fe",
+  "#ff7fff",
+  "#fe80ff",
+  "#ff80fe",
+  "#ff80ff",
+  "#fffeff",
+  "#010101",
+  "#01017f",
+  "#010180",
+  "#7f00fe",
+  "#807f80",
+]
+`;
+
+exports[`snapshot:RAMPH:[24] 1`] = `
+[
+  "#000000",
+  "#7f7f7f",
+  "#808080",
+  "#fefefe",
+  "#ffffff",
+  "#7f0001",
+  "#807f7f",
+  "#fe007f",
+  "#fe017f",
+  "#fe0080",
+  "#fe0180",
+  "#ff007f",
+  "#ff017f",
+  "#ff0080",
+  "#ff0180",
+  "#800001",
+  "#fe7f7f",
+  "#fe7f80",
+  "#ff7f7f",
+  "#fe807f",
+  "#ff7f80",
+  "#fe8080",
+  "#ff807f",
+  "#ff8080",
+  "#fffefe",
+  "#7f0101",
+  "#800101",
+  "#800000",
+  "#fe0001",
+  "#ff0001",
+  "#ff0101",
+  "#010000",
+  "#fe0101",
+  "#ff0000",
+  "#ff0100",
+  "#ff7f01",
+  "#fe8000",
+  "#fe8001",
+  "#ff8000",
+  "#ff8001",
+  "#7f0000",
+  "#fe0000",
+  "#fe0100",
+  "#ff7f00",
+  "#800100",
+  "#fe7f01",
+  "#7f0100",
+  "#fe7f00",
+  "#010100",
+  "#7f7f00",
+  "#7f7f01",
+  "#807f00",
+  "#807f01",
+  "#7f8000",
+  "#7f8001",
+  "#808000",
+  "#808001",
+  "#80807f",
+  "#fefe00",
+  "#fefe01",
+  "#fffe00",
+  "#fffe01",
+  "#feff00",
+  "#feff01",
+  "#ffff00",
+  "#ffff01",
+  "#fefe7f",
+  "#fefe80",
+  "#fffe7f",
+  "#fffe80",
+  "#feff7f",
+  "#feff80",
+  "#ffff7f",
+  "#ffff80",
+  "#fffffe",
+  "#000100",
+  "#007f00",
+  "#007f01",
+  "#017f00",
+  "#017f01",
+  "#008000",
+  "#008001",
+  "#018000",
+  "#018001",
+  "#7f807f",
+  "#00fe00",
+  "#00fe01",
+  "#01fe00",
+  "#01fe01",
+  "#00ff00",
+  "#00ff01",
+  "#01ff00",
+  "#01ff01",
+  "#00fe7f",
+  "#01fe7f",
+  "#00fe80",
+  "#01fe80",
+  "#00ff7f",
+  "#01ff7f",
+  "#00ff80",
+  "#01ff80",
+  "#7ffe00",
+  "#7ffe01",
+  "#80fe00",
+  "#80fe01",
+  "#7fff00",
+  "#7fff01",
+  "#80ff00",
+  "#80ff01",
+  "#7ffe7f",
+  "#7ffe80",
+  "#80fe7f",
+  "#80fe80",
+  "#7fff7f",
+  "#7fff80",
+  "#80ff7f",
+  "#80ff80",
+  "#fefffe",
+  "#000101",
+  "#007f7f",
+  "#017f7f",
+  "#007f80",
+  "#017f80",
+  "#00807f",
+  "#01807f",
+  "#008080",
+  "#018080",
+  "#7f8080",
+  "#00fefe",
+  "#01fefe",
+  "#00feff",
+  "#01feff",
+  "#00fffe",
+  "#01fffe",
+  "#00ffff",
+  "#01ffff",
+  "#7ffefe",
+  "#7ffeff",
+  "#80fefe",
+  "#80feff",
+  "#7ffffe",
+  "#7fffff",
+  "#80fffe",
+  "#80ffff",
+  "#feffff",
+  "#000001",
+  "#0000ff",
+  "#0001ff",
+  "#017ffe",
+  "#000080",
+  "#007ffe",
+  "#00007f",
+  "#0000fe",
+  "#0001fe",
+  "#007fff",
+  "#000180",
+  "#017fff",
+  "#0080fe",
+  "#0180fe",
+  "#0080ff",
+  "#0180ff",
+  "#00017f",
+  "#0100fe",
+  "#0101fe",
+  "#0100ff",
+  "#0101ff",
+  "#010080",
+  "#01007f",
+  "#7f00ff",
+  "#8000fe",
+  "#7f01ff",
+  "#8001fe",
+  "#8000ff",
+  "#8001ff",
+  "#7f7f80",
+  "#7f7ffe",
+  "#7f7fff",
+  "#807ffe",
+  "#807fff",
+  "#7f80fe",
+  "#7f80ff",
+  "#8080fe",
+  "#8080ff",
+  "#fefeff",
+  "#010001",
+  "#7f007f",
+  "#7f017f",
+  "#7f0080",
+  "#7f0180",
+  "#80007f",
+  "#80017f",
+  "#800080",
+  "#800180",
+  "#fe00fe",
+  "#fe01fe",
+  "#fe00ff",
+  "#fe01ff",
+  "#ff00fe",
+  "#ff01fe",
+  "#ff00ff",
+  "#ff01ff",
+  "#fe7ffe",
+  "#fe7fff",
+  "#ff7ffe",
+  "#fe80fe",
+  "#ff7fff",
+  "#fe80ff",
+  "#ff80fe",
+  "#ff80ff",
+  "#fffeff",
+  "#010101",
+  "#010180",
+  "#7f01fe",
+  "#01017f",
+  "#7f00fe",
+  "#807f80",
+]
+`;
+
+exports[`snapshot:RAMPI 1`] = `
+[
+  "#1A1414",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:RAW:[cmyk] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#1A1414",
+  "#B5823F",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+]
+`;
+
+exports[`snapshot:RAW:[hsl] 1`] = `
+[
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAW:[hsv] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#CEAD76",
+  "#683B30",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAW:[lab] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAW:[lch] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAW:[okhsl] 1`] = `
+[
+  "#1A1414",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#CEAD76",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAW:[okhsv] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#6F845D",
+  "#CEAD76",
+  "#40522F",
+  "#683B30",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:RAW:[oklab] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAW:[oklch] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:RAW:[rgb] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[hsl,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#B5823F",
+  "#6F845D",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[hsl,inward] 1`] = `
+[
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:SPI:[hsl,outward] 1`] = `
+[
+  "#1A1414",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[hsl,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[hsv,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[hsv,inward] 1`] = `
+[
+  "#B5823F",
+  "#683B30",
+  "#CEAD76",
+  "#40522F",
+  "#6F845D",
+  "#1A1414",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[hsv,outward] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#6F845D",
+  "#CEAD76",
+  "#40522F",
+  "#683B30",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:SPI:[hsv,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[lch,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[lch,inward] 1`] = `
+[
+  "#B5823F",
+  "#CEAD76",
+  "#683B30",
+  "#6F845D",
+  "#40522F",
+  "#F8F5E6",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[lch,outward] 1`] = `
+[
+  "#1A1414",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+  "#683B30",
+  "#CEAD76",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:SPI:[lch,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#40522F",
+  "#683B30",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[okhsl,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[okhsl,inward] 1`] = `
+[
+  "#B5823F",
+  "#683B30",
+  "#CEAD76",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[okhsl,outward] 1`] = `
+[
+  "#1A1414",
+  "#6F845D",
+  "#683B30",
+  "#CEAD76",
+  "#40522F",
+  "#F8F5E6",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:SPI:[okhsl,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[okhsv,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#40522F",
+  "#683B30",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[okhsv,inward] 1`] = `
+[
+  "#B5823F",
+  "#683B30",
+  "#CEAD76",
+  "#40522F",
+  "#6F845D",
+  "#1A1414",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[okhsv,outward] 1`] = `
+[
+  "#F8F5E6",
+  "#1A1414",
+  "#6F845D",
+  "#CEAD76",
+  "#40522F",
+  "#683B30",
+  "#B5823F",
+]
+`;
+
+exports[`snapshot:SPI:[okhsv,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+]
+`;
+
+exports[`snapshot:SPI:[oklch,bottom-up] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#40522F",
+  "#6F845D",
+  "#B5823F",
+  "#CEAD76",
+  "#F8F5E6",
+]
+`;
+
+exports[`snapshot:SPI:[oklch,inward] 1`] = `
+[
+  "#683B30",
+  "#B5823F",
+  "#CEAD76",
+  "#1A1414",
+  "#F8F5E6",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:SPI:[oklch,outward] 1`] = `
+[
+  "#1A1414",
+  "#683B30",
+  "#F8F5E6",
+  "#B5823F",
+  "#CEAD76",
+  "#40522F",
+  "#6F845D",
+]
+`;
+
+exports[`snapshot:SPI:[oklch,top-down] 1`] = `
+[
+  "#F8F5E6",
+  "#CEAD76",
+  "#B5823F",
+  "#6F845D",
+  "#683B30",
+  "#40522F",
+  "#1A1414",
+]
+`;

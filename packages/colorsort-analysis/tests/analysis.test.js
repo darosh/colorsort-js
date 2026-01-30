@@ -1,25 +1,21 @@
-import {test} from 'vitest'
+import { test, expect } from 'vitest'
 import { algorithmStats, paletteTypeAnalysis, scatterData, topAlgorithms } from '../src/index.ts'
-import DATA  from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
+import DATA from 'colorsort-data-sorted/sorted.json' with { type: 'json' }
 
 test('algorithmStats', () => {
   const as = algorithmStats(DATA)
+  expect(as[0]).toMatchSnapshot()
   
-  console.log(as[0])
-
   const top = topAlgorithms(as, 5)
-  
-  console.log(top)
+  expect(top).toMatchSnapshot()
 })
 
 test('paletteTypeAnalysis', () => {
   const ta = paletteTypeAnalysis(DATA)
-  
-  console.log(ta)
+  expect(ta).toMatchSnapshot()
 })
 
 test('scatterData', () => {
   const sd = scatterData(DATA, 'Original')
-  
-  console.log(sd)
+  expect(sd).toMatchSnapshot()
 })
