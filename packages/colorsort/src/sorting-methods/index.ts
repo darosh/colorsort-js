@@ -289,7 +289,7 @@ function getCombinationsAsArrays(params: { values: any[] }[]): any[][] {
 }
 
 export function isValid(method: SortingMethod, colors: string[]) {
-  return (method.valid && method.valid(colors)) || true
+  return method.valid ? method.valid(colors) : true
 }
 
 export function isValidMethodId(mid: string, colors: string[]) {
