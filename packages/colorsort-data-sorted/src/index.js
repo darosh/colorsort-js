@@ -9,8 +9,12 @@ export async function getSorted() {
 
   if (process.env.FAST === '1') {
     palettes = palettes.slice(0, 10)
+    console.log(`Using ${palettes.length} palettes`)
   } else if (process.env.FAST === '2') {
+    console.log(`Skipping processing!`)
     return null
+  } else {
+    console.log(`Using ${palettes.length} palettes`)
   }
 
   let lastLog = Date.now()
@@ -26,10 +30,16 @@ export async function getSorted() {
     console.log(`Rows / Palettes: ${progress.toFixed(2)}% / ${progressPalettes.toFixed(2)}%`, render.stats())
   })
 
+  console.log(`Compute plan ${computed.sorted.length} records`)
+
   // const sorted = [...computed.sorted].sort((a, b) => a.method.speed - b.method.speed)
 
   const promises = computeRender(computed.sorted)
+
   await Promise.all(promises)
+
+  console.log(`Compute plan processed`)
+
   const serialized = computedSerialize(computed.types)
 
   for (const s of serialized) {
