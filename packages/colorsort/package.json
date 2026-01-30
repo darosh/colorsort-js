@@ -1,7 +1,7 @@
 {
   "name": "colorsort-js",
   "description": "Various color sorting methods",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "author": {
     "name": "Jan Forst",
     "email": "ensonador@gmail.com"
@@ -34,7 +34,8 @@
     "./trained.json": "./dist/trained.json"
   },
   "files": [
-    "dist/"
+    "dist/",
+    "CHANGELOG.md"
   ],
   "homepage": "https://github.com/darosh/colorsort-js",
   "keywords": [
