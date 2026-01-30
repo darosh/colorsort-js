@@ -1,5 +1,5 @@
 import chroma from 'chroma-js'
-import { SORTING_METHODS } from '../src/index.ts'
+import { isValidMethodId, SORTING_METHODS } from '../src/index.ts'
 import { writeFile } from 'node:fs/promises'
 
 const palettes = [
@@ -18,8 +18,13 @@ const data = {}
 for (const palette of palettes) {
   const methods = [...SORTING_METHODS].sort((a, b) => a.speed - b.speed)
 
-  for (const { name, fn, speed, mid } of methods) {
+  for (const { fn, speed, mid } of methods) {
     const start = performance.now()
+
+    if (!isValidMethodId(mid, palette)) {
+      continue
+    }
+
     fn(palette)
     const elapsed = performance.now() - start
 

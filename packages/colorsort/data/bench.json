@@ -1,10 +1,21 @@
 {
-  "Original": 0,
-  "SPI": 1,
+  "Original": 1,
+  "RAMPA": 1,
+  "RAMPC": 1,
+  "RAMPG": 1,
+  "RAMPH": 1,
   "CYL": 1,
-  "HIL": 2,
   "KM": 2,
   "DBSCAN": 2,
+  "RAMP": 2,
+  "RAMPB": 2,
+  "RAMPD": 2,
+  "RAMPE": 2,
+  "RAMPF": 2,
+  "RAMPI": 2,
+  "RAW": 2,
+  "SPI": 2,
+  "HIL": 2,
   "HARM": 3,
   "HARMED": 3,
   "NNA(DE) Lab": 3,
@@ -22,5 +33,5 @@
   "MOM(Closest+,DE)-Oklab": 5,
   "GEN-Oklab": 5,
   "GEN3-Oklab": 5,
-  "_TOTAL": 70
+  "_TOTAL": 90
 }
