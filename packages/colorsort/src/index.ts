@@ -1,6 +1,6 @@
 import { round3 } from './statistics.ts'
 
-export { SORTING_METHODS } from './sorting-methods/index.ts'
+export { SORTING_METHODS, ORIGINAL, isValid, isValidMethodId } from './sorting-methods/index.ts'
 export type { SortingMethod } from './sorting-methods/index.ts'
 export { metrics } from './metrics.js'
 export { detectPaletteType } from './type-detect.ts'
@@ -33,3 +33,5 @@ export const MASTER_ROUND = round3
 
 export { auto, MAX_AUTO, multiAuto } from './auto-sort.ts'
 export { roundAll } from './round.ts'
+
+export { normalizeUp, normalizeDown } from './normalize.ts'

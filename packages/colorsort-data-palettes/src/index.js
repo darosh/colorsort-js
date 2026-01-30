@@ -2,7 +2,7 @@ import chroma from 'chroma-js'
 import PALETTES_DATA from 'colorsort-data-palettes-lospec/palettes.json' with { type: 'json' }
 import { Poline, positionFunctions } from 'poline'
 import { formatHex } from 'culori'
-import { randomizer, oklab } from 'colorsort-js'
+import { randomizer, normalizeUp } from 'colorsort-js'
 
 const next = randomizer()
 
@@ -398,12 +398,7 @@ Object.assign(
 )
 
 Object.values(PALETTES).forEach((result) => {
-  const first = oklab(result[0])
-  const last = oklab(result.at(-1))
-
-  if (first[0] > last[0]) {
-    result.reverse()
-  }
+  normalizeUp(result)
 })
 
 // export function isArtist(slug) {

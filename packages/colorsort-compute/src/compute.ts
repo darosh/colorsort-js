@@ -8,7 +8,6 @@ import { extract } from 'colorgram'
 import { flatRgb } from 'colorsort-js'
 
 export type Method = {
-  name: string
   fn: Function
   valid?: Function
   speed: number
@@ -327,7 +326,7 @@ export async function computePlan(palettes: [key: string, colors: string[]][], s
         bestDistance: null,
         bestDistanceQuality: null,
         render: () =>
-          render({ sortName: method.name, palette: colors })
+          render({ sortName: method.mid, palette: colors })
             // @ts-ignore
             .then(async ({ result, metrics, elapsed }) => {
               row.colors = result

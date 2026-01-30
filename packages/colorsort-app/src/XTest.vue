@@ -63,16 +63,13 @@
 </template>
 <script>
 import {
-  applySpectralProcessing,
+  normalizeUp,
   MASTER_LCH,
   metricsFftFingerprint,
-  oklab,
   getAuto,
   roundAll,
-  oklab2hex,
   oklch,
   oklch2hex,
-  randomizer,
   SORTING_METHODS,
   cosineSimilarity
 } from 'colorsort-js'
@@ -112,12 +109,7 @@ export default {
       const mid = getAuto(colors, TRAINED)[0]
       const sorted = SORTING_METHODS.find((x) => x.mid === mid)?.fn(new Set(colors).values().toArray())
 
-      const first = oklab(sorted[0])
-      const last = oklab(sorted.at(-1))
-
-      if (first[0] > last[0]) {
-        sorted.reverse()
-      }
+      normalizeUp(sorted)
 
       return {
         mid,

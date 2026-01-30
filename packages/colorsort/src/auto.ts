@@ -1,7 +1,6 @@
-import { cosineSimilarity, MASTER_LCH } from './index.ts'
+import { cosineSimilarity, isValidMethodId, MASTER_LCH } from './index.ts'
 import { compareColors } from './vector.ts'
-import { Fingerprint, metricsFftFingerprint } from './metrics-fft.ts'
-// import { pearsonCorrelation } from './similarity.ts'
+import { metricsFftFingerprint } from './metrics-fft.ts'
 
 const SIMILARITY = cosineSimilarity
 
@@ -12,10 +11,6 @@ export interface Trained {
   fingerprints: number
 }
 
-function fix(fingerprint: number[]) {
-  return fingerprint
-}
-
 export function getAuto(colors: string[], trained: Trained[]) {
   const lchColors = colors.map(MASTER_LCH).sort(compareColors)
 
@@ -24,21 +19,25 @@ export function getAuto(colors: string[], trained: Trained[]) {
   let num = colors.length
 
   while (!selected.length && num > 1) {
-    selected = trained.filter((t) => t.colors === num)
+    selected = trained
+      .filter((t) => t.colors === num)
+      .filter(t => isValidMethodId(t.mid, colors))
+    
     num--
   }
 
   while (!selected2.length && num > 1) {
-    selected2 = trained.filter((t) => t.colors === num)
+    selected2 = trained
+      .filter((t) => t.colors === num)
+      .filter(t => isValidMethodId(t.mid, colors))
+
     num--
   }
 
-  let { fingerprint } = metricsFftFingerprint(lchColors).analysis
+  const { fingerprint } = metricsFftFingerprint(lchColors).analysis
 
-  fingerprint = <Fingerprint>fix(<Fingerprint>fingerprint)
-
-  selected.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(a.fingerprint)) : 0))
-  selected2.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(b.fingerprint)) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, fix(a.fingerprint)) : 0))
+  selected.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, b.fingerprint) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, a.fingerprint) : 0))
+  selected2.sort((a, b) => (b.fingerprint && fingerprint ? SIMILARITY(fingerprint, b.fingerprint) : 0) - (a.fingerprint && fingerprint ? SIMILARITY(fingerprint, a.fingerprint) : 0))
 
   if (selected.length) {
     // const close = selected.filter((x) => Math.abs(1 - cosineSimilarity(selected[0].fingerprint, x.fingerprint)) < 0.001)

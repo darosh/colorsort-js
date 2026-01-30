@@ -11,7 +11,7 @@ npm i colorsort-js
 ## Usage
 
 ```javascript
-import { auto, multiAuto } from 'colorsort-js'
+import { auto, multiAuto, normalizeUp } from 'colorsort-js'
 import DATA from 'colorsort-js/trained.json' with { type: 'json' }
 
 const colors = ['#000000', '#fff000', '#000fff']
@@ -23,8 +23,12 @@ console.log(sorted) // outputs sorted array ['#000fff', ...]
 // MULTIPLE SORT - runs multiple methods, first item should be the best
 const multipleSorted = multiAuto(colors, DATA)
 console.log(multipleSorted[0].sorted) // outputs sorted array ['#000fff', ...]
+
+// NORMALIZED DIRECTION
+console.log(normalizeUp(multipleSorted[0].sorted)) // normalized direction, from darker to lighter colors
 ```
 
 - The sorting method is selected automatically
 - Some methods may require more computation time so it recommended to run this in a [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
 - Colors must be an array of strings in this hex format `#000000`
+- `multiAuto` is used in [okpalette.color.pizza](https://okpalette.color.pizza/)

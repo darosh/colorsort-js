@@ -45,7 +45,6 @@ export type SortingFunction = Function & {
 }
 
 export type SortingMethod = {
-  name: string
   mid: string
   description?: {
     model?: any | null
@@ -57,29 +56,27 @@ export type SortingMethod = {
   valid?: Function
 }
 
+export const ORIGINAL = 'Original'
+
 export const SORTING_METHODS_RAW: SortingMethod[] = [
   {
-    name: 'Original',
     fn: (c: UniColor) => c,
-    mid: 'Original',
+    mid: ORIGINAL,
     description: {
       model: null
     }
   },
   {
-    name: 'HARM',
     fn: harmonizeModel,
     mid: 'HARM',
     description: {}
   },
   {
-    name: 'HARMED',
     fn: harmonizeDelta,
     mid: 'HARMED',
     description: {}
   },
   {
-    name: 'NNA(Delta E)',
     fn: graph,
     mid: 'NNA(DE) Lab',
     description: {
@@ -89,7 +86,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'NNA(Delta E+)',
     fn: graphWeighted,
     mid: 'NNA(DE+) Lab',
     description: {
@@ -99,7 +95,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'NNA(Delta E++)',
     fn: graphWeightedPlusPlus,
     mid: 'NNA(DE++) Lab',
     description: {
@@ -109,7 +104,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'NNA(Delta E+1)',
     fn: graphWeightedAdaptive1,
     mid: 'NNA(DE+1) Lab',
     description: {
@@ -119,7 +113,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'NNA(Delta E+2)',
     fn: graphWeightedAdaptive2,
     mid: 'NNA(DE+2) Lab',
     description: {
@@ -129,7 +122,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Closest) Oklab',
     fn: momentumClosestOklab,
     mid: 'MOM(Closest)-Oklab',
     description: {
@@ -138,7 +130,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Closest+) Oklab',
     fn: momentumClosestBestOklab,
     mid: 'MOM(Closest+)-Oklab',
     description: {
@@ -147,7 +138,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Closest+, Delta E) Oklab',
     fn: momentumClosestBestDeltaEOklab,
     mid: 'MOM(Closest+,DE)-Oklab',
     description: {
@@ -156,7 +146,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Inlinest) Oklab',
     fn: momentumInlinestOklab,
     mid: 'MOM(Inlinest)-Oklab',
     description: {
@@ -165,7 +154,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Inlinest, Delta E) Oklab',
     fn: momentumInlinestDeltaEOklab,
     mid: 'MOM(Inlinest,DE)-Oklab',
     description: {
@@ -175,7 +163,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'MOM(Inlinest, Delta E++) Oklab',
     fn: momentumInlinestDeltaEPlusOklab,
     mid: 'MOM(Inlinest,DE++)-Oklab',
     description: {
@@ -185,7 +172,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'Genetic Oklab',
     fn: evolve,
     mid: 'GEN-Oklab',
     description: {
@@ -194,7 +180,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'Genetic3 Oklab',
     fn: evolveMulti,
     mid: 'GEN3-Oklab',
     description: {
@@ -203,7 +188,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'Hilbert',
     fn: hilbert,
     mid: 'HIL',
     description: {
@@ -212,7 +196,6 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'PCA',
     fn: principal,
     mid: 'PCA',
     description: {
@@ -220,97 +203,81 @@ export const SORTING_METHODS_RAW: SortingMethod[] = [
     }
   },
   {
-    name: 'Spiral',
     fn: spiral,
     mid: 'SPI',
     description: {}
   },
   {
-    name: 'Cylindrical',
     fn: cylindrical,
     mid: 'CYL',
     description: {}
   },
   {
-    name: 'Cluster',
     fn: cluster,
     mid: 'CL',
     description: {}
   },
   {
-    name: 'K-means',
     fn: kMeans,
     mid: 'KM',
     description: {}
   },
   {
-    name: 'DBSCAN',
     fn: dbScan,
     mid: 'DBSCAN',
     description: {}
   },
   {
-    name: 'RAMP',
     fn: ramp,
     mid: 'RAMP',
     description: {}
   },
   {
-    name: 'RAMPA',
     fn: rampa,
     mid: 'RAMPA',
     description: {}
   },
   {
-    name: 'RAMPB',
     fn: rampb,
     mid: 'RAMPB',
     description: {}
   },
   {
-    name: 'RAMPC',
     fn: rampc,
     mid: 'RAMPC',
     description: {}
   },
   {
-    name: 'RAMPD',
     fn: rampd,
     mid: 'RAMPD',
     description: {}
   },
   {
-    name: 'RAMPE',
     fn: rampe,
     mid: 'RAMPE',
     description: {}
   },
   {
-    name: 'RAMPF',
     fn: rampf,
     mid: 'RAMPF',
     description: {}
   },
   {
-    name: 'RAMPG',
     fn: rampg,
     mid: 'RAMPG',
     description: {}
   },
   {
-    name: 'RAMPH',
     fn: ramph,
     mid: 'RAMPH',
     description: {}
   },
   {
-    name: 'RAMPI',
     fn: rampi,
     mid: 'RAMPI',
     description: {}
   },
   {
-    name: 'RAW',
     fn: raw,
     mid: 'RAW',
     description: {}
@@ -321,6 +288,14 @@ function getCombinationsAsArrays(params: { values: any[] }[]): any[][] {
   return params.reduce<any[][]>((acc, { values }) => acc.flatMap((combo) => values.map((value) => [...combo, value])), [[]])
 }
 
+export function isValid(method: SortingMethod, colors: string[]) {
+  return (method.valid && method.valid(colors)) || true
+}
+
+export function isValidMethodId(mid: string, colors: string[]) {
+  return isValid(SORTING_METHODS.find(m => m.mid === mid)!, colors)
+}
+
 export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
   (acc, item) => {
     if (item.fn.params) {
@@ -329,7 +304,6 @@ export const SORTING_METHODS = SORTING_METHODS_RAW.reduce(
       for (const combination of combinations) {
         acc.push({
           ...item,
-          name: `${item.name} [${combination.join(',')}]`,
           mid: `${item.mid}:[${combination.join(',')}]`,
           speed: (<{ [index: string]: number }>BENCH)[item.mid] || 0,
           fn: (c: UniColor) => item.fn.call(null, c, ...combination),
