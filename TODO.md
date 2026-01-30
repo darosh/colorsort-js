@@ -1,10 +1,11 @@
 # TODO
 
-- [ ] Add link to readme: used in https://okpalette.color.pizza/
-- [ ] Fix DBSCAN duplicates colors (ok-bad-dbscan palette)
-- [ ] Add tests with snapshots (for refactoring)
-- [ ] Add test for duplicate check
-- [ ] Add normalize direction fn
+- [x] Add link to readme: used in https://okpalette.color.pizza/
+- [x] Fix DBSCAN duplicates colors (ok-bad-dbscan palette)
+- [x] Add tests with snapshots (for refactoring)
+- [x] Add test for duplicate check
+- [x] Add normalize direction fn
+- [x] Remove method names
 
 ## Research, obsolete?
 
