@@ -10,7 +10,7 @@
 
 ## Sorting Test
 
-[darosh.github.io/colorsort-js/sorting-test.html](https://darosh.github.io/colorsort-js/sorting-test.html)
+[darosh.github.io/colorsort-js/sorting-test](https://darosh.github.io/colorsort-js/sorting-test/)
 
 ## R&D Sandbox
 
