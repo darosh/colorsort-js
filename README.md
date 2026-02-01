@@ -2,11 +2,15 @@
 
 > Various color sorting methods<br>
 > Inspired by [work](https://codepen.io/meodai/full/mdpNJQQ) of David Aerne and his intriguing [question](https://bsky.app/profile/meodai.bsky.social/post/3mb7kea5ubk2v):<br> 
-> _What is the “smoothest” order of colors?_
+> _What is the “smoothest” order of colors?_<br>
 
 ## Library 
 
 [./packages/colorsort](./packages/colorsort)
+
+## Sorting Test
+
+[darosh.github.io/colorsort-js/sorting-test.html](https://darosh.github.io/colorsort-js/sorting-test.html)
 
 ## R&D Sandbox
 
@@ -20,3 +24,8 @@
     - [Method $](https://darosh.github.io/colorsort-js/#/?m=%24): manually selected best methods
     - [Method ?](https://darosh.github.io/colorsort-js/#/?m=%3F): automatically selected methods (marked by green lightbulb in the Method column)
 - Stats page [darosh.github.io/colorsort-js/#/stats](https://darosh.github.io/colorsort-js/#/stats) shows the best methods candidates and test set coverage
+
+## Used in
+
+- [okpalette.color.pizza](https://okpalette.color.pizza/)
+- [farbvelo.elastiq.ch](https://farbvelo.elastiq.ch/)

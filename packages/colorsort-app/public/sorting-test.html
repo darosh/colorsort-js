@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html class="bg-black">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@5.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.11.8/dist/vuetify.min.css" />
+  <style>
+  [v-cloak] {
+      display: none;
+  }
+  </style>
+</head>
+<body>
+<div id="app" v-cloak>
+  <v-app theme="dark">
+    <v-app-bar density="comfortable" scroll-behavior="hide">
+      <v-app-bar-title>Color Sorting Test</v-app-bar-title>
+      <v-btn href="https://github.com/darosh/colorsort-js" icon="mdi-github" />
+    </v-app-bar>
+    <v-container>
+      <v-table hover striped="odd" style="margin-top: 96px; margin-bottom: 36px;">
+        <template v-slot:default>
+          <tbody>
+          <tr>
+            <td colspan="3" class="pa-0">
+              <v-textarea autofocus auto-grow class="px-4 py-2" rows="3" hide-details placeholder="Insert hex colors #000000"
+                          variant="plain" density="compact" v-model="editedColors" autocomplete="off"
+                          @update:model-value="editedColorsChanged"></v-textarea>
+            </td>
+            <td style="min-width: 160px;">
+              <x-colors v-if="colors?.length" :colors="colors"></x-colors>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <v-slider density="compact" hide-details v-model="maxMethods" :min="1" max="250" step="1">
+                <template v-slot:label>
+                  <span class="mr-4">Use <b class="d-inline-block text-center"
+                                            style="min-width: 2em;">{{
+                      maxMethods
+                    }}</b> {{ maxMethods === 1 ? 'method' : 'methods' }}</span>
+                </template>
+              </v-slider>
+            </td>
+            <td class="text-right">{{ sorted?.length ? 'Score' : '' }}</td>
+            <td></td>
+          </tr>
+          <tr v-for="(s, si) in sorted" :key="si" @click="copy(s.sorted)" v-ripple style="cursor: pointer;">
+            <td class="text-right">{{ si + 1 }}</td>
+            <td>{{ s.mid }}</td>
+            <td class="text-right">{{ s.metrics.avgAngleChange.toFixed(2) }}</td>
+            <td style="min-width: 160px;">
+              <x-colors :colors="normalizeUp(s.sorted)"></x-colors>
+            </td>
+          </tr>
+          </tbody>
+        </template>
+      </v-table>
+    </v-container>
+    <v-snackbar location="bottom right" theme="light" v-model="copied">Copied</v-snackbar>
+  </v-app>
+</div>
+
+<script type="text/x-template" id="x-colors-template">
+<div>
+  <div class="color-row"
+       style="border: 1px solid rgba(255,255,255,.5); display: flex; align-items: center; width: 100%;">
+    <div v-for="c in colors" style="flex: 1 1; min-width: 1px;"
+         :style="{ background: c, minHeight: `${minHeight}px` }"></div>
+  </div>
+</div>
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3.5.27/dist/vue.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-router@5.0.1/dist/vue-router.global.prod.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@3.11.8/dist/vuetify.min.js"></script>
+
+<script type="module">
+import { multiAuto, normalizeUp } from 'https://cdn.jsdelivr.net/npm/colorsort-js@3.1.0/dist/colorsort.js'
+import SORT_TRAINED_DATA from 'https://cdn.jsdelivr.net/npm/colorsort-js@3.1.0/dist/trained.json' with { type: 'json' }
+
+import { useClipboard } from 'https://cdn.jsdelivr.net/npm/@vueuse/core@14.2.0/+esm'
+
+const { createApp } = Vue
+const { createRouter, createWebHashHistory } = VueRouter
+const { createVuetify } = Vuetify
+const vuetify = createVuetify()
+const router = createRouter({
+  history: createWebHashHistory(),
+  routes: []
+})
+
+const { copy } = useClipboard()
+
+const XColors = {
+  template: '#x-colors-template',
+  props: { colors: { type: Array, default: () => [] }, minHeight: { type: Number, default: 24 } },
+  data () {
+    return {
+      colorsInput: ''
+    }
+  }
+}
+
+const app = createApp({
+  components: {
+    XColors
+  },
+  data: () => ({
+    editedColors: '',
+    parsedColors: [],
+    copied: false,
+    maxMethods: 15
+  }),
+  computed: {
+    colors () {
+      return this.$route.query?.c
+        ?.split('-')
+        ?.map(x => `#${x}`) || []
+    },
+    sorted () {
+      return multiAuto(this.colors, SORT_TRAINED_DATA, this.maxMethods)
+    }
+  },
+  methods: {
+    normalizeUp,
+    copy (colors) {
+      copy(colors.join(' ')).then(x => {
+        this.copied = true
+      })
+    },
+    editedColorsChanged (newValue) {
+      const colors = newValue.match(/(?<!\w)#[0-9a-fA-F]{6}(?!\w)/g)
+
+      if (!colors || !colors.length) {
+        return
+      }
+
+      this.parsedColors = colors
+
+      this.$router.replace({
+        path: '/',
+        query: {
+          c: encodeURIComponent(colors.map(x => x.slice(1)).join('-'))
+        }
+      })
+    },
+  },
+  watch: {
+    colors: {
+      immediate: true,
+      handler (newValue) {
+        if (!newValue) {
+          return
+        }
+
+        if (newValue.join(' ') === this.parsedColors.join(' ')) {
+          return
+        }
+
+        this.editedColors = newValue.join(' ')
+      }
+    },
+  }
+})
+
+app
+  .use(router)
+  .use(vuetify)
+  .mount('#app')
+</script>
+</body>
+</html>

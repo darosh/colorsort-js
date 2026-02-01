@@ -31,4 +31,4 @@ console.log(normalizeUp(multipleSorted[0].sorted)) // normalized direction, from
 - The sorting method is selected automatically
 - Some methods may require more computation time so it recommended to run this in a [web worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers)
 - Colors must be an array of strings in this hex format `#000000`
-- `multiAuto` is used in [okpalette.color.pizza](https://okpalette.color.pizza/)
+- `multiAuto` is used in [okpalette.color.pizza](https://okpalette.color.pizza/) and [farbvelo.elastiq.ch](https://farbvelo.elastiq.ch/)
