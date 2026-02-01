@@ -9,6 +9,16 @@
   [v-cloak] {
       display: none;
   }
+
+  .sorting > * {
+      opacity: .5;
+      transition: opacity 200ms;
+  }
+
+  .hide * {
+      height: 0 !important;
+      overflow: hidden;
+  }
   </style>
 </head>
 <body>
@@ -21,35 +31,47 @@
     <v-container>
       <v-table hover striped="odd" style="margin-top: 96px; margin-bottom: 36px;">
         <template v-slot:default>
+          <thead class="hide">
+          <tr>
+            <td style="width: 80px;"></td>
+            <td style="width: 360px;"></td>
+            <td style="width: 80px;"></td>
+            <td style="min-width: 160px;"></td>
+          </tr>
+          </thead>
           <tbody>
           <tr>
-            <td colspan="3" class="pa-0">
-              <v-textarea autofocus auto-grow class="px-4 py-2" rows="3" hide-details placeholder="Insert hex colors #000000"
+            <td colspan="3" class="pa-0" style="width: 520px;">
+              <v-textarea autofocus auto-grow class="px-4 py-2" rows="3" hide-details
+                          placeholder="Insert hex colors #000000"
                           variant="plain" density="compact" v-model="editedColors" autocomplete="off"
                           @update:model-value="editedColorsChanged"></v-textarea>
             </td>
-            <td style="min-width: 160px;">
+            <td style="min-width: 160px; width: calc(100% - 520px);">
               <x-colors v-if="colors?.length" :colors="colors"></x-colors>
             </td>
           </tr>
           <tr>
-            <td colspan="2">
+            <td colspan="2" style="width: 440px;">
               <v-slider density="compact" hide-details v-model="maxMethods" :min="1" max="250" step="1">
                 <template v-slot:label>
                   <span class="mr-4">Use <b class="d-inline-block text-center"
                                             style="min-width: 2em;">{{
                       maxMethods
-                    }}</b> {{ maxMethods === 1 ? 'method' : 'methods' }}</span>
+                    }}</b> <span class="d-inline-block"
+                                 style="min-width: 4em;">{{ maxMethods === 1 ? 'method' : 'methods' }}</span></span>
                 </template>
               </v-slider>
             </td>
-            <td class="text-right">{{ sorted?.length ? 'Score' : '' }}</td>
+            <td style="width: 80px;" class="text-right">{{ sorted?.length ? 'Score' : '' }}</td>
             <td></td>
           </tr>
-          <tr v-for="(s, si) in sorted" :key="si" @click="copy(s.sorted)" v-ripple style="cursor: pointer;">
-            <td class="text-right">{{ si + 1 }}</td>
-            <td>{{ s.mid }}</td>
-            <td class="text-right">{{ s.metrics.avgAngleChange.toFixed(2) }}</td>
+          <tr :class="{sorting}" v-for="(s, si) in sorted" :key="si" @click="copy(s.sorted)"
+              v-ripple
+              style="cursor: pointer;">
+            <td style="width: 80px;" class="text-right">{{ si + 1 }}</td>
+            <td style="width: 360px;">{{ s.mid }}</td>
+            <td style="width: 80px;" class="text-right">{{ s.metrics.avgAngleChange.toFixed(2) }}</td>
             <td style="min-width: 160px;">
               <x-colors :colors="normalizeUp(s.sorted)"></x-colors>
             </td>
@@ -91,6 +113,39 @@ const router = createRouter({
   routes: []
 })
 
+function workerFn () {
+  self.onmessage = ({ data: { colors, maxMethods, workerResolverId } }) => {
+    self.postMessage({ workerResolverId, sorted: multiAuto(colors, SORT_TRAINED_DATA, maxMethods) })
+  }
+}
+
+const blob = new Blob([[
+  'import { multiAuto, normalizeUp } from \'https://cdn.jsdelivr.net/npm/colorsort-js@3.1.0/dist/colorsort.js\'',
+  'import SORT_TRAINED_DATA from \'https://cdn.jsdelivr.net/npm/colorsort-js@3.1.0/dist/trained.json\' with { type: \'json\' }',
+  workerFn.toString(),
+  'workerFn()'
+].join('\n')], { type: 'application/javascript' })
+
+const workerUrl = URL.createObjectURL(blob)
+const worker = new Worker(workerUrl, { type: 'module' })
+let workerResolver
+let workerResolverId = 0
+
+worker.addEventListener('message', ({ data }) => {
+  if (data.workerResolverId === workerResolverId) {
+    workerResolver(data.sorted)
+  }
+})
+
+function sortInWorker (colors, maxMethods) {
+  workerResolverId++
+
+  return new Promise(resolve => {
+    workerResolver = resolve
+    worker.postMessage({ colors, maxMethods, workerResolverId })
+  })
+}
+
 const { copy } = useClipboard()
 
 const XColors = {
@@ -111,16 +166,15 @@ const app = createApp({
     editedColors: '',
     parsedColors: [],
     copied: false,
-    maxMethods: 15
+    maxMethods: 15,
+    sorted: [],
+    sorting: true
   }),
   computed: {
     colors () {
       return this.$route.query?.c
         ?.split('-')
         ?.map(x => `#${x}`) || []
-    },
-    sorted () {
-      return multiAuto(this.colors, SORT_TRAINED_DATA, this.maxMethods)
     }
   },
   methods: {
@@ -146,6 +200,13 @@ const app = createApp({
         }
       })
     },
+    updateSort () {
+      setTimeout(async () => {
+        this.sorting = true
+        this.sorted = await sortInWorker(this.colors, this.maxMethods)
+        this.sorting = false
+      })
+    }
   },
   watch: {
     colors: {
@@ -156,12 +217,16 @@ const app = createApp({
         }
 
         if (newValue.join(' ') === this.parsedColors.join(' ')) {
-          return
+          // return
         }
 
         this.editedColors = newValue.join(' ')
+        this.updateSort()
       }
     },
+    async maxMethods () {
+      this.updateSort()
+    }
   }
 })
 
