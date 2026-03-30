@@ -29,3 +29,4 @@
 
 - [okpalette.color.pizza](https://okpalette.color.pizza/)
 - [farbvelo.elastiq.ch](https://farbvelo.elastiq.ch/)
+- [pickypalette.color.pizza](https://pickypalette.color.pizza/)
